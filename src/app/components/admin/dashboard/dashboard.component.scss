@@ -1,0 +1,16 @@
+/* Thêm hiệu ứng mượt mà cho toggle */
+.navbar-collapse {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Đảm bảo navbar không bị đè lên nội dung */
+  body {
+    padding-top: 56px; /* Căn chỉnh khoảng cách phía trên cho các nội dung phía dưới */
+  }
+  
+//   .card-title{
+//     display: -webkit-box;
+//     -webkit-line-clamp: 2;
+//     -webkit-box-orient: vertical;
+//     overflow: hidden;
+//   }

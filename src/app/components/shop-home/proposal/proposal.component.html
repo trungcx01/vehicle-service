@@ -1,0 +1,75 @@
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="proposalModalLabel">Gửi Đề xuất Cứu trợ</h5>
+      <button
+        (click)="closeModal()"
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="proposalForm">
+        <div class="form-group mb-3" >
+          <label for="expectedPrice" class="form-label"
+            >Chi phí dự kiến (VNĐ)</label
+          >
+          <input
+            type="number"
+            id="expectedPrice"
+            class="form-control"
+            formControlName="expectedPrice"
+            name="expectedPrice"
+            [readOnly]="proposal"
+            required
+          />
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="predict" class="form-label">Dự đoán tình trạng</label>
+          <textarea
+            id="predict"
+            class="form-control"
+            formControlName="predict"
+            name="predict"
+            rows="3"
+            required
+            [readOnly]="proposal"
+          ></textarea>
+        </div>
+
+        <div class="form-group mb-3" *ngIf="proposal">
+          <label class="form-label">Trạng thái</label>
+          <div>
+            <span 
+              class="badge" 
+              [ngClass]="{
+                'bg-warning text-dark': proposal.status === 'PENDING',
+                'bg-success': proposal.status === 'ACCEPTED',
+                'bg-primary': proposal.status === 'in-progress',
+                'bg-info': proposal.status === 'resolved',
+                'bg-danger': proposal.status === 'unresolved',
+                'bg-secondary': !proposal.status
+              }"
+            >
+              {{
+                proposal.status === 'PENDING' ? 'Đang chờ xử lý' :
+                proposal.status === 'ACCEPTED' ? 'Đã chấp nhận' :
+                proposal.status === 'in-progress' ? 'Đang tiến hành' :
+                proposal.status === 'resolved' ? 'Đã giải quyết' :
+                proposal.status === 'unresolved' ? 'Không thể giải quyết' :
+                'Không xác định'
+              }}
+            </span>
+          </div>
+        </div>
+        
+        <button *ngIf="!proposal" (click)="submitProposal()" class="btn btn-secondary w-100 mt-3">
+          Gửi đề xuất
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

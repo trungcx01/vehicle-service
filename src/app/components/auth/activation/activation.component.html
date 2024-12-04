@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h4 class="modal-title">Xác Thực Mã Kích Hoạt</h4>
+  <!-- Không cho phép đóng modal bằng nút Close -->
+</div>
+<div class="modal-body">
+  <p>Mã kích hoạt đã được gửi đến email {{email}}. Vui lòng nhập mã để xác thực.</p>
+  <input type="text" class="form-control" placeholder="Nhập mã kích hoạt" [(ngModel)]="activationCode"/>
+</div>
+<div class="modal-footer">
+  <!-- Chỉ cho phép đóng modal khi bấm Xác Thực -->
+  <!-- <button type="button" class="btn btn-primary" (click)="verifyCode()">Xác Thực</button> -->
+</div>

@@ -1,0 +1,129 @@
+/* General styling for navbar */
+.navbar {
+  padding: 0.8rem 1.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+a{
+  text-decoration: none;
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #007bff;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 15px;
+}
+
+.search-bar input {
+  border-radius: 50px;
+  padding: 8px 15px;
+  width: 400px;
+}
+
+// .search-bar button {
+//   border-radius: 50px;
+//   padding: 8px 15px;
+// }
+
+/* Notification Icon */
+.notification-icon {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  padding: 3px 8px;
+}
+
+/* User Links */
+.nav-item {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+a.nav-link{
+  text-align: start;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+  padding: 10px 20px;
+}
+
+.custom-dropdown-menu{
+  position: absolute;
+  top: 40px;
+  left: -30px;
+}
+.slogan {
+  font-size: 0.85rem;
+  margin-top: -5px;
+}
+
+
+/* Điều chỉnh font-size cho chữ "Thông báo" khi màn hình nhỏ */
+@media (max-width: 991px) {
+  .d-lg-none {
+    display: inline;
+    font-size: 1rem; /* Đảm bảo font-size của "Thông báo" khi màn hình nhỏ là bình thường */
+  }
+  .user-dropdown{
+    display: none !important;
+  }
+
+  .notification-badge {
+    display: none !important;
+  }
+
+  .notification-icon {
+   /* Đảm bảo icon Thông báo khi màn hình lớn không bị ảnh hưởng */
+  }
+
+  /* Hiển thị các mục Tài khoản và Đăng xuất giống như Emergency và Appointment */
+  .navbar-nav .nav-item {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 10px;
+    width: 100%;
+  }
+ 
+}
+
+@media (max-width: 767px) {
+  .notification-badge {
+    display: none !important;
+    font-size: 1rem;
+  }
+
+  .navbar-brand {
+    font-size: 1.6rem;
+  }
+
+  .notification-icon {
+    // font-size: 1.5rem;
+  }
+
+  
+}

@@ -1,0 +1,123 @@
+<div class="group-container">
+  <div class="row signup-form">
+    <form
+      class="col-lg-6 col-md-7"
+      (ngSubmit)="onSignUp()"
+      [formGroup]="signUpForm"
+    >
+      <h2 class="text-center">Sign Up</h2>
+
+      <div class="signup">
+        <div class="form-group">
+          <input
+            placeholder="Email"
+            formControlName="email"
+            class="form-control"
+            type="email"
+            id="email"
+            name="email"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('email')!.invalid &&
+              (signUpForm.get('email')!.dirty ||
+                signUpForm.get('email')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="signUpForm.get('email')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <input
+            placeholder="Username"
+            formControlName="username"
+            class="form-control"
+            type="text"
+            id="username"
+            name="username"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('username')!.invalid &&
+              (signUpForm.get('username')!.dirty ||
+                signUpForm.get('username')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="signUpForm.get('username')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            placeholder="Password"
+            formControlName="password"
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('password')!.invalid &&
+              (signUpForm.get('password')!.dirty ||
+                signUpForm.get('password')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="signUpForm.get('password')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            placeholder="Confirm Password"
+            class="form-control"
+            type="password"
+            formControlName="confirmPassword"
+          />
+          <div
+            *ngIf="
+              signUpForm.get('confirmPassword')!.invalid &&
+              (signUpForm.get('confirmPassword')!.dirty ||
+                signUpForm.get('confirmPassword')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="signUpForm.get('confirmPassword')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Signup" />
+    </form>
+
+    <div class="col-lg-6 col-md-5 title">
+      <span>Hello, Welcome</span>
+      <span>Already have an account?</span>
+      <input
+        type="button"
+        class="btn btn-light"
+        value="Login"
+        (click)="navigateToLogin()"
+      />
+    </div>
+  </div>
+</div>

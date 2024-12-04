@@ -1,0 +1,71 @@
+<div class="group-container">
+  <div class="row login-form">
+    <div class="col-lg-6 col-md-5 title">
+      <span>Welcome Back</span>
+      <span>Don't have an account?</span>
+      <input
+        type="button"
+        class="btn btn-light"
+        value="Register"
+        (click)="navigateToSignUp()"
+      />
+    </div>
+    <form class="col-lg-6 col-md-7" (ngSubmit)="save()" [formGroup]="loginForm">
+      <h2 class="text-center">Login</h2>
+
+      <div class="login">
+        <div class="form-group">
+          <input
+            placeholder="Username/Email"
+            formControlName="usernameOrEmail"
+            class="form-control"
+            type="email"
+            id="usernameOrEmail"
+            name="usernameOrEmail"
+          />
+          <div
+            *ngIf="
+              loginForm.get('usernameOrEmail')!.invalid &&
+              (loginForm.get('usernameOrEmail')!.dirty ||
+                loginForm.get('usernameOrEmail')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="loginForm.get('usernameOrEmail')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input
+            placeholder="Password"
+            formControlName="password"
+            class="form-control"
+            type="password"
+            id="password"
+            name="password"
+          />
+          <div
+            *ngIf="
+              loginForm.get('password')!.invalid &&
+              (loginForm.get('password')!.dirty ||
+                loginForm.get('password')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="loginForm.get('password')?.errors?.['required']"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Login" />
+    </form>
+  </div>
+</div>

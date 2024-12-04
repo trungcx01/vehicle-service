@@ -1,0 +1,38 @@
+<div id="map" style="position: relative; height: 100vh; width: 100%;">
+
+    <div class="map-buttons">
+        <button class="btn-back" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <button class="btn-center" (click)="resetCenter()">
+            <i class="fas fa-crosshairs"></i>
+        </button>
+
+        <button class="toggle-btn" (click)="setVisible()" *ngIf="!visible">
+            <i class="fas fa-bars"></i> 
+        </button>
+    </div>
+
+
+    <div class="map-control" *ngIf="visible">
+        <div class="d-flex align-items-center justify-content-between gap-2">
+            <span class="control-title">Cứu trợ khẩn cấp</span>
+            <i class="fas fa-minus close-btn" (click)="setVisible()"></i>
+        </div>
+
+        <div class="info">
+            <label for="origin">Khách hàng:</label>
+            <input id="origin" [value]="origin" type="text" readonly>
+
+            <label for="destination">Shop:</label>
+            <input id="destination" [value]="destination" type="text" readonly>
+
+            <label for="distance">Đường đi ngắn nhất:</label>
+            <input id="distance" [value]="shortestDistance" type="text" readonly>
+
+            <label for="time">Thời gian sớm nhất: </label>
+            <input id="time" [value]="fastestTime" type="text" readonly>
+        </div>
+    </div>
+</div>

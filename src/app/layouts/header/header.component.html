@@ -1,0 +1,128 @@
+<div class="header">
+  <nav class="navbar navbar-expand-lg bg-light-subtle shadow-sm">
+    <div class="container">
+      <!-- Logo hoặc tên brand -->
+      <a class="navbar-brand fw-bold text-primary" href="#">Vehicle S</a>
+
+      <!-- Nút toggle khi màn hình nhỏ -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu Navbar -->
+      <div class="collapse navbar-collapse" id="navbarNav" >
+        <ul class="navbar-nav ms-auto flex-lg-row flex-column" style="align-items: center;"> <!-- Thêm flex-column cho màn hình nhỏ -->
+          <!-- Thanh tìm kiếm -->
+          <li class="nav-item" *ngIf="!router.url.endsWith('search')">
+            <div class="d-flex search-bar">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search"
+                (keydown.enter)="onSearch()"
+              />
+            </div>
+          </li>
+
+          <!-- Service Dropdown -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Dịch vụ
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Repair</a></li>
+              <li><a class="dropdown-item" href="#">Maintenance</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="cursor: pointer;" (click)="navToShopList()">Cửa hàng</a>
+          </li>
+
+          <!-- Appointment Link -->
+          <li class="nav-item">
+            <a class="nav-link" style="cursor: pointer;" (click)="navToAppointment()">Lịch hẹn</a>
+          </li>
+
+          <!-- Emergency Request Link -->
+          <li class="nav-item">
+            <a class="nav-link" style="cursor: pointer;" (click)="navToEmergencyRequest()">Khẩn cấp</a>
+          </li>
+
+          <!-- Notifications Dropdown -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link notification-icon"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fa-solid fa-bell d-none d-lg-inline"></i>
+              <span class="d-lg-none ">Thông báo</span>
+              <span class="notification-badge bg-danger text-white" *ngIf="notifications.length > 0">{{ countUnread }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end notify-dropdown-width" aria-labelledby="navbarDropdown">
+              <li *ngIf="notifications.length === 0" class="dropdown-item text-center">
+                Không có thông báo nào
+              </li>
+              <li *ngFor="let item of notifications" class="dropdown-item notify-item">
+                <a href="#" class="d-flex align-items-center">
+                  <div class="notify-icon me-3">
+                    <i class="fa-solid fa-circle-info text-info"></i>
+                  </div>
+                  <div class="notify-details">
+                    <p class="mb-0">{{ item.message }}</p>
+                    <small class="text-muted">{{ item.createdAt | date: 'dd/mm/yyyy hh:ss' }}</small>
+                  </div>
+                </a>
+              </li>
+              <li class="dropdown-footer text-center">
+                <a href="/notifications" class="text-primary">Xem tất cả thông báo</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- User Dropdown -->
+          <li class="nav-item dropdown user-dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fa fa-user d-none d-lg-inline"></i>
+              <span class="d-lg-none">Tài khoản</span>
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu">
+              <li><a *ngIf="isLogin" class="dropdown-item" href="/info">Tài khoản của tôi</a></li>
+              <li><a *ngIf="isLogin" class="dropdown-item text-danger" [routerLink]="url" (click)="logout()">{{ name }}</a></li>
+              <li><a *ngIf="!isLogin" class="dropdown-item text-primary" [routerLink]="url">{{ name }}</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item d-lg-none"> <!-- Hiển thị chỉ trên màn hình nhỏ -->
+            <a class="nav-link" href="/info">Tài khoản của tôi</a>
+          </li>
+          <li class="nav-item d-lg-none user">
+            <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">Đăng xuất</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>

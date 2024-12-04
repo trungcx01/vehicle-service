@@ -1,0 +1,40 @@
+<div class="container mt-5">
+    <h3>Lịch sử lịch hẹn</h3>
+    <div class="row">
+        <div class="col-12" *ngFor="let appointment of appointments">
+            <div class="card appointment-card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="appointment-info">
+                            <h5>{{ appointment.date}} | Khung giờ: {{ appointment.time }}</h5>
+                            <p><strong>Loại xe:</strong> {{ appointment.vehicleType }}</p>
+                            <p><strong>Ghi chú dành cho cửa hàng:</strong> {{ appointment.note ? appointment.note : "Không có" }}</p>
+
+                            <p><strong>Shop:</strong> {{ appointment.vehicleCares[0].shop.name }}</p>
+                            <p><strong>Địa chỉ:</strong> {{ appointment.vehicleCares[0].shop.address }}</p>
+
+                            <ul>
+                                <li *ngFor="let item of appointment.vehicleCares">
+                                    <strong>{{ item.name }}:</strong> {{ item.price | number }} VNĐ
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="appointment-status">
+                            <span *ngIf="appointment.status === 'PENDING'" class="badge bg-warning">PENDING</span>
+                            <span *ngIf="appointment.status === 'PAID'" class="badge bg-success">PAID</span>
+                            <span *ngIf="appointment.status === 'ACCEPTED'" class="badge bg-primary">ACCEPTED</span>
+                            <span *ngIf="appointment.status === 'DECLINED'" class="badge bg-danger">DECLINED</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <button (click)="navToPayment(appointment.id)" *ngIf="appointment.status === 'PENDING'" class="btn btn-primary">Thanh toán</button>
+                        <button class="btn btn-danger">
+                            Hủy
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

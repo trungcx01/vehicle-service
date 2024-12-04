@@ -1,0 +1,26 @@
+.date {
+    position: relative;
+
+    i {
+        font-size: 28px;
+        position: absolute;
+        right: 5%;
+        top: 47%;
+    }
+}
+
+
+  
+input{
+    border-radius: 4px;
+    background-color: #fff;
+  
+    &:focus{
+        outline: none;
+        box-shadow: none;
+        border: 1px solid #1878de;
+    }
+}
+
+ 
+  

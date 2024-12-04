@@ -1,0 +1,11 @@
+input{
+  border-radius: 0;
+  &:focus{
+    box-shadow: none;
+    outline: #285fe0;
+  }
+}
+
+.form-control{
+  padding: 12px;
+}

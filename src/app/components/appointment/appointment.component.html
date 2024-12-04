@@ -1,0 +1,66 @@
+
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingModalLabel">Đặt lịch sửa chữa bảo dưỡng xe</h5>
+          <button type="button" (click)="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" [formGroup]="appointmentForm">
+          <!-- Tên Shop -->
+          <div class="shop-name mb-3 text-center">
+            <h6>Cửa hàng: {{shop.name}}</h6>
+          </div>
+  
+          <!-- Loại xe -->
+          <div class="form-group mb-3">
+            <label for="vehicleType" class="form-label">Loại xe</label>
+            <select class="form-select custom-select" id="vehicleType" formControlName="vehicleType">
+              <option value="MOTORBIKE">Motorbike</option>
+              <option value="BIKE">Bike</option>
+            </select>
+          </div>
+  
+          <!-- Thời gian hẹn -->
+          <div class="form-group mb-3 date">
+            <label for="appointmentDate" class="form-label">Thời gian hẹn</label>
+            <input
+     
+              class="form-control"
+              id="appointmentDate"
+              formControlName="date"
+              ngbDatepicker
+              #d="ngbDatepicker"
+
+              [weekdays]="false"
+            />
+            <i (click)="d.toggle()" class="fa-solid fa-calendar-days"></i> 
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="form-control-label" for="openingTime">Thời gian</label>
+              <input formControlName="time"  class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime1" [format]="24"  readonly>
+              <ngx-material-timepicker #fullTime1 ></ngx-material-timepicker>
+          </div>
+  
+          <!-- Dịch vụ của Shop -->
+          <div class="form-group mb-3" >
+            <label class="form-label">Chọn dịch vụ</label>
+            <div formGroupName="vehicleCareIds">
+                <div *ngFor="let vehicle of vehicleCares">
+                  <label>
+                    <input type="checkbox" [formControlName]="vehicle.id" />
+                    {{ vehicle.name }}
+                  </label>
+                </div>
+              </div>
+          </div>
+  
+          <!-- Ghi chú -->
+          <div class="form-group mb-3">
+            <label for="notes" class="form-label">Ghi chú thêm</label>
+            <textarea formControlName="note" class="form-control custom-input" id="notes" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary custom-btn" data-bs-dismiss="modal">Hủy</button>
+          <button (click)="submit()" type="button" class="btn btn-success custom-btn">Thanh toán</button>
+        </div>

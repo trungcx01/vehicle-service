@@ -1,0 +1,53 @@
+/* Tùy chỉnh cho nút */
+.custom-btn {
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 8px 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .custom-btn:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  /* Tùy chỉnh cho modal */
+  .custom-modal {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+  
+  .modal-header {
+    background-color: #007bff;
+    color: white;
+    border-bottom: none;
+  }
+  
+  .modal-footer {
+    border-top: none;
+  }
+  
+  /* Tùy chỉnh input và select */
+  .custom-input, .custom-select {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    transition: border-color 0.3s;
+  }
+  
+  .custom-input:focus, .custom-select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  }
+
+  .date{
+    position: relative;
+    i{
+      position: absolute;
+      right: 8px;
+      font-size: 23px;
+      top: 58%;
+    }
+  }

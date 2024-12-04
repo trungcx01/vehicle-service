@@ -1,0 +1,93 @@
+<div class="customer row justify-content-center">
+  <div class="col-md-7">
+    <form [formGroup]="shopForm">
+      <h4 class="text-center">Đăng kí thông tin Shop</h4>
+      <div class="row">
+        <div class="form-group col-6 mb-3">
+          <label class="form-control-label" for="field_name">Họ và tên</label>
+          <input
+            type="text"
+            class="form-control"
+            name="name"
+            id="field_name"
+            formControlName="name"
+          />
+        </div>
+
+        <div class="form-group col-6 mb-3">
+          <label class="form-control-label" for="field_phone"
+            >Số điện thoại</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="phone"
+            id="field_phone"
+            formControlName="phoneNumber"
+          />
+        </div>
+      </div>
+
+
+     
+
+      <div class="form-group mb-3">
+        <label class="form-control-label" for="field_description">Mô tả</label>
+        <textarea
+          type="text"
+          class="form-control"
+          name="description"
+          id="field_description"
+          ormControlName="description"
+        ></textarea>
+      </div>
+
+      <div class="form-group mb-3 col-12">
+        <label class="form-control-label" for="field_address">Địa chỉ</label>
+        <ng-select
+          formControlName="address"
+          id="field_address"
+          style="font-family: roboto; width: 100% !important"
+          [items]="addressOptions"
+          bindLabel="description"
+          bindValue="description"
+          (search)="onItemChange($event)"
+          [searchable]="true"
+        ></ng-select>
+      </div>
+
+
+      <div class="row mb-3">
+        <div class="form-group col-6">
+          <label class="form-control-label" for="openingTime">Thời gian mở cửa</label>
+            <input  formControlName="openingTime" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime1" [format]="24"  readonly>
+            <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+        </div>
+
+        <div class="form-group col-6">
+          <label class="form-control-label" for="closingTime">Thời gian đóng cửa</label>
+          <input  formControlName="closingTime" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime2" [format]="24"  readonly>
+          <ngx-material-timepicker #fullTime2></ngx-material-timepicker>
+        </div>
+      </div>
+
+      <!-- <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+                <small class="form-text text-danger"
+                       *ngIf="editForm.get('email')?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+                </small>
+            </div> -->
+      <div class="form-check mb-3">
+        <input id="tick" type="checkbox" class="form-check-input" />
+        <label for="tick" class="form-check-label"
+          >Tôi đồng ý với các điều khoản</label
+        >
+      </div>
+
+      <button type="submit" (click)="submit()" class="btn btn-success">
+        Lưu
+      </button>
+      <button class="btn btn-danger">Hủy</button>
+    </form>
+  </div>
+</div>

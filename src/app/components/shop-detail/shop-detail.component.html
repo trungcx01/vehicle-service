@@ -1,0 +1,267 @@
+<div class="shop-detail container my-5 text-center">
+  <div class="top container">
+    <div class="shop-header text-center">
+      <img
+        src="https://timthosuaxe.com/wp-content/uploads/2021/05/Screenshot_1.jpg"
+        alt="Shop Logo"
+        class="shop-logo mb-3"
+      />
+      <h1 class="shop-name">{{ shop.name }}</h1>
+      <div class="shop-rating">
+        <span>{{ shop.rating }}★★★★☆</span> (4.5)
+      </div>
+    </div>
+  
+    <!-- Thông tin Shop -->
+    <div class="shop-info my-4 p-4 text-start">
+      <div class="row">
+        <div class="col-md-6">
+          <h4>Địa chỉ:</h4>
+          <p>{{ shop.address }}</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Liên hệ:</h4>
+          <p>{{ shop.phoneNumber }}</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Thời gian làm việc:</h4>
+          <p>Thứ 2 - Chủ Nhật: 8:00 AM - 8:00 PM</p>
+        </div>
+        <div class="col-md-6">
+          <h4>Dịch vụ khẩn cấp:</h4>
+          <p>Có sẵn 24/7</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Phần Dịch Vụ -->
+  <div class="services my-4">
+    <h3 class="mb-4">Dịch Vụ Cung Cấp</h3>
+    <div class="row">
+      <!-- Service 1 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://voxemay.vn/wp-content/uploads/2021/10/cach-tu-thay-nhot-xe-may-cho-hang-yamaha-tai-nha-1-1024x768.jpg"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Thay Dầu Xe</h5>
+            <p class="card-text">Mô tả ngắn gọn về dịch vụ.</p>
+            <p class="estimate-duration">Thời gian: 30 phút</p>
+            <p class="price">Giá: 500.000 VND</p>
+          </div>
+        </div>
+      </div>
+      <!-- Service 2 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Bảo Dưỡng Xe</h5>
+            <p class="card-text">Dịch vụ bảo dưỡng định kỳ cho xe máy và ô tô.</p>
+            <p class="estimate-duration">Thời gian: 1 giờ</p>
+            <p class="price">Giá: 300.000 VND</p>
+          </div>
+        </div>
+      </div>
+      <!-- Service 3 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Sửa Chữa Động Cơ</h5>
+            <p class="card-text">Sửa chữa các sự cố liên quan đến động cơ xe.</p>
+            <p class="estimate-duration">Thời gian: 2 giờ</p>
+            <p class="price">Giá: 1.500.000 VND</p>
+          </div>
+        </div>
+      </div>
+      <!-- Service 4 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Kiểm Tra Phanh</h5>
+            <p class="card-text">Kiểm tra và thay thế má phanh xe.</p>
+            <p class="estimate-duration">Thời gian: 45 phút</p>
+            <p class="price">Giá: 400.000 VND</p>
+          </div>
+        </div>
+      </div>
+      <!-- Service 5 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Thay Lốp Xe</h5>
+            <p class="card-text">Dịch vụ thay lốp xe với các loại lốp chất lượng cao.</p>
+            <p class="estimate-duration">Thời gian: 30 phút</p>
+            <p class="price">Giá: 600.000 VND</p>
+          </div>
+        </div>
+      </div>
+      <!-- Service 6 -->
+      <div class="col-md-4 mb-4">
+        <div class="service-card card">
+          <img
+            src="https://via.placeholder.com/300x200"
+            alt="Service Image"
+            class="card-img-top"
+          />
+          <div class="card-body">
+            <div class="availability">Available</div>
+            <h5 class="card-title">Thay Ắc Quy</h5>
+            <p class="card-text">Dịch vụ thay thế ắc quy xe máy và ô tô.</p>
+            <p class="estimate-duration">Thời gian: 30 phút</p>
+            <p class="price">Giá: 300.000 VND</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="booking my-4 text-center">
+      <button class="btn btn-primary btn-lg" (click)="openAppointmentModal()">Đặt Lịch Hẹn</button>
+    </div>
+    
+  </div>
+  
+
+  <!-- Phần Đặt Lịch -->
+  
+
+  <!-- Hình Ảnh Shop
+  <div class="shop-images my-4">
+    <h3 class="mb-4">Hình Ảnh Cửa Hàng</h3>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <img src="shop-image-1.jpg" alt="Shop Image" class="img-fluid" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="shop-image-2.jpg" alt="Shop Image" class="img-fluid" />
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="shop-image-3.jpg" alt="Shop Image" class="img-fluid" />
+      </div>
+    </div>
+  </div> -->
+
+  
+  <!-- Đánh Giá -->
+  <div class="reviews my-4">
+    <h3 class="mb-4">Đánh Giá Khách Hàng</h3>
+  
+    <!-- Review 1 -->
+    <div class="review-card card p-3 mb-3">
+      <div class="d-flex align-items-start">
+        <img
+          src="https://res.cloudinary.com/dmwkcepna/image/upload/v1730523432/anonymous-user_gbpozf.jpg"
+          alt="Customer Avatar"
+          class="rounded-circle mr-3"
+          width="80"
+          height="80"
+        />
+        <div class="review-details mr-3">
+          <div class="customer-name">Nguyễn Văn A</div>
+          <div class="review-date">1 ngày trước</div>
+          <div class="review-rating">★★★★★</div>
+        </div>
+        <div class="review-content">
+          Dịch vụ rất tuyệt vời, nhân viên thân thiện và chuyên nghiệp.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Review 2 -->
+    <div class="review-card card p-3 mb-3">
+      <div class="d-flex align-items-start">
+        <img
+          src="https://via.placeholder.com/80"
+          alt="Customer Avatar"
+          class="rounded-circle mr-3"
+          width="80"
+          height="80"
+        />
+        <div class="review-details mr-3">
+          <div class="customer-name">Trần Thị B</div>
+          <div class="review-date">3 ngày trước</div>
+          <div class="review-rating">★★★★☆</div>
+        </div>
+        <div class="review-content">
+          Dịch vụ tốt, tuy nhiên thời gian hoàn thành có thể nhanh hơn.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Review 3 -->
+    <div class="review-card card p-3 mb-3">
+      <div class="d-flex align-items-start">
+        <img
+          src="https://via.placeholder.com/80"
+          alt="Customer Avatar"
+          class="rounded-circle mr-3"
+          width="80"
+          height="80"
+        />
+        <div class="review-details mr-3">
+          <div class="customer-name">Lê Minh C</div>
+          <div class="review-date">5 ngày trước</div>
+          <div class="review-rating">★★★★★</div>
+        </div>
+        <div class="review-content">
+          Tôi rất hài lòng với dịch vụ ở đây. Nhân viên rất nhiệt tình và chuyên môn cao.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Review 4 -->
+    <div class="review-card card p-3 mb-3">
+      <div class="d-flex align-items-start">
+        <img
+          src="https://via.placeholder.com/80"
+          alt="Customer Avatar"
+          class="rounded-circle mr-3"
+          width="80"
+          height="80"
+        />
+        <div class="review-details mr-3">
+          <div class="customer-name">Phan Quang D</div>
+          <div class="review-date">7 ngày trước</div>
+          <div class="review-rating">★★★☆☆</div>
+        </div>
+        <div class="review-content">
+          Dịch vụ không tồi, nhưng có thể cải thiện về thái độ phục vụ.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="direction">
+    <h3 class="mb-4">Hướng dẫn chỉ đường</h3>
+    <div id="map" style="width: 96%; height: 400px; margin-bottom: 30px"></div>
+  </div>
+</div>

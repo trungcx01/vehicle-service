@@ -1,0 +1,110 @@
+<div class="admin-home-container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid container">
+        <!-- Logo hoặc tên brand -->
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        
+        <!-- Nút toggle khi màn hình nhỏ -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Menu Navbar -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="notifications">
+                <i class="fa fa-users me-2"></i>Khách hàng
+              </a>
+            </li>
+  
+            <li class="nav-item">
+              <a class="nav-link" routerLink="notifications">
+                <i class="fa fa-store me-2"></i>Cửa hàng
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="services">
+                <i class="fa fa-cogs me-2"></i>Dịch Vụ
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="appointments">
+                <i class="fa fa-calendar-check me-2"></i>Lịch Hẹn
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="emergency-request-list">
+                <i class="fa fa-exclamation-triangle me-2"></i>Khẩn Cấp
+              </a>
+            </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" routerLink="info">
+                <i class="fa fa-bell me-2"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">
+                <i class="fa fa-sign-out-alt me-2"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  
+    <!-- Trang Dashboard chính -->
+    <div class="container mt-5">
+      <h1 class="text-center mb-5">Chào mừng đến với Admin Dashboard</h1>
+  
+      <div class="row">
+        <!-- Card Quản lý Khách Hàng -->
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card shadow-lg text-center p-3 h-100">
+            <div class="card-body">
+              <h5 class="card-title">Quản lý Khách Hàng</h5>
+              <p><i class="fa fa-user mt-1" style="font-size: 2.5rem;"></i></p>
+              <a class="btn btn-dark mt-3" routerLink="customers">Xem Chi Tiết</a>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Card Quản lý Cửa Hàng -->
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card shadow-lg text-center p-3 h-100">
+            <div class="card-body">
+              <h5 class="card-title">Quản lý Cửa Hàng</h5>
+              <p><i class="fa fa-store mt-1" style="font-size: 2.5rem;"></i></p>
+              <a class="btn btn-dark mt-3" routerLink="shops">Xem Chi Tiết</a>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Card Quản lý Dịch Vụ -->
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card shadow-lg text-center p-3 h-100">
+            <div class="card-body">
+              <h5 class="card-title ">Quản lý Dịch Vụ</h5>
+              <p><i class="fa fa-wrench mt-1" style="font-size: 2.5rem;"></i></p>
+              <a class="btn btn-dark mt-3" routerLink="services">Xem Chi Tiết</a>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Card Quản lý Lịch Hẹn -->
+        <div class="col-md-6 col-lg-3 mb-4">
+          <div class="card shadow-lg text-center p-3 h-100">
+            <div class="card-body">
+              <h5 class="card-title">Quản lý Lịch Hẹn</h5>
+              <p><i class="fa fa-calendar mt-1" style="font-size: 2.5rem;"></i></p>
+              <a class="btn btn-dark mt-3" routerLink="appointments">Xem Chi Tiết</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <router-outlet></router-outlet>
+  </div>
+  

@@ -1,0 +1,56 @@
+<div class="container back-link-container d-flex align-items-center mb-3 mt-3">
+    <i class="fa-solid fa-arrow-left"></i>&nbsp;
+    <a href="#" class="back-link"> Quay về trang chủ</a>
+</div>
+
+<h2 class="text-center mt-3 mb-4">Thanh toán đơn hàng Lịch hẹn</h2>
+<div class="container payment-page">
+    <div class="row">
+        <div class="col-lg-5 col-md-12 left-column">
+            <div class="info-section shop-info mb-4 p-4 rounded shadow-sm" style="background-color: #f0f4f8;">
+                <h5 class="font-weight-bold">Thông tin Cửa hàng</h5>
+                <p><strong>Tên:</strong> {{ appointment.vehicleCares[0].shop.name }}</p>
+                <p><strong>Địa chỉ:</strong> {{ appointment.vehicleCares[0].shop.address }}</p>
+                <p><strong>SĐT:</strong> {{ appointment.vehicleCares[0].shop.phoneNumber }}</p>
+            </div>
+
+            <div class="info-section customer-info p-4 rounded shadow-sm" style="background-color: #f0f4f8;">
+                <h5 class="font-weight-bold">Thông tin Khách hàng</h5>
+                <p><strong>Tên:</strong> {{ appointment.customer.name }}</p>
+                <p><strong>Địa chỉ:</strong> {{ appointment.customer.address }}</p>
+                <p><strong>SĐT:</strong> {{ appointment.customer.phoneNumber }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-7 col-md-12 right-column">
+            <div class="info-section appointment-info mb-4 p-4 rounded shadow-sm" style="background-color: #ffffff;">
+                <h5 class="font-weight-bold">Thông tin Lịch hẹn</h5>
+                <p><strong>Ngày đặt:</strong> {{ appointment.date }}</p>
+                <p><strong>Khung giờ:</strong> {{ appointment.time }}</p>
+                <p><strong>Ghi chú:</strong> {{ appointment.note }}</p>
+            </div>
+
+            <div class="vehicle-care-list mb-4 p-4 rounded shadow-sm" style="background-color: #ffffff;">
+                <h5 class="font-weight-bold">Dịch vụ</h5>
+                <div class="vehicle-care-card d-flex justify-content-between border-bottom py-2" *ngFor="let care of appointment.vehicleCares">
+                    <span>{{ care.name }}</span>
+                    <span>{{ care.price | number }} VNĐ</span>
+                </div>
+            </div>
+
+            <div class="total-amount text-right d-flex justify-content-between mb-4 p-4 rounded shadow-sm font-weight-bold" style="background-color: #ffffff;">
+                <span>Tổng tiền</span>
+                <span>{{ amount | number }} VNĐ</span>
+            </div>
+
+            <div class="payment-options">
+                <h5 class="mb-3 font-weight-bold">Phương thức thanh toán</h5>
+                <div class="d-flex flex-column gap-2">
+                    <button (click)="pay('QR')" class="btn btn-primary w-100">Thanh toán bằng QR</button>
+                    <button (click)="pay('BANKING')" class="btn btn-outline-dark w-100">Thanh toán bằng VNPAY</button>
+                    <button (click)="pay('CASH')" class="btn btn-secondary w-100">Thanh toán trực tiếp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

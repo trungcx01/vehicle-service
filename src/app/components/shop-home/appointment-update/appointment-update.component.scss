@@ -1,0 +1,22 @@
+.modal-content {
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0;
+    
+  }
+  
+  .modal-header {
+    color: white;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+  }
+
+  .date{
+    position: relative;
+
+    i{
+        position: absolute;
+        right: 3.5%;
+        top: 55%;
+    }
+  }

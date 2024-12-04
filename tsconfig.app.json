@@ -4,12 +4,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": ["@angular/localize"]
   },
-  "files": [
-    "src/main.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts"],
+
+  "angularCompilerOptions": {
+    "enableIvy": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules/ng2-completer"]
 }

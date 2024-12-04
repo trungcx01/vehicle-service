@@ -1,0 +1,220 @@
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-md-12 col-sm-12">
+
+      <!-- Tabs -->
+      <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="accountInfoTab"
+            data-bs-toggle="tab"
+            href="#accountInfo"
+            role="tab"
+            aria-controls="accountInfo"
+            aria-selected="true">
+            Thông tin tài khoản
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            id="changePasswordTab"
+            data-bs-toggle="tab"
+            href="#changePassword"
+            role="tab"
+            aria-controls="changePassword"
+            aria-selected="false">
+            Đổi mật khẩu
+          </a>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content bg-light p-4 rounded shadow-sm" id="accountTabsContent">
+
+        <!-- Thông tin tài khoản -->
+        <div
+          class="tab-pane fade show active"
+          id="accountInfo"
+          role="tabpanel"
+          aria-labelledby="accountInfoTab">
+          <h4 class="mb-4 text-center">Thông tin tài khoản</h4>
+
+          <!-- CUSTOMER Form -->
+          <form *ngIf="role === 'CUSTOMER'" [formGroup]="customerInfoForm" (ngSubmit)="saveInfo()">
+            <div class="text-center mb-4">
+              <label for="avatar">
+                <img
+                  [src]="previewImage"
+                  class="rounded-circle img-thumbnail shadow-sm"
+                  style="width: 120px; height: 120px; cursor: pointer;"
+                  alt="Avatar" />
+              </label>
+              <input type="file" id="avatar" name="avatar" (change)="onFileSelected($event)" hidden />
+              <p class="text-muted">Nhấp để thay đổi ảnh đại diện</p>
+            </div>
+            <div class="mb-3">
+              <label for="username" class="form-label">Tên đăng nhập</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                [value]="username"
+                disabled />
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Họ và tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                formControlName="name" />
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Địa chỉ</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                formControlName="address" />
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phoneNumber"
+                  formControlName="phoneNumber" />
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="dob" class="form-label">Ngày sinh</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="dob"
+                  formControlName="dob" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Lưu thông tin</button>
+          </form>
+
+          <!-- SHOP Form -->
+          <form *ngIf="role === 'SHOP'" [formGroup]="shopInfoForm" (ngSubmit)="saveInfo()">
+            <div class="text-center mb-4">
+              <label for="avatar">
+                <img
+                  [src]="previewImage"
+                  class="rounded-circle img-thumbnail shadow-sm"
+                  style="width: 120px; height: 120px; cursor: pointer;"
+                  alt="Avatar" />
+              </label>
+              <input type="file" id="avatar" name="avatar" (change)="onFileSelected($event)" hidden />
+              <p class="text-muted">Nhấp để thay đổi ảnh đại diện</p>
+            </div>
+
+            <div class="mb-3">
+              <label for="username" class="form-label">Tên đăng nhập</label>
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                [value]="username"
+                disabled />
+            </div>
+            <div class="mb-3">
+              <label for="name" class="form-label">Họ và tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                formControlName="name" />
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Địa chỉ</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                name="address"
+                formControlName="address" />
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="openingTime" class="form-label">Thời gian mở cửa</label>
+                <input
+                  formControlName="openHour"
+                  class="form-control"
+                  [ngxTimepicker]="timePicker1"
+                  [format]="24"
+                  name="openingTime"
+                  readonly />
+                <ngx-material-timepicker #timePicker1></ngx-material-timepicker>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="closingTime" class="form-label">Thời gian đóng cửa</label>
+                <input
+                  formControlName="closeHour"
+                  class="form-control"
+                  [ngxTimepicker]="timePicker2"
+                  [format]="24"
+                  name="closingTime"
+                  readonly />
+                <ngx-material-timepicker #timePicker2></ngx-material-timepicker>
+              </div>
+
+              <div class="mb-3">
+                <label for="description" class="form-label">Mô tả</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="description"
+                  name="description"
+                  formControlName="description" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Lưu thông tin</button>
+          </form>
+        </div>
+
+        <!-- Đổi mật khẩu -->
+        <div
+          class="tab-pane fade"
+          id="changePassword"
+          role="tabpanel"
+          aria-labelledby="changePasswordTab">
+          <h4 class="mb-4 text-center">Đổi mật khẩu</h4>
+          <form [formGroup]="changePasswordForm">
+            <div class="mb-3">
+              <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+              <input
+                type="password"
+                class="form-control"
+                id="oldPassword"
+                formControlName="oldPassword" />
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">Mật khẩu mới</label>
+              <input
+                type="password"
+                class="form-control"
+                id="newPassword"
+                formControlName="newPassword" />
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Nhập lại mật khẩu mới</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirmPassword"
+                formControlName="confirmPassword" />
+            </div>
+            <button (click)="changePassword()" type="submit" class="btn btn-success w-100">Đổi mật khẩu</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
