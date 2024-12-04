@@ -10,3 +10,43 @@
     border-bottom: 1px solid #ddd;
     font-weight: bold;
   }
+
+  .file-upload {
+    position: relative;
+    margin-top: 10px;
+  }
+  
+  .file-upload input[type="file"] {
+    display: none;
+  }
+  
+  .file-upload-label {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .preview-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .preview-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  input, textarea{
+    &:focus{
+        box-shadow: none;
+    }
+    outline: none;
+}

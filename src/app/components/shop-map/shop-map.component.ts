@@ -35,7 +35,7 @@ export class ShopMapComponent {
   TOTAL_STEP = 4;
   shortestDistance = 0;
   fastestTime = 0;
-  visible = true;
+  visible = false;
   proposal: any
   proposalId: any;
 
@@ -61,8 +61,8 @@ export class ShopMapComponent {
     );
     [this.origin_lng, this.origin_lat] = await this.convertToLatLng(this.origin);
 
-    this.addMarker(this.destination_lng, this.destination_lat, 'customer');
-    this.addMarker(this.origin_lng, this.origin_lat, 'shop');
+    this.addMarker(this.destination_lng, this.destination_lat, 'CUSTOMER');
+    this.addMarker(this.origin_lng, this.origin_lat, 'SHOP');
     this.setMapCenter();
     [this.fastestTime, this.shortestDistance] = await this.getDistanceAndTime();
     this.getDirectionLines(String(this.i));
@@ -112,23 +112,15 @@ export class ShopMapComponent {
   }
 
   addMarker(lng: number, lat: number, role: string): void {
-    const customMarker = document.createElement('div');
-    customMarker.className = role === 'shop' ? 'shop-marker' : 'customer-marker';
-    customMarker.style.backgroundImage =
-      role === 'shop'
-        ? 'url(https://res.cloudinary.com/dmwkcepna/image/upload/v1732774699/shop_marker.png)'
-        : 'url(https://res.cloudinary.com/dmwkcepna/image/upload/v1732774699/customer_marker.png)';
-    customMarker.style.backgroundSize = 'cover';
-    customMarker.style.width = '40px';
-    customMarker.style.height = '40px';
-    customMarker.style.cursor = 'pointer';
-
     const marker = new goongjs.Marker({
-      element: customMarker,
-    })
-      .setLngLat([lng, lat])
-      .addTo(this.map);
-    this.markers.push(marker);
+      color: role === 'SHOP' ? '#FF5733' : '#33C1FF', // Màu khác biệt
+  })
+    .setLngLat([lng, lat])
+    .addTo(this.map);
+
+  marker['role'] = role;
+
+  this.markers.push(marker);
   }
 
   startShopSimulation(): void {
@@ -148,21 +140,21 @@ export class ShopMapComponent {
         });
         clearInterval(intervalId);
       }
-    }, 5000);
+    }, 10000);
   }
 
   
 
   updateShopMarker(): void {
     const shopMarker = this.markers.find(
-      (marker) => marker.getElement().className === 'shop-marker'
+      (marker) => marker['role'] === 'SHOP'
     );
     if (shopMarker) {
       shopMarker.setLngLat([this.origin_lng, this.origin_lat]);
     } else {
-      this.addMarker(this.origin_lng, this.origin_lat, 'shop');
+      this.addMarker(this.origin_lng, this.origin_lat, 'SHOP');
     }
-    this.markers.pop()!.remove();
+    // this.markers.pop()!.remove();
     this.map.removeLayer(String(this.i));
     this.map.removeSource(String(this.i++));
     this.getDirectionLines(String(this.i));

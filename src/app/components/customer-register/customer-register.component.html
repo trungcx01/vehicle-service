@@ -1,5 +1,5 @@
 <div class="customer row justify-content-center">
-  <div class="col-md-7">
+  <div class="col-lg-10">
     <form [formGroup]="customerForm">
       <h4 class="text-center">Đăng kí thông tin Customer</h4>
       <div class="form-group mb-3">
@@ -45,7 +45,6 @@
             id="datepicker"
             ngbDatepicker
             #d="ngbDatepicker"
-            navigation="none"
             [weekdays]="false"
           />
           <i (click)="d.toggle()" class="fa-solid fa-calendar-days"></i>
@@ -65,8 +64,10 @@
         >
       </div>
 
-      <button type="submit" (click)="submit()" class="btn btn-success">Lưu</button>
-      <button class="btn btn-danger">Hủy</button>
+      <div class="d-flex mt-4 gap-3">
+        <button type="submit" (click)="submit()" class="btn btn-success col-6">Lưu</button>
+      <button class="btn btn-danger col-6">Hủy</button>
+      </div>
     </form>
   </div>
 </div>

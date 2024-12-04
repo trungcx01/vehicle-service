@@ -5,6 +5,10 @@
     align-items: center;
     justify-content: center;
 
+    small{
+        font-size: 10px;
+    }
+
     .signup-form {
         height: 80vh;
         width: 65vw;
@@ -88,7 +92,7 @@
         .signup-form {
             display: flex;
             flex-direction: column;
-            height: 70vh;
+            height: 90vh;
             width: 80vw;
 
             .title {
@@ -107,14 +111,14 @@
             }
 
             form {
-                flex: 2;
+                flex: 2.7;
                 justify-content: center;
 
                 input {
                     padding: 5px;
                 }
 
-                gap: 13px;
+                gap: 10px;
                 padding: 0 20px;
                 order: 2;
             }
@@ -122,11 +126,16 @@
     }
 
     @media (max-width: 380px) {
+        .title{
+            height: 80%;
+        }
         .signup-form {
-            height: 85vh;
+            height: 90vh;
             width: 80vw;
             display: flex;
             flex-direction: column;
+
+           
 
             .title {
                 flex: 1;
@@ -151,7 +160,7 @@
                     padding: 5px;
                 }
 
-                gap: 13px;
+                gap: 10px;
                 padding: 0 20px;
                 order: 2;
             }

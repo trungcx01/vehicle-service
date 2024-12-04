@@ -31,20 +31,21 @@ export class SignupComponent implements OnInit {
   }
 
   activate() {
-    Swal.close();
     Swal.fire({
       title: "Kích hoạt tài khoản",
-      text: `<span style="font-size: 0.7em;">Mã kích hoạt đã được gửi đến email <strong>${
-        this.signUpForm.get('email')!.value
-      }</strong>. Vui lòng nhập vào ô dưới đây!</span>`,
-      input: 'text',
+      html: `<span style="font-size: 1.2em;">
+                Mã kích hoạt đã được gửi đến email 
+                <strong>${this.signUpForm.get('email')!.value}</strong>. 
+                Vui lòng nhập vào ô dưới đây!
+             </span>`, 
+      input: 'text', 
       inputAttributes: {
-        autocapitalize: 'off',
+        autocapitalize: 'off', 
       },
-      confirmButtonText: 'Kích hoạt',
-      showLoaderOnConfirm: true,
+      confirmButtonText: 'Kích hoạt', 
+      showLoaderOnConfirm: true, 
       allowOutsideClick: false, 
-      allowEscapeKey: false,  
+      allowEscapeKey: false, 
     }).then((result) => {
       if (result.isConfirmed) {
         this.authService.activated(result.value).subscribe({
@@ -79,15 +80,6 @@ export class SignupComponent implements OnInit {
         this.signUpForm.get('password')!.value ===
         this.signUpForm.get('confirmPassword')!.value
       ) {
-        Swal.fire({
-          title: 'Đang gửi mã kích hoạt...',
-          text: 'Vui lòng chờ trong giây lát',
-          allowOutsideClick: false, 
-          allowEscapeKey: false,  
-          didOpen: () => {
-            Swal.showLoading(); 
-          }
-        });
         this.authService.signUp(signUp).subscribe({
           next: (res) => {
             console.log(res);
@@ -102,7 +94,7 @@ export class SignupComponent implements OnInit {
           },
         });
       } else {
-        this.toastr.error('Passwords do not match');
+        this.toastr.error('Mật khẩu không trùng khớp!');
       }
     }
   }

@@ -32,8 +32,8 @@ export class ShopRegisterComponent implements OnInit {
       phoneNumber: ['', Validators.required],
       address: ['', Validators.required],
       description: ['', Validators.required],
-      openingTime: ['', Validators.required],
-      closingTime: ['', Validators.required],
+      openHour: ['', Validators.required],
+      closeHour: ['', Validators.required],
     });
   }
 ngOnInit(): void {
@@ -58,15 +58,8 @@ ngOnInit(): void {
 
   submit(){
     const token = localStorage.getItem("token");
-    
-    const value = {
-      name: this.shopForm.value.name,
-      phoneNumber: this.shopForm.value.phoneNumber,
-      address: this.shopForm.value.address,
-      description: this.shopForm.value.description,
-      openingHour: this.shopForm.value.openingTime + "-" + this.shopForm.value.closingTime
-    }
-    this.shopService.createShop(value).subscribe({
+    console.log(this.shopForm.value)
+    this.shopService.createShop(this.shopForm.value).subscribe({
       next: (res) =>{
         console.log('Dữ liệu trả về:', res);
         this.toastr.success("Đăng kí thành công!")

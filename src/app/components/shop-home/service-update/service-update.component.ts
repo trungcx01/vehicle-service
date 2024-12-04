@@ -13,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 export class ServiceUpdateComponent {
   vehicleCareForm!: FormGroup;
   @Input() vehicleCare: any;
+  previewFile: any;
+  image: any;
 
   constructor(
     private fb: FormBuilder,
@@ -41,12 +43,25 @@ export class ServiceUpdateComponent {
         estimatedDuration: this.vehicleCare.estimatedDuration,
         available: this.vehicleCare.available,
       });
+      this.previewFile = this.vehicleCare.imageUrl;
+      this.image = this.vehicleCare.imageUrl;
     }
   }
 
+  onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    this.image = file;
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previewFile = (e.target.result);
+        };
+        reader.readAsDataURL(file); // sau khi đọc file xong thì sẽ lưu dạng base64 về e.target.result ở dòng 51
+    }
+  
+
   onSubmit() {
     if (!this.vehicleCare) {
-      this.vehicleCareService.create(this.vehicleCareForm.value).subscribe({
+      this.vehicleCareService.create(this.vehicleCareForm.value, this.image).subscribe({
         next: (data) => {
           console.log(data);
           this.toastr.success('Thêm mới thành công');
@@ -61,7 +76,8 @@ export class ServiceUpdateComponent {
         },
       });
     } else {
-      this.vehicleCareService.update(this.vehicleCareForm.value).subscribe({
+  
+      this.vehicleCareService.update(this.vehicleCareForm.value, this.image).subscribe({
         next: (data) => {
           console.log(data);
          

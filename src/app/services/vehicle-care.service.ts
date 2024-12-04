@@ -18,12 +18,28 @@ export class VehicleCareService {
     return this.http.get(this.apiUrl + "/current-shop");
   }
 
-  create(vehicleCare: IVehicleCareDTO): Observable<any>{
-    return this.http.post(this.apiUrl, vehicleCare);
+  create(vehicleCare: IVehicleCareDTO, image: File): Observable<any>{
+    const formData = new FormData();
+    formData.append(
+      'vehicleCareDTO',
+      new Blob([JSON.stringify(vehicleCare)], {
+        type: 'application/json',
+      })
+    );
+    formData.append('image', image);
+    return this.http.post(this.apiUrl, formData);
   }
 
-  update(vehicleCare: IVehicleCareDTO): Observable<any>{
-    return this.http.put(this.apiUrl, vehicleCare);
+  update(vehicleCare: IVehicleCareDTO, image: File): Observable<any>{
+    const formData = new FormData();
+    formData.append(
+      'vehicleCareDTO',
+      new Blob([JSON.stringify(vehicleCare)], {
+        type: 'application/json',
+      })
+    );
+    formData.append('image', image);
+    return this.http.put(this.apiUrl, formData);
   }
 
   delete(vehicleCareId: number){

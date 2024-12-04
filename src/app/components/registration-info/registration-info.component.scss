@@ -1,11 +1,64 @@
-img{
-    padding: 15px;
-    
-}
-.account-card{
+/* Tổng quan cho container */
+.container {
+    max-width: 800px;
+    margin: auto;
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    padding: 60px;
+    border-radius: 10px; /* Bo góc nhẹ */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+  }
+  
+  /* Tiêu đề */
+  h2 {
+    font-family: 'Roboto', sans-serif; /* Font hiện đại */
+    font-weight: bold;
+    color: #05878c;
+  }
+  
+  /* Card tổng quát */
+  .account-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
     cursor: pointer;
-}
-
-.row{
-    padding: 0 140px;
-}
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .account-card:hover {
+    transform: scale(1.02); /* Hiệu ứng phóng to khi hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng */
+  }
+  
+  .account-card img {
+    border: 3px solid transparent; /* Viền trong suốt mặc định */
+    transition: border-color 0.2s ease;
+  }
+  
+  .account-card img:hover {
+    border-color: #05878c; /* Thay đổi màu viền khi hover */
+  }
+  
+  .account-card-body h5 {
+    font-size: 1.25em;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  /* Button tiếp tục */
+  .next-page .btn {
+    font-size: 1em;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #05878c;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .next-page .btn:hover {
+    background-color: #04666e;
+    transform: scale(1.1); /* Phóng to nhẹ */
+  }
+  
