@@ -1,81 +1,125 @@
-<!-- Appointment Modal -->
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title" id="vehicleCareModalLabel">
-              {{ appointment ? 'Update Appointment' : 'Add Appointment' }}
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-  
-        <div class="modal-body">
-          <form id="appointmentForm" [formGroup]="appointmentForm">
-            <div class="row g-3">
-                <div class="col-6">
-                    <label for="customerPhone" class="form-label">SĐT Khách hàng</label>
-                    <input formControlName="customerId" type="text" id="customerPhone" class="form-control" placeholder="Enter phone number" required />
-                  </div>
-
-                  <div class="col-md-6">
-                    <label for="vehicleType" class="form-label">Loại Phương tiện</label>
-                    <select id="vehicleType" class="form-select" required formControlName="vehicleType"> 
-                      <option value="CAR">Car</option>
-                      <option value="MOTORBIKE">Motorbike</option>
-                      <option value="TRUCK">Truck</option>
-                    </select>
-                  </div>
-                <div class="date form-group mb-3 col-6">
-                    <label for="datepicker">Ngày hẹn</label>
-                    <input
-                    formControlName="date"
-                      class="form-control"
-                      id="datepicker"
-                      ngbDatepicker
-                      #d="ngbDatepicker"
-                      [weekdays]="false"
-                      (click)="d.toggle()"
-                    />
-                    <!-- <i " class="fa-solid fa-calendar-days" style="font-size: 17px;"></i> -->
-                  </div>
-
-                  <div class="form-group col-6">
-                    <label class="form-control-label" for="openingTime">Thời gian</label>
-                      <input formControlName="time"  class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime1" [format]="24"  readonly>
-                      <ngx-material-timepicker #fullTime1 ></ngx-material-timepicker>
-                  </div>
-
-  
-            
-  
-                  <div class="mb-3 col-12" >
-                    <label class="form-label">Chọn dịch vụ</label>
-                    <div formGroupName="vehicleCareIds">
-                        <div *ngFor="let vehicle of vehicleCares">
-                          <label>
-                            <input type="checkbox" [formControlName]="vehicle.id" />
-                            {{ vehicle.name }}
-                          </label>
-                        </div>
-                      </div>
-                  </div>
-
-             
-  
-              <div class="col-12">
-                <label for="note" class="form-label">Ghi chú</label>
-                <textarea formControlName="note" id="note" class="form-control" rows="3"></textarea>
-              </div>
-            </div>
-          </form>
-        </div>
-  
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" (click)="onSubmit()" class="btn btn-primary">
-              {{ appointment ? 'Sửa' : 'Thêm mới' }}
-            </button>
-          </div>
-      </div>
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <!-- Header Modal -->
+    <div class="modal-header bg-dark text-light">
+      <h5 class="modal-title fw-bold" id="vehicleCareModalLabel">
+        {{ appointment ? 'Cập nhật Lịch hẹn' : 'Thêm Lịch hẹn' }}
+      </h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
 
-  
+    <!-- Body Modal -->
+    <div class="modal-body">
+      <form id="appointmentForm" [formGroup]="appointmentForm">
+        <div class="row g-4">
+          <!-- Số điện thoại khách hàng -->
+          <div class="col-md-6">
+            <label for="customerPhone" class="form-label fw-semibold">SĐT Khách hàng</label>
+            <input
+              formControlName="customerId"
+              type="text"
+              id="customerPhone"
+              class="form-control"
+              placeholder="Nhập số điện thoại"
+              required
+            />
+          </div>
+
+          <!-- Loại phương tiện -->
+          <div class="col-md-6">
+            <label for="vehicleType" class="form-label fw-semibold">Loại Phương tiện</label>
+            <select
+              id="vehicleType"
+              class="form-select"
+              formControlName="vehicleType"
+              required
+            >
+              <option value="CAR">Car</option>
+              <option value="MOTORBIKE">Motorbike</option>
+              <option value="TRUCK">Truck</option>
+            </select>
+          </div>
+
+          <!-- Ngày hẹn -->
+          <div class="col-md-6">
+            <label for="datepicker" class="form-label fw-semibold">Ngày hẹn</label>
+            <div class="input-group">
+              <input
+                formControlName="date"
+                type="text"
+                id="datepicker"
+                class="form-control"
+                ngbDatepicker
+                #d="ngbDatepicker"
+              
+              />
+              <span class="input-group-text" (click)="d.toggle()">
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- Thời gian -->
+          <div class="col-md-6">
+            <label for="openingTime" class="form-label fw-semibold">Thời gian</label>
+            <input
+              formControlName="time"
+              type="text"
+              id="openingTime"
+              class="form-control"
+              aria-label="24hr format"
+              [ngxTimepicker]="fullTime1"
+              [format]="24"
+              readonly
+            />
+            <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+          </div>
+
+          <!-- Dịch vụ -->
+          <div class="col-12">
+            <label class="form-label fw-semibold">Chọn Dịch vụ</label>
+            <div formGroupName="vehicleCareIds" class="d-flex flex-wrap gap-2">
+              <div *ngFor="let vehicle of vehicleCares" class="form-check">
+                <input
+                  type="checkbox"
+                  [formControlName]="vehicle.id"
+                  class="form-check-input"
+                  id="service-{{ vehicle.id }}"
+                />
+                <label class="form-check-label" for="service-{{ vehicle.id }}">
+                  {{ vehicle.name }}
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ghi chú -->
+          <div class="col-12">
+            <label for="note" class="form-label fw-semibold">Ghi chú</label>
+            <textarea
+              formControlName="note"
+              id="note"
+              class="form-control"
+              rows="3"
+              placeholder="Nhập ghi chú"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer Modal -->
+    <div class="modal-footer d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+        Hủy
+      </button>
+      <button
+        type="submit"
+        (click)="onSubmit()"
+        class="btn btn-success"
+      >
+        {{ appointment ? 'Cập nhật' : 'Thêm mới' }}
+      </button>
+    </div>
+  </div>
+</div>

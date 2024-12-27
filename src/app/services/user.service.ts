@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,5 +14,17 @@ export class UserService {
     const formData = new FormData();
     formData.append('avatar', avatar);
     return this.http.put(`${this.apiUrl}/update-avatar`, formData)
+  }
+
+  getByMonth(date: string){
+    return this.http.get(`${this.apiUrl}/get-by-month/${date}`)
+  }
+
+  lockAccount(userId: number): Observable<any>{
+    return this.http.put(this.apiUrl + "/lock/" + userId, {});
+  }
+
+  unlockAccount(userId: number): Observable<any>{
+    return this.http.put(this.apiUrl + "/unlock/" + userId, {});
   }
 }

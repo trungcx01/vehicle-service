@@ -1,5 +1,56 @@
+<div class="shop-home-container">
 
-<div class="shop-home-container" >
-  <app-shop-dashboard-header></app-shop-dashboard-header> 
-  <router-outlet></router-outlet>  
+  <nav class="sidebar" [ngClass]="{ 'collapsed': isCollapsed }">
+
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="fa" [ngClass]="isCollapsed ? 'fa-bars' : 'fa-times'"></i>
+    </button>
+    
+    <span class="navbar-brand fw-bold text-center mb-3" *ngIf="!isCollapsed" href="#">Shop Dashboard</span>
+
+    <ul class="navbar-nav w-100">
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('services') ? 'active' : ''" routerLink="services">
+          <i class="fa fa-cogs"></i><span *ngIf="!isCollapsed">Hạng mục</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('appointments') ? 'active' : ''" routerLink="appointments">
+          <i class="fa fa-calendar-check"></i><span *ngIf="!isCollapsed">Lịch Hẹn</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('emergency-request-list') ? 'active' : ''" routerLink="emergency-request-list">
+          <i class="fa fa-exclamation-triangle"></i><span *ngIf="!isCollapsed">Khẩn Cấp</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('reviews') ? 'active' : ''" routerLink="reviews">
+          <i class="fa fa-star"></i><span *ngIf="!isCollapsed">Đánh giá</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('statistic') ? 'active' : ''" routerLink="statistic">
+          <i class="fa fa-chart-line"></i><span *ngIf="!isCollapsed">Thống kê</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('info') ? 'active' : ''" routerLink="info">
+          <i class="fa fa-user"></i><span *ngIf="!isCollapsed">Tài khoản của tôi</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-danger" (click)="logout()">
+          <i class="fa fa-sign-out-alt"></i><span *ngIf="!isCollapsed">Đăng Xuất</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+
+  <div class="content-container">
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>

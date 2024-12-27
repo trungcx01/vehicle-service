@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 })
 export class AppointmentComponent implements OnInit {
   @Input() shop: any;
+  @Input() vehicleCare: any;
   appointmentForm: any;
   vehicleCares: any[] = [];
   constructor(
@@ -27,13 +28,7 @@ export class AppointmentComponent implements OnInit {
     private toastr: ToastrService, 
     private router: Router
   ) {
-    this.appointmentForm = this.fb.group({
-      date: ['', Validators.required],
-      time: ['', Validators.required],
-      vehicleType: ['', Validators.required],
-      note: ['', Validators.required],
-      vehicleCareIds: this.fb.group({})
-    });
+    
   }
 
   getVehicleCares() {
@@ -52,6 +47,26 @@ export class AppointmentComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    if (this.vehicleCare && this.vehicleCare.id) {
+      this.appointmentForm = this.fb.group({
+        date: ['', Validators.required],
+        time: ['', Validators.required],
+        vehicleType: ['', Validators.required],
+        note: ['', Validators.required],
+        vehicleCareIds: this.fb.group({
+          [this.vehicleCare.id]: true
+        })
+      });
+    } else {
+      this.appointmentForm = this.fb.group({
+        date: ['', Validators.required],
+        time: ['', Validators.required],
+        vehicleType: ['', Validators.required],
+        note: ['', Validators.required],
+        vehicleCareIds: this.fb.group({})
+      });
+    }
+    
     console.log(this.shop);
     this.getVehicleCares();
     this.cdr.detectChanges();
@@ -65,6 +80,7 @@ export class AppointmentComponent implements OnInit {
 
   submit() {
     const appointment = this.appointmentForm.value;
+    console.log(appointment);
     appointment.vehicleCareIds = [];
     appointment.date = this.util.convertDate(appointment.date);
     console.log(this.appointmentForm.get("vehicleCareIds").value)

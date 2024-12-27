@@ -2,6 +2,7 @@ export interface IPaymentDTO{
     amount?: number;
     paymentMethod?: string;
     appointmentId?: number
+    proposalId?: number
 }
 
 export class PaymentDTO implements IPaymentDTO{
@@ -9,5 +10,6 @@ export class PaymentDTO implements IPaymentDTO{
         public amount?: number,
         public paymentMethod?: string,
         public appointmentId?: number,
+        public proposalId?: number
     ){}
 }

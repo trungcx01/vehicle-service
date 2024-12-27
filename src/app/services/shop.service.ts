@@ -34,7 +34,15 @@ export class ShopService {
     return this.http.get(this.apiUrl + "/check-send-proposal/" + erId);
   }
 
-  searchShopByName(name: string): Observable<any>{
-    return this.http.get(`${this.apiUrl}/search?name=${name}`);
+  searchShop(name: string, district: string): Observable<any>{
+    return this.http.get(`${this.apiUrl}/search?name=${name}&district=${district}`);
+  }
+
+  getAll(): Observable<any>{
+    return this.http.get(this.apiUrl);
+  }
+
+  delete(id: number): Observable<any>{
+    return this.http.delete(this.apiUrl + "/" + id);
   }
 }

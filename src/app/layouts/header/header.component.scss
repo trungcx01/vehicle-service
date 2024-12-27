@@ -48,7 +48,7 @@ a{
   padding: 3px 8px;
 }
 
-/* User Links */
+
 .nav-item {
   display: inline-block;
   margin-right: 15px;
@@ -58,32 +58,89 @@ a.nav-link{
   text-align: start;
 }
 
-/* Dropdown Menu */
-.dropdown-menu {
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+.notify-dropdown-width {
+  min-width: 250px; 
+  max-height: 400px; 
+  overflow-y: auto; 
+  padding: 0; 
+  border-radius: 10px; /* Bo góc */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+  background-color: #ffffff;
 }
 
-.dropdown-item {
-  padding: 10px 20px;
+/* Mục "Không có thông báo nào" */
+.dropdown-item.text-center {
+  text-align: center;
+  padding: 12px 20px;
+  color: #6c757d; /* Màu xám */
 }
 
-.custom-dropdown-menu{
-  position: absolute;
-  top: 40px;
-  left: -30px;
+/* Mục thông báo */
+.notify-item {
+  display: flex;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f1f1f1; 
+  transition: background-color 0.3s ease;
 }
-.slogan {
-  font-size: 0.85rem;
-  margin-top: -5px;
+
+.notify-item:hover {
+  background-color: #f8f9fa; 
 }
 
 
-/* Điều chỉnh font-size cho chữ "Thông báo" khi màn hình nhỏ */
+.notify-icon {
+  font-size: 1.3rem;
+  color: #17a2b8; 
+}
+
+
+.notify-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notify-details p {
+  font-size: 0.9rem;
+  color: #333; /* Màu chữ tối */
+  margin: 0;
+}
+
+.notify-details small {
+  font-size: 0.8rem;
+  color: #868e96; /* Màu xám cho thời gian */
+}
+
+/* Footer của Dropdown */
+.dropdown-footer {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-top: 1px solid #ddd;
+}
+
+.dropdown-footer a {
+  color: #007bff;
+  font-size: 0.9rem;
+}
+
+.dropdown-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Khi không có thông báo */
+.dropdown-item.text-center {
+  font-size: 0.9rem;
+  color: #6c757d;
+  padding: 10px;
+}
+
+
+
+
 @media (max-width: 991px) {
   .d-lg-none {
     display: inline;
-    font-size: 1rem; /* Đảm bảo font-size của "Thông báo" khi màn hình nhỏ là bình thường */
+    font-size: 1rem; 
   }
   .user-dropdown{
     display: none !important;
@@ -94,10 +151,9 @@ a.nav-link{
   }
 
   .notification-icon {
-   /* Đảm bảo icon Thông báo khi màn hình lớn không bị ảnh hưởng */
   }
 
-  /* Hiển thị các mục Tài khoản và Đăng xuất giống như Emergency và Appointment */
+
   .navbar-nav .nav-item {
     display: block;
     width: 100%;
@@ -126,4 +182,36 @@ a.nav-link{
   }
 
   
+}
+
+
+
+.header{
+  margin-bottom: 20px;
+}
+
+.navbar .nav-link {
+  color: #6c757d;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.navbar .nav-link.active {
+  color: #ffffff;
+  background-color: #007bff;
+  padding: 8px 15px;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+
+.notification-dot {
+  position: absolute;
+  top: 4px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #dc3545; /* Màu đỏ */
+  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Hiệu ứng sáng nhẹ */
 }

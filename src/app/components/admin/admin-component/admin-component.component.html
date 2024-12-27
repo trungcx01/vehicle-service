@@ -1,0 +1,62 @@
+<div class="admin-home-container">
+
+    <nav class="sidebar" [ngClass]="{ 'collapsed': isCollapsed }">
+      
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="fas" [ngClass]="isCollapsed ? 'fa-bars' : 'fa-times'"></i>
+      </button>
+      
+      <span class="navbar-brand fw-bold text-center mb-3" *ngIf="!isCollapsed">Dashboard</span>
+  
+      <ul class="navbar-nav w-100">
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('customer-management') ? 'active' : ''" routerLink="customer-management">
+            <i class="fas fa-users"></i><span *ngIf="!isCollapsed">Khách hàng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('shop-management') ? 'active' : ''" routerLink="shop-management">
+            <i class="fas fa-store"></i><span *ngIf="!isCollapsed">Cửa hàng</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('vehicle-care-management') ? 'active' : ''" routerLink="vehicle-care-management">
+            <i class="fas fa-car"></i><span *ngIf="!isCollapsed">Hạng mục</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('appointment-management') ? 'active' : ''" routerLink="appointment-management">
+            <i class="fas fa-calendar-check"></i><span *ngIf="!isCollapsed">Lịch hẹn</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('emergency-request-management') ? 'active' : ''" routerLink="emergency-request-management">
+            <i class="fas fa-exclamation-circle"></i><span *ngIf="!isCollapsed">Khẩn cấp</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('review-management') ? 'active' : ''" routerLink="review-management">
+            <i class="fas fa-star"></i><span *ngIf="!isCollapsed">Đánh giá</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="router.url.endsWith('statistic') ? 'active' : ''" routerLink="statistic">
+            <i class="fas fa-chart-bar"></i><span *ngIf="!isCollapsed">Thống kê</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i><span *ngIf="!isCollapsed">Đăng xuất</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  
+    <div class="content-container">
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  
+  </div>
+  

@@ -1,5 +1,5 @@
 import { CustomerService } from './../../services/customer.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -27,6 +27,7 @@ export class UserInfoComponent implements OnInit {
   username: any;
   avatar: any;
   type: any;
+  edit = true;
 
   constructor(
     private fb: FormBuilder,
@@ -35,24 +36,25 @@ export class UserInfoComponent implements OnInit {
     private router: Router,
     private customerService: CustomerService,
     private shopService: ShopService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
   ) {
     this.customerInfoForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      dob: [''],
+      name: [{ value: '', disabled: this.edit }, Validators.required],
+      address: [{ value: '', disabled: this.edit }, Validators.required],
+      phoneNumber: [{ value: '', disabled: this.edit }, Validators.required],
+      dob: [{ value: '', disabled: this.edit }],
     });
 
     this.shopInfoForm = this.fb.group({
       id: [''],
-      name: ['', Validators.required],
-      address: ['', Validators.required],
-      phoneNumber: ['', Validators.required],
-      closeHour: [''],
-      openHour: [''],
-      description: [''],
+      name: [{ value: '', disabled: this.edit }, Validators.required],
+      address: [{ value: '', disabled: this.edit }, Validators.required],
+      phoneNumber: [{ value: '', disabled: this.edit }, Validators.required],
+      closeHour: [{ value: '', disabled: this.edit }],
+      openHour: [{ value: '', disabled: this.edit }],
+      description: [{ value: '', disabled: this.edit }],
     });
 
     this.changePasswordForm = this.fb.group({
@@ -127,6 +129,14 @@ export class UserInfoComponent implements OnInit {
     });
   }
 
+  modify(){
+    this.edit = false;
+    if (this.role === 'CUSTOMER'){
+      this.customerInfoForm.enable();
+    }else{
+      this.shopInfoForm.enable();
+    }
+  }
   saveInfo() {
     if (this.role === 'SHOP') {
       const shop = {
@@ -143,10 +153,14 @@ export class UserInfoComponent implements OnInit {
 
       this.shopService.update(shop).subscribe({
         next: (res) => {
+          this.shopInfoForm.disable();
+          this.edit= true;
           if (this.avatar) {
             this.userService.updateAvatar(this.avatar).subscribe({
               next: (data) => {
                 console.log(data);
+                this.shopInfoForm.disable();
+                this.edit= true;
               },
               error: (err) => {
                 console.log(err);
@@ -187,10 +201,14 @@ export class UserInfoComponent implements OnInit {
 
       this.customerService.update(customer).subscribe({
         next: (res) => {
+          this.customerInfoForm.disable();
+          this.edit= true;
           if (this.avatar) {
             this.userService.updateAvatar(this.avatar).subscribe({
               next: (data) => {
                 console.log(data);
+                this.customerInfoForm.disable();
+                this.edit= true;
               },
               error: (err) => {
                 console.log(err);

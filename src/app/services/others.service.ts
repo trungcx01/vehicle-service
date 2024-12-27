@@ -29,4 +29,8 @@ export class OthersService {
   getDistanceAndTime(origins: string, destinations: string){
     return this.http.get(`https://rsapi.goong.io/distancematrix?origins=${origins}&destinations=${destinations}&vehicle=car&api_key=${environment.apiKey}`)
   }
+
+  fromLatLngToAddress(lat: number, lng: number){
+    return this.http.get(`https://rsapi.goong.io/Geocode?latlng=${lat},${lng}&api_key=${environment.apiKey}`)
+  }
 }

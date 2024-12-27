@@ -1,44 +1,62 @@
-<div class="shop-detail container my-5 text-center">
+<div class="shop-detail container text-center">
   <div class="top container">
-    <div class="shop-header text-center">
-      <img
-        src="https://timthosuaxe.com/wp-content/uploads/2021/05/Screenshot_1.jpg"
-        alt="Shop Logo"
-        class="shop-logo mb-3"
-      />
-      <h1 class="shop-name">{{ shop.name }}</h1>
-      <div class="shop-rating">
-        <span>{{ shop.rating }}★★★★☆</span> (4.5)
+    <div class="shop-header bg-light text-center mb-5 rounded shadow-sm">
+      <div class="position-relative">
+        <div 
+          class="bg-cover rounded-top" 
+          style="
+            background: url('https://congcutot.vn/uploads/store/page/article/2023/07/thiet-ke-quy-mo-vua-theo-chieu-ngang.jpg') no-repeat center center;
+            height: 250px;
+            background-size: cover;
+          ">
+        </div>
+        <div class="position-absolute top-100 start-50 translate-middle">
+          <img 
+            [src]="shop!.user.imageUrl" 
+            alt="Shop Avatar" 
+            class="rounded-circle border border-3 border-white shadow-lg" 
+            style="width: 150px; height: 150px;">
+        </div>
       </div>
-    </div>
-  
-    <!-- Thông tin Shop -->
-    <div class="shop-info my-4 p-4 text-start">
-      <div class="row">
-        <div class="col-md-6">
-          <h4>Địa chỉ:</h4>
-          <p>{{ shop.address }}</p>
+    
+      <div class="mt-5 pt-3">
+        <h1 class="fs-4 text-primary fw-bold" style="margin: 0">{{ shop.name }}</h1>
+        <div class="text-muted">
+          <span>{{ shop.rate }}</span> ★★★★☆ (4.5)
         </div>
-        <div class="col-md-6">
-          <h4>Liên hệ:</h4>
-          <p>{{ shop.phoneNumber }}</p>
-        </div>
-        <div class="col-md-6">
-          <h4>Thời gian làm việc:</h4>
-          <p>Thứ 2 - Chủ Nhật: 8:00 AM - 8:00 PM</p>
-        </div>
-        <div class="col-md-6">
-          <h4>Dịch vụ khẩn cấp:</h4>
-          <p>Có sẵn 24/7</p>
+      </div>
+      <div class="shop-info my-4 p-5 text-start bg-light rounded shadow-sm">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <h4 class="text-info">Địa chỉ:</h4>
+            <p class="text-dark">{{ shop.address }}</p>
+          </div>
+    
+          <div class="col-md-6 mb-3">
+            <h4 class="text-info">Liên hệ:</h4>
+            <p class="text-dark">{{ shop.phoneNumber }}</p>
+          </div>
+    
+          <div class="col-md-6 mb-3">
+            <h4 class="text-info">Thời gian làm việc:</h4>
+            <p class="text-dark">
+              Thứ 2 - Chủ Nhật: {{ shop.openHour.substring(0, 5) }} - 
+              {{ shop.closeHour.substring(0, 5) }}
+            </p>
+          </div>
+    
+          <div class="col-md-6 mb-3">
+            <h4 class="text-info">Dịch vụ khẩn cấp:</h4>
+            <p class="text-dark">Có sẵn 24/7</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
 
-  <!-- Phần Dịch Vụ -->
-  <div class="services my-4">
-    <h3 class="mb-4">Dịch Vụ Cung Cấp</h3>
+
+  <div class="services">
+    <h4 class="text-center my-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-size: 1.75rem; font-weight: 600;">Hạng Mục Chăm Sóc Xe</h4>
     <div class="row">
       <!-- Service 1 -->
       <div class="col-md-4 mb-4">
@@ -68,7 +86,9 @@
           <div class="card-body">
             <div class="availability">Available</div>
             <h5 class="card-title">Bảo Dưỡng Xe</h5>
-            <p class="card-text">Dịch vụ bảo dưỡng định kỳ cho xe máy và ô tô.</p>
+            <p class="card-text">
+              Dịch vụ bảo dưỡng định kỳ cho xe máy và ô tô.
+            </p>
             <p class="estimate-duration">Thời gian: 1 giờ</p>
             <p class="price">Giá: 300.000 VND</p>
           </div>
@@ -85,7 +105,9 @@
           <div class="card-body">
             <div class="availability">Available</div>
             <h5 class="card-title">Sửa Chữa Động Cơ</h5>
-            <p class="card-text">Sửa chữa các sự cố liên quan đến động cơ xe.</p>
+            <p class="card-text">
+              Sửa chữa các sự cố liên quan đến động cơ xe.
+            </p>
             <p class="estimate-duration">Thời gian: 2 giờ</p>
             <p class="price">Giá: 1.500.000 VND</p>
           </div>
@@ -119,7 +141,9 @@
           <div class="card-body">
             <div class="availability">Available</div>
             <h5 class="card-title">Thay Lốp Xe</h5>
-            <p class="card-text">Dịch vụ thay lốp xe với các loại lốp chất lượng cao.</p>
+            <p class="card-text">
+              Dịch vụ thay lốp xe với các loại lốp chất lượng cao.
+            </p>
             <p class="estimate-duration">Thời gian: 30 phút</p>
             <p class="price">Giá: 600.000 VND</p>
           </div>
@@ -144,124 +168,82 @@
       </div>
     </div>
     <div class="booking my-4 text-center">
-      <button class="btn btn-primary btn-lg" (click)="openAppointmentModal()">Đặt Lịch Hẹn</button>
-    </div>
-    
-  </div>
-  
-
-  <!-- Phần Đặt Lịch -->
-  
-
-  <!-- Hình Ảnh Shop
-  <div class="shop-images my-4">
-    <h3 class="mb-4">Hình Ảnh Cửa Hàng</h3>
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <img src="shop-image-1.jpg" alt="Shop Image" class="img-fluid" />
-      </div>
-      <div class="col-md-4 mb-4">
-        <img src="shop-image-2.jpg" alt="Shop Image" class="img-fluid" />
-      </div>
-      <div class="col-md-4 mb-4">
-        <img src="shop-image-3.jpg" alt="Shop Image" class="img-fluid" />
-      </div>
-    </div>
-  </div> -->
-
-  
-  <!-- Đánh Giá -->
-  <div class="reviews my-4">
-    <h3 class="mb-4">Đánh Giá Khách Hàng</h3>
-  
-    <!-- Review 1 -->
-    <div class="review-card card p-3 mb-3">
-      <div class="d-flex align-items-start">
-        <img
-          src="https://res.cloudinary.com/dmwkcepna/image/upload/v1730523432/anonymous-user_gbpozf.jpg"
-          alt="Customer Avatar"
-          class="rounded-circle mr-3"
-          width="80"
-          height="80"
-        />
-        <div class="review-details mr-3">
-          <div class="customer-name">Nguyễn Văn A</div>
-          <div class="review-date">1 ngày trước</div>
-          <div class="review-rating">★★★★★</div>
-        </div>
-        <div class="review-content">
-          Dịch vụ rất tuyệt vời, nhân viên thân thiện và chuyên nghiệp.
-        </div>
-      </div>
-    </div>
-  
-    <!-- Review 2 -->
-    <div class="review-card card p-3 mb-3">
-      <div class="d-flex align-items-start">
-        <img
-          src="https://via.placeholder.com/80"
-          alt="Customer Avatar"
-          class="rounded-circle mr-3"
-          width="80"
-          height="80"
-        />
-        <div class="review-details mr-3">
-          <div class="customer-name">Trần Thị B</div>
-          <div class="review-date">3 ngày trước</div>
-          <div class="review-rating">★★★★☆</div>
-        </div>
-        <div class="review-content">
-          Dịch vụ tốt, tuy nhiên thời gian hoàn thành có thể nhanh hơn.
-        </div>
-      </div>
-    </div>
-  
-    <!-- Review 3 -->
-    <div class="review-card card p-3 mb-3">
-      <div class="d-flex align-items-start">
-        <img
-          src="https://via.placeholder.com/80"
-          alt="Customer Avatar"
-          class="rounded-circle mr-3"
-          width="80"
-          height="80"
-        />
-        <div class="review-details mr-3">
-          <div class="customer-name">Lê Minh C</div>
-          <div class="review-date">5 ngày trước</div>
-          <div class="review-rating">★★★★★</div>
-        </div>
-        <div class="review-content">
-          Tôi rất hài lòng với dịch vụ ở đây. Nhân viên rất nhiệt tình và chuyên môn cao.
-        </div>
-      </div>
-    </div>
-  
-    <!-- Review 4 -->
-    <div class="review-card card p-3 mb-3">
-      <div class="d-flex align-items-start">
-        <img
-          src="https://via.placeholder.com/80"
-          alt="Customer Avatar"
-          class="rounded-circle mr-3"
-          width="80"
-          height="80"
-        />
-        <div class="review-details mr-3">
-          <div class="customer-name">Phan Quang D</div>
-          <div class="review-date">7 ngày trước</div>
-          <div class="review-rating">★★★☆☆</div>
-        </div>
-        <div class="review-content">
-          Dịch vụ không tồi, nhưng có thể cải thiện về thái độ phục vụ.
-        </div>
-      </div>
+      <button class="btn btn-primary btn-lg" (click)="openAppointmentModal()">
+        Đặt Lịch Hẹn
+      </button>
     </div>
   </div>
+
+  <section class="reviews">
+    <h4 class="text-center my-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-size: 1.75rem; font-weight: 600;">Đánh Giá Về Cửa Hàng</h4>
+    <div *ngIf="reviews && reviews.length === 0" class="col-12 m-auto text-center">
+      <div class="alert alert-warning p-4 rounded-3 shadow-sm">
+        
+          <p class="mb-0 text-muted">
+              Cửa hàng hiện không có đánh giá nào. Hãy sử dụng dịch vụ và trở thành người đầu tiên đánh giá!
+          </p>
+      </div>
+  </div>
+    <div *ngFor="let review of reviews" class="review-card card p-4 mb-4 shadow-sm border-0 comment-form">
   
+
+      <div class="d-flex justify-content-start align-items-center mb-3">
+        <div class="col-1">
+          <img [src]="review.customer.user.imageUrl"
+            alt="Customer Avatar"
+            class="rounded-circle"
+            width="80" height="80" />
+        </div>
+        <div class="review-details col-3">
+          <div class="customer-name fw-bold">{{ review.customer.name }}</div>
+          <div class="review-date text-muted small">{{ review.createAt | date: "dd/MM/yyyy HH:mm" }}</div>
+          <div class="type">
+            <p><span class="badge" [ngClass]="{
+              'bg-primary': review.serviceType === 'APPOINTMENT',
+              'bg-dark': review.serviceType === 'EMERGENCY_REQUEST',
+            }">{{ review.serviceType }}</span></p>
+          </div>
+          <div class="review-rating text-warning">
+            {{ "★".repeat(review.rate) + "☆".repeat(5 - review.rate) }}
+          </div>
+        </div>
   
+
+        <div class="review-content text-secondary col-5 mx-4">
+          <p>{{ review.description }}</p>
+        </div>
+  
+ 
+        <div class="review-image col-3">
+          <img *ngIf="review.imageUrl"
+            [src]="review.imageUrl"
+            class="rounded border"
+            style="width: 100px; height: 100px; object-fit: cover"
+            alt="Attached Review Image" />
+        </div>
+      </div>
+  
+
+      <!-- <div class="dropdown" *ngIf="review.customer.id === customer.id">
+        <i style="cursor: pointer;" class="fas fa-ellipsis-h dropdown-toggle" id="dropdownMenuButton"
+          data-bs-toggle="dropdown" aria-expanded="false"></i>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" href="#">Sửa</a></li>
+          <li><a class="dropdown-item" href="#">Xóa</a></li>
+        </ul>
+      </div> -->
+  
+    </div>
+  </section>
+  
+
   <div class="direction">
-    <h3 class="mb-4">Hướng dẫn chỉ đường</h3>
-    <div id="map" style="width: 96%; height: 400px; margin-bottom: 30px"></div>
+    <h4 class="text-center my-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-size: 1.75rem; font-weight: 600;">Đường Đi Tới Cửa Hàng</h4>
+    <div id="map" 
+         style="width: 100%; height: 400px; margin: 30px auto; 
+                border: 2px solid #ddd; 
+                border-radius: 8px; 
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+                background-color: #f9f9f9;">
+    </div>
   </div>
-</div>

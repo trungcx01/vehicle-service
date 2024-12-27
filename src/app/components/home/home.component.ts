@@ -53,7 +53,8 @@ export class HomeComponent implements OnInit {
   }
 
   navToShopDetail(id: number){
-    this.router.navigate(['/shop-detail', id]);
+    // this.router.navigate(['/shop-detail', id]);
+    window.location.href = "/shop-detail/" + id;
   }
 
 

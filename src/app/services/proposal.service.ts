@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IProposalDTO } from '../models/proposal.model';
@@ -27,4 +27,8 @@ export class ProposalService {
     return this.http.get(this.apiUrl + "/" + id);
   }
 
+  updateStatus( status: string, id: number): Observable<any> {
+    const params = new HttpParams().set('status', status);  
+    return this.http.put(this.apiUrl + "/update-status/" + id, {}, { params });
+  }
 }

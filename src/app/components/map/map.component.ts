@@ -82,6 +82,7 @@ export class MapComponent {
     return new Promise((resolve, reject) => {
       this.activatedRoute.paramMap.subscribe((params) => {
         const proposalId = Number(params.get('proposalId'));
+        console.log('hdhe',proposalId)
         this.proposalService.getById(proposalId).subscribe({
           next: (data) => {
             const origin = data.shop.address;
@@ -197,6 +198,10 @@ export class MapComponent {
         text: 'Cảm ơn bạn đã sử dụng dịch vụ!',
         icon: 'info',
         confirmButtonText: 'OK',
+      }).then((res) =>{
+        if (res.isConfirmed){
+          this.router.navigate(['']);
+        }
       });
     }
     // this.markers.pop()!.remove();

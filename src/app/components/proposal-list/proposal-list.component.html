@@ -9,30 +9,28 @@
     </div>
   </div>
 
-
   <div *ngIf="hasProposal" class="proposal-list">
-    <h2>Đề xuất từ cửa hàng</h2>
+    <h2 class="proposal-title">Đề xuất từ cửa hàng</h2>
     <p class="subtitle">Chọn cửa hàng phù hợp để tiếp tục dịch vụ cứu trợ</p>
 
     <div *ngFor="let proposal of proposals" class="proposal-card">
       <div class="proposal-details">
-        <img src="https://via.placeholder.com/60" alt="Shop Logo" class="shop-logo">
-        <div>
-          <h4>{{ proposal.shopName }}</h4>
-          <p><strong>Giá trị dự kiến:</strong> {{ proposal.expectedPrice | currency }}</p>
-          <p><strong>Dự đoán thành công:</strong> {{ proposal.predict }}</p>
+        <img [src]="proposal.shop.user.imageUrl" alt="Shop Logo" class="shop-logo">
+        <div class="proposal-info">
+          <h4>{{ proposal.shop.name }}</h4>
+          <p class="info-text"><strong>Giá đề xuất:</strong> {{ proposal.expectedPrice | number }} VNĐ</p>
+          <p class="info-text"><strong>Chẩn đoán:</strong> {{ proposal.predict }}</p>
+          <p class="info-text"><strong>SĐT:</strong> {{ proposal.shop.phoneNumber }}</p>
         </div>
       </div>
 
       <div class="proposal-actions">
-        <button class="btn-accept" (click)="acceptProposal(proposal.id)">
+        <button class="btn-accept" (click)="acceptProposal(proposal)">
           <i class="fas fa-check-circle"></i> Chấp nhận
         </button>
-        <!-- <button class="btn-reject" (click)="rejectProposal(proposal.id)">
-          <i class="fas fa-times-circle"></i> Từ chối
-        </button> -->
       </div>
     </div>
+
     <div class="spinner">
       <div class="spinner-border text-primary" role="status"></div>
       <p>Đang tìm kiếm các đề xuất khác...</p>

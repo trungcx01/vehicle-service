@@ -1,21 +1,25 @@
-<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
   <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="proposalModalLabel">Gửi Đề xuất Cứu trợ</h5>
+    <!-- Header Modal -->
+    <div class="modal-header bg-dark text-light">
+      <h5 class="modal-title fw-bold" id="proposalModalLabel">
+        Gửi Đề xuất Cứu trợ
+      </h5>
       <button
         (click)="closeModal()"
         type="button"
-        class="btn-close"
+        class="btn-close btn-close-white"
         data-bs-dismiss="modal"
         aria-label="Close"
       ></button>
     </div>
+
+    <!-- Body Modal -->
     <div class="modal-body">
       <form [formGroup]="proposalForm">
-        <div class="form-group mb-3" >
-          <label for="expectedPrice" class="form-label"
-            >Chi phí dự kiến (VNĐ)</label
-          >
+        <!-- Chi phí dự kiến -->
+        <div class="col-md-12 mb-3">
+          <label for="expectedPrice" class="form-label fw-semibold">Chi phí dự kiến (VNĐ)</label>
           <input
             type="number"
             id="expectedPrice"
@@ -27,8 +31,9 @@
           />
         </div>
 
-        <div class="form-group mb-3">
-          <label for="predict" class="form-label">Dự đoán tình trạng</label>
+        <!-- Dự đoán tình trạng -->
+        <div class="col-md-12 mb-3">
+          <label for="predict" class="form-label fw-semibold">Dự đoán tình trạng</label>
           <textarea
             id="predict"
             class="form-control"
@@ -40,34 +45,49 @@
           ></textarea>
         </div>
 
+        <!-- Trạng thái -->
         <div class="form-group mb-3" *ngIf="proposal">
-          <label class="form-label">Trạng thái</label>
+          <label class="form-label fw-semibold">Trạng thái</label>
           <div>
             <span 
               class="badge" 
               [ngClass]="{
                 'bg-warning text-dark': proposal.status === 'PENDING',
                 'bg-success': proposal.status === 'ACCEPTED',
-                'bg-primary': proposal.status === 'in-progress',
-                'bg-info': proposal.status === 'resolved',
-                'bg-danger': proposal.status === 'unresolved',
+                'bg-primary': proposal.status === 'IN_PROGRESS',
+                'bg-info': proposal.status === 'FINISHED',
+                'bg-danger': proposal.status === 'DECLINED',
                 'bg-secondary': !proposal.status
               }"
             >
               {{
                 proposal.status === 'PENDING' ? 'Đang chờ xử lý' :
                 proposal.status === 'ACCEPTED' ? 'Đã chấp nhận' :
-                proposal.status === 'in-progress' ? 'Đang tiến hành' :
-                proposal.status === 'resolved' ? 'Đã giải quyết' :
-                proposal.status === 'unresolved' ? 'Không thể giải quyết' :
+                proposal.status === 'IN_PROGRESS' ? 'Đang tiến hành' :
+                proposal.status === 'FINISHED' ? 'Đã hoàn thành' :
+                proposal.status === 'DECLINED' ? 'Không thể giải quyết' :
                 'Không xác định'
               }}
             </span>
           </div>
         </div>
-        
-        <button *ngIf="!proposal" (click)="submitProposal()" class="btn btn-secondary w-100 mt-3">
+
+        <!-- Gửi đề xuất -->
+        <button 
+          *ngIf="!proposal" 
+          (click)="submitProposal()" 
+          class="btn btn-success w-100 mt-3"
+        >
           Gửi đề xuất
+        </button>
+
+        <!-- Đánh dấu hoàn thành -->
+        <button 
+          *ngIf="proposal && proposal.status === 'ACCEPTED'" 
+          (click)="updateStatus('FINISHED', proposal)" 
+          class="btn btn-info w-100 mt-3"
+        >
+          <i class="fa fa-check-double me-1"></i> Đánh dấu hoàn thành
         </button>
       </form>
     </div>

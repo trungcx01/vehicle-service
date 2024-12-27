@@ -1,0 +1,28 @@
+<div class="notifications-container container">
+    <!-- Notification Header -->
+    <div class="notification-header text-center mb-4">
+      <h2 class="text-primary">Thông báo của bạn</h2>
+    </div>
+  
+    <!-- Empty State: No Notifications -->
+    <div *ngIf="notifications.length === 0" class="alert alert-info text-center">
+      <i class="fa-solid fa-bell-slash"></i> Hiện không có thông báo nào.
+    </div>
+  
+    <!-- Notifications List -->
+    <div *ngIf="notifications.length > 0" class="notification-list row">
+      <div *ngFor="let notification of notifications" class="col-12 col-md-6 mb-4">
+        <div class="notification-card p-4 shadow-sm border rounded">
+          <div class="notification-header d-flex justify-content-between mb-2">
+            <span class="fw-bold text-primary">Thông báo</span>
+            <small class="text-muted">{{ notification.createAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+          </div>
+          <div class="notification-body">
+            <p>{{ notification.message }}</p>
+            <small class="text-muted">Cập nhật: {{ notification.updateAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

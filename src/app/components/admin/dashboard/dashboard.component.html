@@ -1,59 +1,4 @@
-<div class="admin-home-container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid container">
-        <!-- Logo hoặc tên brand -->
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
-        
-        <!-- Nút toggle khi màn hình nhỏ -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <!-- Menu Navbar -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" routerLink="notifications">
-                <i class="fa fa-users me-2"></i>Khách hàng
-              </a>
-            </li>
-  
-            <li class="nav-item">
-              <a class="nav-link" routerLink="notifications">
-                <i class="fa fa-store me-2"></i>Cửa hàng
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="services">
-                <i class="fa fa-cogs me-2"></i>Dịch Vụ
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="appointments">
-                <i class="fa fa-calendar-check me-2"></i>Lịch Hẹn
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="emergency-request-list">
-                <i class="fa fa-exclamation-triangle me-2"></i>Khẩn Cấp
-              </a>
-            </li>
-          
-            <li class="nav-item">
-              <a class="nav-link" routerLink="info">
-                <i class="fa fa-bell me-2"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">
-                <i class="fa fa-sign-out-alt me-2"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  
+<div class="admin-home-container">  
     <!-- Trang Dashboard chính -->
     <div class="container mt-5">
       <h1 class="text-center mb-5">Chào mừng đến với Admin Dashboard</h1>
@@ -105,6 +50,6 @@
       </div>
     </div>
   
-    <router-outlet></router-outlet>
+
   </div>
   

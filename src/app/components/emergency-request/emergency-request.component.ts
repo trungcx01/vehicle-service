@@ -10,38 +10,65 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-emergency-request',
   templateUrl: './emergency-request.component.html',
-  styleUrl: './emergency-request.component.scss'
+  styleUrl: './emergency-request.component.scss',
 })
-export class EmergencyRequestComponent implements OnInit{
+export class EmergencyRequestComponent implements OnInit {
   customer: any;
   form: any;
   previewFiles: any;
   images: any[] = [];
   addressOptions: any;
-  constructor(private customerService: CustomerService, private fb: FormBuilder,
-    private emergencyRequestService: EmergencyRequestService, private router: Router, private othersService: OthersService
-  ){
+  constructor(
+    private customerService: CustomerService,
+    private fb: FormBuilder,
+    private emergencyRequestService: EmergencyRequestService,
+    private router: Router,
+    private othersService: OthersService
+  ) {
     this.form = this.fb.group({
       vehicleType: ['', Validators.required],
       licensePlate: ['', Validators.required],
       description: ['', Validators.required],
-      location: ['', Validators.required]
-      });
+      location: ['', Validators.required],
+    });
   }
 
   ngOnInit(): void {
-      this.getCurrentCustomer();
+    this.getCurrentCustomer();
   }
-  getCurrentCustomer(){
+  getCurrentCustomer() {
     this.customerService.getCurrentCustomer().subscribe({
-      next: (res) =>{
+      next: (res) => {
         console.log(res);
         this.customer = res;
       },
-      error: (err) =>{
+      error: (err) => {
         console.log(err);
-      }
-    })
+      },
+    });
+  }
+
+  updateLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.othersService
+          .fromLatLngToAddress(
+            position.coords.latitude,
+            position.coords.longitude
+          )
+          .subscribe({
+            next: (res : any) => {
+              this.form.patchValue({
+                location: res.results[0].formatted_address,
+              })
+              console.log(res);
+            },
+            error: (err) => {
+              console.log(err);
+            },
+          });
+      });
+    }
   }
 
   onFileSelected(event: any): void {
@@ -63,7 +90,6 @@ export class EmergencyRequestComponent implements OnInit{
       }
     }
   }
-  
 
   onItemChange(input: any) {
     this.othersService.autocomplete(input.term).subscribe({
@@ -72,7 +98,7 @@ export class EmergencyRequestComponent implements OnInit{
         if (data.predictions) {
           this.addressOptions = data.predictions;
         } else {
-          this.addressOptions = []; 
+          this.addressOptions = [];
         }
       },
       error: (err) => {
@@ -81,24 +107,31 @@ export class EmergencyRequestComponent implements OnInit{
     });
   }
 
-  onSubmit(){
+  onSubmit() {
     const formValue = {
       vehicleType: this.form.value.vehicleType,
       licensePlate: this.form.value.licensePlate,
       description: this.form.value.description,
       location: this.form.value.location,
-      customerId: this.customer.id
-    }
+      customerId: this.customer.id,
+    };
 
     console.log(this.images[0], this.images[1], this.images[2]);
-    this.emergencyRequestService.createEmergencyRequest(this.images[0], (this.images[1] || null), (this.images[2] || null), formValue).subscribe({
-      next: (res) =>{
-        console.log('0ok',res);
-        this.router.navigate(['/proposal-list', res.id])
-      },
-      error: (err) =>{
-        console.log(err);
-      }
-    })
+    this.emergencyRequestService
+      .createEmergencyRequest(
+        this.images[0],
+        this.images[1] || null,
+        this.images[2] || null,
+        formValue
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('0ok', res);
+          this.router.navigate(['/proposal-list', res.id]);
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 }

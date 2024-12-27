@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
     this.notificationService.getNotifications().subscribe({
       next: (notification) => {
         if (notification.startsWith('NOTIFICATION')) {
-          this.toastr.success(notification);
+          this.toastr.success(notification.substring(14));
          this.getUnreadNoti();
          this.getByCurrentUser();
         }

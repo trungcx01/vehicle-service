@@ -1,17 +1,4 @@
-.date{
-    position: relative;
-    i{
-        position: absolute;
-        top: 50%;
-        right: 6%;
-        font-size: 24px;
-    }
-}
 
-.customer{
-    margin: 30px auto;
-    padding: 30px;
-}
 
 input{
     &:focus{
@@ -21,7 +8,7 @@ input{
 }
 
 .customer {
-    padding: 30px 20px;
+    padding: 70px 20px !important;
     margin: 40px auto;
     background-color: #ffffff; /* Màu nền trắng */
     border-radius: 10px; /* Góc bo tròn */

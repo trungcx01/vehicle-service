@@ -23,7 +23,6 @@ export class ProposalListComponent implements OnInit {
   ngOnInit(): void {
     history.pushState(null, '', window.location.href);
 
-
     window.onpopstate = () => {
       if (!this.isNavigatingBack) {
         const confirmLeave = confirm(
@@ -64,12 +63,16 @@ export class ProposalListComponent implements OnInit {
     });
   }
 
-  acceptProposal(proposalId: number): void {
-    this.proposalService.acceptProposal(proposalId).subscribe({
+  acceptProposal(proposal: any): void {
+    this.proposalService.acceptProposal(proposal.id).subscribe({
       next: (res) => {
         console.log(res);
-        setTimeout(() =>{
-          this.router.navigate(['/map-emergency', proposalId]);
+        setTimeout(() => {
+          this.router.navigate([
+            '/payment',
+            'proposal',
+            proposal.id,
+          ]);
         }, 1000);
       },
       error: (error) => {

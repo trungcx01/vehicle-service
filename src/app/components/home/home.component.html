@@ -1,11 +1,11 @@
 <div class="home">
   <section class="banner">
     <div
-      id="vehicleSlider"
-      class="carousel slide"
-      data-ride="carousel"
-      data-interval="1000"
-    >
+  id="vehicleSlider"
+  class="carousel slide"
+  data-bs-ride="carousel"
+  data-bs-interval="2300"
+>
       <!-- 10000 ms = 10s -->
       <div class="carousel-inner">
         <div
@@ -16,7 +16,7 @@
         >
           <div class="carousel-caption">
             <h1>Vehicle S</h1>
-            <a href="#services" class="btn btn-custom">Dịch vụ xe</a>
+            <a href="#services" class="btn btn-custom">Đặt lịch hẹn</a>
             <a href="#emergency" class="btn btn-custom">Hỗ trợ khẩn cấp</a>
           </div>
         </div>
@@ -55,11 +55,12 @@
       </button>
     </div>
   </section>
+
   <section class="intro-section">
     <div class="container">
-      <h2>Về Chúng Tôi - Vehicle S</h2>
+      <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-weight: 600;">Về Chúng Tôi</h4>
 
-      <!-- Establishment and Values -->
+
       <div class="content text-center mb-5">
         <p class="fst-italic">
           <strong>Vehicle S</strong> được thành lập vào năm 2024 với
@@ -74,7 +75,6 @@
         </p>
       </div>
 
-      <!-- Unique Features Section -->
       <div class="row">
         <div class="col-md-4">
           <div class="highlight-feature text-center" style="background-color: #FF6666;">
@@ -109,7 +109,8 @@
 
   <section class="guide-section">
     <div class="container">
-      <h3 class="text-center mb-4">Hướng Dẫn Sử Dụng</h3>
+      <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-weight: 600;">Hướng dẫn sử dụng</h4>
+
 
       <!-- Đặt Lịch Bảo Dưỡng, Sửa Chữa -->
       <div class="card mb-4 shadow-sm">
@@ -136,8 +137,8 @@
                 class="step-icon"
               />
               <p class="step-description">
-                <strong>Chọn Dịch Vụ</strong><br />
-                Chọn dịch vụ bảo dưỡng/sửa chữa.
+                <strong>Chọn Hạng mục Chăm sóc xe</strong><br />
+                Chọn hạng mục bảo dưỡng/sửa chữa.
               </p>
             </div>
             <div class="col-md-4">
@@ -201,116 +202,83 @@
     </div>
   </section>
 
-  <section class="customer-reviews">
+  <section class="customer-reviews py-5">
     <div class="container">
-      <h3 class="text-center mb-4">Đánh Giá Từ Khách Hàng</h3>
-      <div
-        id="customerReviewsCarousel"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div class="carousel-inner" *ngFor="let item of top8ReviewNewest">
-          <!-- Đánh Giá 1 -->
-          <div class="carousel-item active">
-            <div class="review-card">
-              <h5 class="fw-bold">{{item.customer.name}}</h5>
-              <p>
-                <small>Đánh giá cho <strong>{{item.shop.name}}</strong></small>
-              </p>
-              <div class="review-rating">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-half"></i>
+      <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-weight: 600;">Đánh Giá Từ Cửa Hàng</h4>
+      <div id="customerReviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+        <div class="carousel-inner">
+          <div *ngFor="let item of top8ReviewNewest; let i = index" class="carousel-item" [ngClass]="{'active': i === 0}">
+            <div class="review-card card p-5 shadow-sm">
+              <div class="row ms-5 me-5">
+                <div class="col-md-3 text-center">
+                  <img [src]="item.customer.user.imageUrl" alt="Avatar" class="rounded-circle" width="80" height="80" />
+                  <h5 class="fw-bold mt-2">{{ item.customer.name }}</h5>
+                  <p class="text-muted">{{ item.createAt | date:'short' }}</p>
+                </div>
+                <div class="col-md-9 m-auto d-flex flex-column align-items-center">
+                  <p class="text-muted" style="font-size: 16px;">
+                    Đánh giá cho <strong *ngIf="item.serviceType === 'EMERGENCY_REQUEST'" class="fs-5">{{  item.baseService.shop.name }}</strong>
+                    <strong *ngIf="item.serviceType !== 'EMERGENCY_REQUEST'" class="fs-5">{{  item.baseService.vehicleCares[0].shop.name}}</strong>
+                  </p>
+                  
+                  <p class="text-muted" style="font-size: 16px;">
+                    Dịch vụ sử dụng: <strong class="fs-5">{{  item.serviceType }}</strong>
+                    
+                  </p>
+                  
+                
+                    <div class="review-rating text-warning fs-5">
+                      {{ "★".repeat(item.rate) + "☆".repeat(5 - item.rate) }}
+                    </div>
+             
+  
+      
+                  <p class="review-content">
+                    {{ item.description }}
+                  </p>
+                  
+                </div>
               </div>
-              <p class="mt-2">
-                Dịch vụ rất tốt và nhân viên nhiệt tình. Rất hài lòng với trải
-                nghiệm lần này.
-              </p>
             </div>
           </div>
-
-          <!-- Đánh Giá 2 -->
-          <div class="carousel-item">
-            <div class="review-card">
-              <h5 class="fw-bold">Trần Thị B</h5>
-              <p>
-                <small>Đánh giá cho <strong>Cửa Hàng XYZ</strong></small>
-              </p>
-              <div class="review-rating">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-              <p class="mt-2">
-                Cửa hàng rất uy tín và có nhiều kinh nghiệm. Tôi rất an tâm khi
-                sử dụng dịch vụ ở đây.
-              </p>
-            </div>
-          </div>
-
-          <!-- Thêm các Đánh Giá Khác -->
         </div>
-        <button
-          class="carousel-control-prev prev"
-          type="button"
-          data-bs-target="#customerReviewsCarousel"
-          data-bs-slide="prev"
-        >
+
+        <button class="carousel-control-prev text-dark p-2" type="button" data-bs-target="#customerReviewsCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button
-          class="carousel-control-next next"
-          type="button"
-          data-bs-target="#customerReviewsCarousel"
-          data-bs-slide="next"
-        >
+        <button class="carousel-control-next text-dark p-2" type="button" data-bs-target="#customerReviewsCarousel" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>
     </div>
   </section>
+  
+  
+
+  
 
   <!-- Danh Sách Top 8 Shop Có Đánh Giá Cao -->
-  <section class="top-rated-shops">
-    <div class="container">
-      <h3 class="text-center mb-4">Top 8 Shop Được Đánh Giá Cao Nhất</h3>
-      <div class="row g-4" *ngFor="let item of top6ShopRating">
-        <!-- Shop 1 -->
-        <div class="col-md-3" (click)="navToShopDetail(item.id)" style="cursor: pointer;">
-          <div class="shop-card">
-            <div class="shop-image">
-              <img src="https://via.placeholder.com/300" alt="Cửa Hàng ABC" />
-            </div>
-            <div class="shop-info">
-              <h5 class="shop-name">{{item.name}}</h5>
-              <p class="shop-rating">{{item.rating +4.6}} ★★★☆☆</p>
-              <p class="shop-address">{{item.address}}</p>
-            </div>
+<section class="top-rated-shops">
+  <div class="container">
+    <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);  font-weight: 600;">Top Cửa Hàng Có Đánh Giá Cao Nhất</h4>
+    <div class="row">
+      <!-- Sử dụng *ngFor với top8ShopRating để hiển thị 8 shop -->
+      <div *ngFor="let item of top6ShopRating" class="col-lg-4" (click)="navToShopDetail(item.id)" style="cursor: pointer;">
+        <div class="shop-card">
+          <div class="shop-image">
+            <img [src]="item.user.imageUrl" alt="Shop Image"/>
+          </div>
+          <div class="shop-info">
+            <h5 class="shop-name">{{ item.name }}</h5>
+            <p class="shop-rating">★★★☆☆({{ item.rating }})</p>
+            <p class="shop-address">{{ item.address }}</p>
           </div>
         </div>
-
-        <!-- Shop 2 -->
-        <div class="col-md-3">
-          <div class="shop-card">
-            <div class="shop-image">
-              <img src="https://via.placeholder.com/300" alt="Cửa Hàng XYZ" />
-            </div>
-            <div class="shop-info">
-              <h5 class="shop-name">Cửa Hàng XYZ</h5>
-              <p class="shop-rating">4.8 <i class="bi bi-star-fill"></i></p>
-              <p class="shop-address">456 Đường XYZ, Quận 2, TP.HCM</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Thêm 6 Shop Khác Tương Tự -->
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 </div>

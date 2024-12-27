@@ -5,6 +5,7 @@ export interface ICustomerDTO{
     name?: string,
     dob?: string,
     phoneNumber?:string,
+    district?: any
 }
 
 export class CustomerDTO implements ICustomerDTO{
@@ -15,5 +16,6 @@ export class CustomerDTO implements ICustomerDTO{
         public name?: string,
         public dob?: string,
         public phoneNumber?:string,
+        public district?: any
     ) {}
 }

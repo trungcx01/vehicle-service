@@ -33,33 +33,36 @@
           </li>
 
           <!-- Service Dropdown -->
-          <li class="nav-item dropdown">
+          <li class="nav-item">
             <a
-              class="nav-link dropdown-toggle"
+              class="nav-link"
+              [ngClass]="router.url.endsWith('/vehicle-care-list') ? 'active' : ''"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Dịch vụ
+              Hạng mục
             </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Repair</a></li>
-              <li><a class="dropdown-item" href="#">Maintenance</a></li>
-            </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link" style="cursor: pointer;" (click)="navToShopList()">Cửa hàng</a>
+            <a class="nav-link" 
+              [ngClass]="router.url.endsWith('shop-list') ? 'active' : ''"
+            style="cursor: pointer;" href="/shop-list">Cửa hàng</a>
           </li>
 
           <!-- Appointment Link -->
           <li class="nav-item">
-            <a class="nav-link" style="cursor: pointer;" (click)="navToAppointment()">Lịch hẹn</a>
+            <a class="nav-link"
+              [ngClass]="router.url.endsWith('appointment-history') ? 'active' : ''"
+             style="cursor: pointer;" href="/appointment-history">Lịch hẹn</a>
           </li>
 
           <!-- Emergency Request Link -->
           <li class="nav-item">
-            <a class="nav-link" style="cursor: pointer;" (click)="navToEmergencyRequest()">Khẩn cấp</a>
+            <a class="nav-link" 
+            [ngClass]="router.url.endsWith('emergency-requests') ? 'active' : ''"
+            style="cursor: pointer;" href="/emergency-requests">Khẩn cấp</a>
           </li>
 
           <!-- Notifications Dropdown -->
@@ -73,7 +76,8 @@
             >
               <i class="fa-solid fa-bell d-none d-lg-inline"></i>
               <span class="d-lg-none ">Thông báo</span>
-              <span class="notification-badge bg-danger text-white" *ngIf="notifications.length > 0">{{ countUnread }}</span>
+              <span class="notification-dot bg-danger" *ngIf="notifications.length > 0"></span>
+              <!-- <span class="notification-badge bg-danger text-white" *ngIf="notifications.length > 0">{{ countUnread }}</span> -->
             </a>
             <ul class="dropdown-menu dropdown-menu-end notify-dropdown-width" aria-labelledby="navbarDropdown">
               <li *ngIf="notifications.length === 0" class="dropdown-item text-center">

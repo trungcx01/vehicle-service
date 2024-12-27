@@ -1,4 +1,4 @@
-<div *ngIf="payment.paymentStatus === 'ACCEPTED'"  class="container payment-success mt-5">
+<div *ngIf="payment?.status === 'FINISHED'"  class="container payment-success mt-5">
     <div class="header text-center">
       <i class="fas fa-check-circle success-icon"></i>
       <h2>Thanh toán thành công!</h2>
@@ -16,18 +16,18 @@
       </div>
       <div class="info-row">
         <span class="label col-6">Ngày giờ:</span>
-        <span class="value col-6">{{ payment.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        <span class="value col-6">{{ payment.updateAt | date: 'dd/MM/yyyy HH:mm' }}</span>
       </div>
   
       <div class="info-row">
         <span class="label col-6">Thanh toán dịch vụ:</span>
-        <span class="value col-6">{{payment.appointment ? 'Đặt lịch hẹn bảo dưỡng xe' : 'Cứu trợ khẩn cấp'}}</span>
+        <span class="value col-6">{{payment.serviceType === 'APPOINTMENT' ? 'Đặt lịch hẹn bảo dưỡng xe' : 'Cứu trợ khẩn cấp'}}</span>
       </div>
   
       <div class="info-row">
         <span class="label col-6">Cửa hàng:</span>
-        <span *ngIf="payment.appointment" class="value col-6">{{ payment.appointment.vehicleCares[0].shop.name }}, {{ payment.appointment.vehicleCares[0].shop.address }}</span>
-        <span *ngIf="!payment.appointment" class="value col-6">{{ payment.emergencyRequest.shop.name }}, {{ payment.emergencyRequest.shop.address }}</span>  
+        <span *ngIf="payment.serviceType === 'APPOINTMENT'" class="value col-6">{{ payment.baseService.vehicleCares[0].shop.name }}, {{ payment.baseService.vehicleCares[0].shop.address }}</span>
+        <span *ngIf="payment.serviceType !== 'APPOINTMENT'" class="value col-6">{{ payment.baseService.shop.name }}, {{ payment.baseService.shop.address }}</span>  
     </div>
   
       <div class="info-row">
@@ -37,13 +37,13 @@
     </div>
   
     <div class="action-buttons mt-4 text-center">
-      <button class="btn btn-primary" (click)="printBill()">In hóa đơn</button>
+      <button *ngIf="payment.serviceType !== 'APPOINTMENT'" class="btn btn-primary" (click)="navToMap()">Theo dõi cửa hàng</button>
       <button class="btn btn-secondary" (click)="goToHome()">Quay lại trang chủ</button>
     </div>
   </div>
   
 
-  <div *ngIf="payment.paymentStatus === 'DECLINED'" class="container payment-fail mt-5">
+  <div *ngIf="payment?.status === 'CANCELED'" class="container payment-fail mt-5">
     <div class="header text-center">
       <i class="fas fa-times-circle fail-icon"></i>
       <h2>Thanh toán thất bại!</h2>

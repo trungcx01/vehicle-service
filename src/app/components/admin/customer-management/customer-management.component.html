@@ -1,0 +1,50 @@
+<!-- customer-management.component.html -->
+<div class="container mt-5 ms-5 col-11">
+    <h1 class="mb-4">Customer Management</h1>
+  
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Tên</th>
+          <th>Số điện thoại</th>
+          <th>Địa chỉ</th>
+          <th>Ngày sinh</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.phoneNumber }}</td>
+          <td>{{ customer.address }}</td>
+          <td>{{ customer.dob | date: 'dd/MM/yyyy'}}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="customer.user.locked === true? 'bg-secondary' : 'bg-success'"
+            >
+              {{ customer.user.locked === true? 'Inactive' : 'Active' }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-warning me-2"
+              (click)="updateStatus(customer.user.id, customer.user.locked)"
+            >
+              {{ customer.user.locked === true? 'Mở khóa tài khoản' : 'Khóa tài khoản' }}
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteCustomer(customer.id)"
+            >
+              Xóa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

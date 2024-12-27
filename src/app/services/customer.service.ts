@@ -29,6 +29,15 @@ export class CustomerService {
     return this.http.get(this.apiUrl + "/get-by-phone", {params: params})
   }
 
+  getAll(): Observable<any>{
+    return this.http.get(this.apiUrl);
+  }
+
+  delete(id: number): Observable<any>{
+    return this.http.delete(this.apiUrl + "/" + id);
+  }
+ 
+
   // updateInfo(avatar: File, customer: ICustomerDTO): Observable<any>{
   //   const formData = new FormData();
   //   formData.append('avatar', avatar);

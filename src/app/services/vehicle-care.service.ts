@@ -46,7 +46,10 @@ export class VehicleCareService {
     return this.http.delete(this.apiUrl + "/" + vehicleCareId);
   }
 
-  search(name: string, start: any, end: any): Observable<any>{
-    return this.http.get(`${this.apiUrl}/search?name=${name}&start=${start}&end=${end}`);
+  search(name: string, district: string, start: any, end: any): Observable<any>{
+    return this.http.get(`${this.apiUrl}/search?name=${name}&district=${district}&priceFrom=${start}&priceTo=${end}`);
+  }
+  getAll(): Observable<any>{
+    return this.http.get(this.apiUrl);
   }
 }

@@ -1,5 +1,5 @@
 <div class="emergency-form mb-5 mt-5">
-  <h2 class="form-title">Cứu Trợ Khẩn Cấp</h2>
+  <h1 class="form-title">Cứu Trợ Khẩn Cấp</h1>
   <form #emergencyForm="ngForm" [formGroup]="form" class="form-container">
     <div class="form-group">
       <label>Họ và Tên *</label>
@@ -81,7 +81,7 @@
           (search)="onItemChange($event)"
           [searchable]="true"
         ></ng-select>
-        <button type="button" class="btn-gps"><i class="fa-solid fa-location-dot"></i>&nbsp;Lấy Vị Trí GPS</button>
+        <button (click)="updateLocation()" type="button" class="btn-gps"><i class="fa-solid fa-location-dot"></i>&nbsp;Lấy Vị Trí GPS</button>
       </div>
     </div>
     <div class="form-group">

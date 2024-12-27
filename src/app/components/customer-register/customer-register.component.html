@@ -2,7 +2,7 @@
   <div class="col-lg-10">
     <form [formGroup]="customerForm">
       <h4 class="text-center">Đăng kí thông tin Customer</h4>
-      <div class="form-group mb-3">
+      <div class="form-group mb-4">
         <label class="form-control-label" for="field_name">Họ và tên</label>
         <input
           type="text"
@@ -13,18 +13,19 @@
         />
       </div>
 
-      <div class="form-group mb-3">
+      <div class="form-group mb-4">
         <label class="form-control-label" for="field_address">Địa chỉ</label>
        <ng-select
        formControlName="address"
         id="field_address"
         style="font-family: roboto"
-        [items]="addressOptions" bindLabel="description"  bindValue="description" (search)="onItemChange($event)"
+        [items]="addressOptions" bindLabel="description"  bindValue="description"  (change)="onChange($event)"
+        (search)="onSearch($event)" 
         [searchable]="true"></ng-select>
       </div>
 
       <div class="row">
-        <div class="form-group mb-3 col-6">
+        <div class="form-group mb-4 col-6">
           <label class="form-control-label" for="field_phone"
             >Số điện thoại</label
           >
@@ -37,18 +38,24 @@
           />
         </div>
 
-        <div class="date form-group mb-3 col-6">
+        <div class="date form-group mb-4 col-6">
           <label for="datepicker">Ngày sinh</label>
-          <input
-          formControlName="dob"
-            class="form-control"
-            id="datepicker"
-            ngbDatepicker
-            #d="ngbDatepicker"
-            [weekdays]="false"
-          />
-          <i (click)="d.toggle()" class="fa-solid fa-calendar-days"></i>
+          <div class="input-group">
+            <input
+              class="form-control"
+              id="datepicker"
+              formControlName="dob"
+              ngbDatepicker
+              #d="ngbDatepicker"
+              [weekdays]="false"
+            />
+            <span class="input-group-text calendar-icon" (click)="d.toggle()">
+              <i class="fa-solid fa-calendar-days"></i>
+            </span>
+          </div>
         </div>
+
+        
       </div>
 
       <!-- <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">

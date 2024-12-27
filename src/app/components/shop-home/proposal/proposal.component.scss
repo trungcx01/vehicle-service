@@ -51,4 +51,9 @@
   .fade {
     transition: opacity 0.3s ease;
   }
-  
+  input, textarea{
+    &:focus{
+        box-shadow: none;
+    }
+    outline: none;
+}

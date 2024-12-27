@@ -1,0 +1,105 @@
+<div class="container mt-5 ms-5 col-11">
+  <h2 class="text-center mb-4">Quản Lý Yêu Cầu Khẩn Cấp</h2>
+
+  <div class="d-flex justify-content-between mb-3">
+    <!-- <button class="btn btn-primary" (click)="openEmergencyRequestModal()">
+      Thêm Yêu Cầu
+    </button> -->
+    <!-- <input
+      type="text"
+      class="form-control w-25"
+      placeholder="Tìm kiếm..."
+      [(ngModel)]="searchTerm"
+    /> -->
+  </div>
+
+  <table class="table table-hover table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Mô Tả</th>
+        <th>Vị Trí</th>
+        <th>Biển Số Xe</th>
+        <th>Loại Xe</th>
+        <th>Trạng Thái</th>
+        <th>Khách Hàng</th>
+        <th>Hình ảnh mô tả</th>
+        <th>Các đề xuất</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of emergencyRequests; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ request.description }}</td>
+        <td>{{ request.location }}</td>
+        <td>{{ request.licensePlate }}</td>
+        <td>{{ request.vehicleType }}</td>
+        <td>
+            <strong 
+            [ngClass]="{
+              'bg-warning text-dark': request.requestStatus === 'PENDING',
+              'bg-success ': request.requestStatus === 'ACCEPTED',
+              'bg-primary ': request.requestStatus === 'IN_PROGRESS',
+              'bg-info text-dark': request.requestStatus === 'FINISHED',
+              'bg-danger ': request.requestStatus === 'CANCELED',
+              'bg-secondary ': request.requestStatus === 'DECLINED'
+            }" 
+            class="px-3 py-1 rounded-pill text-light">
+            {{ request.requestStatus }}
+          </strong>
+            </td>
+        <td>{{ request.customer.name }}</td>
+        <td>
+          <div
+            class="d-flex flex-wrap gap-2 mb-2"
+            *ngFor="let item of request.imageDetail.split(' - ')"
+          >
+            <img
+              [src]="item"
+              class="img-thumbnail"
+              width="200"
+              height="200"
+              alt="Image detail"
+            />
+          </div>
+        </td>
+        <td>
+          <ul class="list-group">
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center mb-3"
+              *ngFor="let item of request.proposals"
+            >
+              <div class="text-start">
+                <p class="mb-1">
+                  <i class="fas fa-store me-2 text-primary"></i>
+                  <strong>{{ item.shop.name }}</strong>
+                </p>
+                <p class="mb-1">
+                  <i class="fas fa-chart-line text-success"></i>
+                  Dự đoán: {{ item.predict }}
+                </p>
+                <p class="mb-1">
+                  <i class="fas fa-dollar-sign text-warning"></i>
+                  Giá dự kiến: {{ item.expectedPrice | number }} VNĐ
+                </p>
+                <p class="mb-0">
+                  Trạng thái:
+                  <strong
+                    [ngClass]="{
+                      'bg-success': item.status === 'ACCEPTED',
+                      'bg-warning': item.status === 'PENDING',
+                      'bg-danger': item.status === 'CANCELED'
+                    }"
+                    class="px-2 py-1 rounded text-light"
+                  >
+                    {{ item.status }}
+                  </strong>
+                </p>
+              </div>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

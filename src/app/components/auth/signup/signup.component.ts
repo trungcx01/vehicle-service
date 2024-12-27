@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ActivationComponent } from '../activation/activation.component';
 import Swal from 'sweetalert2';
+import { style } from '@angular/animations';
 
 @Component({
   selector: 'app-signup',

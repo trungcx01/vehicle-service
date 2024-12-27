@@ -38,6 +38,7 @@ export class ShopMapComponent {
   visible = false;
   proposal: any
   proposalId: any;
+  private isDialogShown = false;
 
   constructor(private othersService: OthersService, private activatedRoute: ActivatedRoute, private proposalService: ProposalService, 
     private router: Router, private notificationService: NotificationService, private authService: AuthService
@@ -67,7 +68,9 @@ export class ShopMapComponent {
     [this.fastestTime, this.shortestDistance] = await this.getDistanceAndTime();
     this.getDirectionLines(String(this.i));
 
+   
       this.startShopSimulation();
+    
     
   }
 
@@ -123,25 +126,33 @@ export class ShopMapComponent {
   this.markers.push(marker);
   }
 
-  startShopSimulation(): void {
-    const intervalId = setInterval(() => {
-      this.origin_lat += (this.destination_lat - this.origin_lat) / this.TOTAL_STEP;
-      this.origin_lng += (this.destination_lng - this.origin_lng) / this.TOTAL_STEP;
 
-      this.updateShopMarker();
-      this.sendUpdatedPositionToCustomer(this.origin_lat, this.origin_lng);
 
-      if (this.checkIfArrived()) {
-        Swal.fire({
-          title: 'Đã đến nơi!',
-          text: 'Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!',
-          icon: 'success',
-          confirmButtonText: 'Hoàn tất',
-        });
-        clearInterval(intervalId);
-      }
-    }, 10000);
-  }
+startShopSimulation(): void {
+  const intervalId = setInterval(() => {
+    this.origin_lat += (this.destination_lat - this.origin_lat) / this.TOTAL_STEP;
+    this.origin_lng += (this.destination_lng - this.origin_lng) / this.TOTAL_STEP;
+    this.updateShopMarker();
+    this.sendUpdatedPositionToCustomer(this.origin_lat, this.origin_lng);
+    
+
+    if (this.checkIfArrived() && !this.isDialogShown) {
+      clearInterval(intervalId);
+      this.isDialogShown = true;
+      Swal.fire({
+        title: 'Đã đến nơi!',
+        text: 'Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!',
+        icon: 'success',
+        confirmButtonText: 'Hoàn tất',
+      }).then((res) => {
+        
+        if (res.isConfirmed) {
+          this.router.navigate(['/shop-home']);
+        }
+      });
+    }
+  }, 10000);
+}
 
   
 

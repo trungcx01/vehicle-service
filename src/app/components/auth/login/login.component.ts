@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -43,22 +44,27 @@ export class LoginComponent implements OnInit {
           this.authService.getCurrentUser().subscribe({
             next: (res) => {
               console.log(res);
-              const role = res.roles[0].name;
-              if (role === 'SHOP') {
-                this.router.navigate(['/shop-home']).then(() => {
-                  window.location.reload();  
-                });
-              } else if (role === 'CUSTOMER') {
-                this.router.navigate(['']).then(() => {
-                  window.location.reload();  
-                });
-                this.toastr.success('Login successfully!');
-              } else if (role === 'USER') {
-                this.router.navigate(['/registration-info']).then(() => {
-                  window.location.reload();  
-                });
+              if (res.roles.length !== 0) {
+                const role = res.roles[0].name;
+                if (role === 'SHOP') {
+                  this.router.navigate(['/shop-home']).then(() => {
+                    window.location.reload();
+                  });
+                } else if (role === 'CUSTOMER') {
+                  this.router.navigate(['']).then(() => {
+                    window.location.reload();
+                  });
+                  this.toastr.success('Đăng nhập thành công!');
+                }
+                else if (role === 'ADMIN') {
+                  this.router.navigate(['/adminn bvcvc ']).then(() => {
+                    window.location.reload();
+                  });
+                  this.toastr.success('Đăng nhập thành công!');
+                }
               } else {
-                this.router.navigate(['/login']);
+                this.toastr.success('Đăng nhập thành công!');
+                this.router.navigate(['/registration-info']);
               }
             },
             error: (err) => {
@@ -67,7 +73,8 @@ export class LoginComponent implements OnInit {
           });
         },
         error: (err) => {
-          // this.toastr.error(err)
+          // this.toastr.error(err.error.message)
+          Swal.fire("Lỗi", err.error.message, "error");
           console.log(err);
         },
       });

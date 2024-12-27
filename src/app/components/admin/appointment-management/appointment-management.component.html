@@ -1,0 +1,77 @@
+<div class="container mt-5 ms-5 col-11">
+  <h2 class="text-center mb-4">Danh sách Lịch Hẹn</h2>
+
+  <!-- <div class="d-flex justify-content-between mb-3">
+      <button class="btn btn-primary" (click)="openAppointmentModal()">Thêm Lịch Hẹn</button>
+      <input type="text" class="form-control w-25" placeholder="Tìm kiếm..." [(ngModel)]="searchTerm">
+    </div> -->
+
+  <table class="table table-hover table-bordered text-center">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Ghi Chú</th>
+        <th>Thời Gian</th>
+        <th>Loại Xe</th>
+        <th style="width: 150px">Dịch Vụ</th>
+        <th>Khách Hàng</th>
+        <th>Trạng Thái</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of appointments">
+        <td class="text-center fw-bold">{{ item.id }}</td>
+        <td>{{ item.note || "Không có ghi chú" }}</td>
+        <td>
+          {{ item.date | date : "dd/MM/yyyy" }}<br />
+          {{ item.time }}
+        </td>
+        <td>{{ item.vehicleType }}</td>
+        <td>
+          <ul class="list-unstyled mb-0">
+            <li
+              *ngFor="let v of item.vehicleCares"
+              class="d-flex align-items-center"
+            >
+              <span class="text-success fw-bold me-2">•</span>
+              <span>{{ v.name }}</span>
+            </li>
+          </ul>
+        </td>
+        <td class="text-center fw-semibold">{{ item.customer.name }}</td>
+        <td class="text-center">
+          <div class="justify-content-center align-items-center">
+            <span *ngIf="item.status === 'ACCEPTED'" class="badge bg-success"
+              >Đã Chấp Nhận</span
+            >
+            <span
+              *ngIf="item.status === 'PENDING'"
+              class="badge bg-warning text-dark"
+              >Đang Xử Lý</span
+            >
+            <span *ngIf="item.status === 'CANCELED'" class="badge bg-danger"
+              >Đã Hủy</span
+            >
+            <span *ngIf="item.status === 'FINISHED'" class="badge bg-info"
+              >Hoàn Thành</span
+            >
+          </div>
+          <div *ngIf="item.status !== 'CANCELED' && item.status !== 'FINISHED'">
+            <span
+              *ngIf="item.paymentStatus === 'FINISHED'"
+              class="badge bg-primary"
+              >Đã Thanh Toán</span
+            >
+            <span
+              *ngIf="item.paymentStatus !== 'FINISHED'"
+              class="badge bg-secondary"
+              >Chưa Thanh Toán</span
+            >
+          </div>
+        </td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>

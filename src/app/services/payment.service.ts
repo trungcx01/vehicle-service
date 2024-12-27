@@ -18,4 +18,18 @@ export class PaymentService {
   getPayment(id: number): Observable<any>{
     return this.http.get(this.apiUrl + "/" + id);
   }
+
+  getPaymentByAppointment(id: number): Observable<any>{
+    return this.http.get(this.apiUrl + "/appointment/" + id);
+  }
+  getPaymentByEmergencyRequest(id: number): Observable<any>{
+    return this.http.get(this.apiUrl + "/emergency-request/" + id);
+  }
+
+  getTurnoverByDate(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/get-by-date/" + date);
+  }
+  totalAmountByDateAndCurrentShop(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/total-by-shop/" + date);
+  }
 }

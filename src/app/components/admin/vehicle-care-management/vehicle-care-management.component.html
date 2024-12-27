@@ -1,0 +1,47 @@
+<section class="vehicle-care-management py-5 ms-5 mt-5 col-11">
+    <div class="container">
+      <h2 class="text-center mb-4">Quản Lý Dịch Vụ VehicleCare</h2>
+<!--   
+      Add vehicleCare Button
+      <div class="text-end mb-4">
+        <button class="btn btn-primary" (click)="openAddvehicleCareModal()">Thêm Dịch Vụ</button>
+      </div> -->
+  
+      <!-- Vehicle Care Table -->
+      <table class="table table-bordered">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Tên Dịch Vụ</th>
+            <th>Mô Tả</th>
+            <th>Giá</th>
+            <th>Thời Gian Ước Tính</th>
+            <th>Trạng Thái</th>
+            <th>Hình Ảnh</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vehicleCare of vehicleCares; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ vehicleCare.name }}</td>
+            <td>{{ vehicleCare.description }}</td>
+            <td>{{ vehicleCare.price | currency:'VND' }}</td>
+            <td>{{ vehicleCare.estimatedDuration }}</td>
+            <td>
+              <span [class]="vehicleCare.available ? 'text-success' : 'text-danger'">
+                {{ vehicleCare.available ? 'Có Sẵn' : 'Không Có Sẵn' }}
+              </span>
+            </td>
+            <td>
+              <img [src]="vehicleCare.imageUrl" alt="vehicleCare Image" class="img-fluid" width="100">
+            </td>
+            <td>
+              <button class="btn btn-danger" (click)="delete(vehicleCare.id)">Xóa</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  

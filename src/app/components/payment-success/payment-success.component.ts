@@ -1,6 +1,7 @@
 import { PaymentService } from './../../services/payment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-payment-success',
@@ -32,28 +33,34 @@ export class PaymentSuccessComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-      this.activatedRoute.paramMap.subscribe(params =>{
-        const id = Number(params.get("id"));
-        console.log(id);
-        this.paymentService.getPayment(id).subscribe({
-          next: (data) => {
-            console.log(data);
-            this.payment = data;
-          },
-          error: (error) => {
-            console.error(error);
-          }
-        })
-      })
+    this.activatedRoute.paramMap.subscribe((params) => {
+      const id = Number(params.get('id'));
+      console.log(id);
+      this.paymentService.getPayment(id).subscribe({
+        next: (data) => {
+          console.log(data);
+          this.payment = data;
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
+    });
   }
+  
+
   retryPayment(){
     this.router.navigate(['/payment'], this.payment.id);
   }
   printBill() {
-    window.print(); // In hóa đơn
+    window.print(); 
   }
 
   goToHome() {
     window.location.href = '/'; // Quay lại trang chính
+  }
+
+  navToMap(){
+    this.router.navigate(['/map-emergency/' + this.payment.baseService.id ]);
   }
 }

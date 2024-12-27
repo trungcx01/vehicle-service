@@ -11,7 +11,7 @@ export class AppComponent {
   showHeaderFooter: boolean = true;
   loading = false;
   constructor(private router: Router, public loadingService: LoadingService) {}
-  urlNoHeaderFooter = ['/shop-home', '/login', '/signup', '/unauthorized', '/map', '/admin'];  
+  urlNoHeaderFooter = ['/shop-home', '/login', '/signup', '/unauthorized', '/map', '/admin', '/forgot-password'];  
   ngOnInit() {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
@@ -29,6 +29,14 @@ export class AppComponent {
         
       }
     });
+
+    // this.checkLogin();
+  }
+
+  checkLogin(){
+    if (localStorage.getItem("token") === null){
+      this.router.navigate(['/login']);
+    }
   }
   
 }

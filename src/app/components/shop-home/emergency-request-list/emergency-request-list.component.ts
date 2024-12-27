@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProposalComponent } from '../proposal/proposal.component';
 import { ShopService } from '../../../services/shop.service';
 import { catchError, forkJoin, map, of } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-emergency-request-list',
@@ -62,5 +63,9 @@ export class EmergencyRequestListComponent implements OnInit{
       centered: true
     });
     modalRef.componentInstance.proposal = proposal;
+  }
+
+  updateStatus(requestId: number, status: string){
+    
   }
 }

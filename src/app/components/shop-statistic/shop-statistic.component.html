@@ -1,0 +1,199 @@
+<div class="shop-statistic-container container mt-5">
+  <div class="card bg-primary text-white shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <h3 class="h4 mb-0">Thống kê cửa hàng</h3>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs justify-content-center mb-4 border-0">
+    <li class="nav-item">
+      <a
+        class="nav-link px-4 py-2"
+        [class.active]="selectedTab === 'overview'"
+        (click)="selectedTab = 'overview'"
+      >
+        🌍 Tổng quan
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link px-4 py-2"
+        [class.active]="selectedTab === 'appointments'"
+        (click)="selectedTab = 'appointments'"
+      >
+        📅 Lịch hẹn & cứu trợ
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link px-4 py-2"
+        [class.active]="selectedTab === 'turnover'"
+        (click)="selectedTab = 'turnover'"
+      >
+        💰 Doanh thu
+      </a>
+    </li>
+  </ul>
+
+
+  <div class="tab-content">
+
+    <div *ngIf="selectedTab === 'overview'" class="tab-pane fade show active">
+      <h3 class="mb-3">Tổng quan</h3>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card bg-primary text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng số Lịch hẹn</h5>
+              <p class="card-text">{{ overviewData?.totalAppointments }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-danger text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng số Yêu cầu cứu trợ</h5>
+              <p class="card-text">{{ overviewData?.totalEmergencyRequests }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card bg-success text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng doanh thu</h5>
+              <p class="card-text">{{ overviewData?.totalRevenue | currency }}</p>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+
+    <div *ngIf="selectedTab === 'appointments'" class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="mb-4">📅 Thống kê Lịch hẹn và Cứu trợ</h4>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="dateStart" class="form-label">Từ ngày:</label>
+            <div class="input-group">
+              <input
+                type="text"
+                placeholder="Chọn ngày bắt đầu"
+                class="form-control"
+                id="appointmentDateStart"
+                [(ngModel)]="dateStart"
+                ngbDatepicker
+                #d1="ngbDatepicker"
+              />
+              <span class="input-group-text" (click)="d1.toggle()">
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="dateEnd" class="form-label">Đến ngày:</label>
+            <div class="input-group">
+              <input
+                type="text"
+                placeholder="Chọn ngày kết thúc"
+                class="form-control"
+                id="appointmentDateEnd"
+                [(ngModel)]="dateEnd"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+              />
+              <span class="input-group-text" (click)="d2.toggle()">
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button
+              class="btn btn-primary w-100 btn-lg hover-effect"
+              (click)="fetchAppointmentData()"
+            >
+              Lọc dữ liệu
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="text-center mt-4">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+
+        <div class="chart-container mt-4" *ngIf="!isLoading">
+          <canvasjs-chart
+            [options]="chartOptions"
+            [styles]="{ width: '100%', height: '400px' }"
+          ></canvasjs-chart>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedTab === 'turnover'" class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="mb-4">💰 Thống kê Doanh thu</h4>
+        <div class="row">
+          <div class="col-md-4">
+            <label for="dateStart" class="form-label">Từ ngày:</label>
+            <div class="input-group">
+              <input
+                type="text"
+                placeholder="Chọn ngày bắt đầu"
+                class="form-control"
+                id="turnoverDateStart"
+                [(ngModel)]="dateStart"
+                ngbDatepicker
+                #d3="ngbDatepicker"
+              />
+              <span class="input-group-text" (click)="d3.toggle()">
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="dateEnd" class="form-label">Đến ngày:</label>
+            <div class="input-group">
+              <input
+                type="text"
+                placeholder="Chọn ngày kết thúc"
+                class="form-control"
+                id="turnoverDateEnd"
+                [(ngModel)]="dateEnd"
+                ngbDatepicker
+                #d4="ngbDatepicker"
+              />
+              <span class="input-group-text" (click)="d4.toggle()">
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button
+              class="btn btn-primary w-100 btn-lg hover-effect"
+              (click)="fetchTurnoverData()"
+            >
+              Lọc dữ liệu
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="isLoading" class="text-center mt-4">
+          <div class="spinner-border text-primary" role="status"></div>
+          <p>Đang tải dữ liệu...</p>
+        </div>
+
+        <div class="chart-container mt-4" *ngIf="!isLoading">
+          <canvasjs-chart
+            [options]="turnoverChartOptions"
+            [styles]="{ width: '100%', height: '400px' }"
+          ></canvasjs-chart>
+          <p class="text-center mt-3 fw-bold">
+            Tổng doanh thu: {{ sumTurnOver | number }} VNĐ
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -8,26 +8,14 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './shop-home.component.scss'
 })
 export class ShopHomeComponent {
-  isMobileView: boolean = false;
-  isSidebarOpen: boolean = true;
+  isCollapsed = false; // State to toggle the sidebar
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (event.target.innerWidth < 992) {
-      this.isMobileView = true;
-    } else {
-      this.isMobileView = false;
-    }
-  }
+  constructor(public router: Router, private toastr: ToastrService) {}
 
   toggleSidebar() {
-    this.isSidebarOpen = !this.isSidebarOpen;
+    this.isCollapsed = !this.isCollapsed; // Toggle sidebar state
   }
 
-
-  constructor(private toastr: ToastrService, private router: Router){
-
-  }
   logout(): void {
     localStorage.removeItem('token');   
     this.toastr.success('Đăng xuất thành công!');

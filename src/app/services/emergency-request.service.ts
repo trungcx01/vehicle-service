@@ -1,5 +1,5 @@
 import { IEmergencyRequestDTO } from './../models/emergency-request.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -42,7 +42,25 @@ export class EmergencyRequestService {
     return this.http.get(this.apiUrl);
   }
 
-  getById(): Observable<any> {
-    return this.http.get(this.apiUrl + '/id');
+  getById(id: number): Observable<any> {
+    return this.http.get(this.apiUrl + '/' + id);
   }
+  updateStatus(status: string, id: number): Observable<any> {
+    const params = new HttpParams().set('status', status);  
+    return this.http.put(this.apiUrl + "/update-status/" + id, {}, { params });
+  }
+
+  countByDate(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/count/" + date);
+  }
+
+  countByDateAndCurrentShop(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/count-by-shop/" + date);
+  }
+
+  getByCurrentCustomer(){
+    return this.http.get(this.apiUrl + "/current-customer");
+  }
+
+  
 }

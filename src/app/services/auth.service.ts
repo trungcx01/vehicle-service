@@ -35,4 +35,14 @@ changePassword(oldPassword: string, newPassword: string){
   getCurrentUser(): Observable<any>{
     return this.http.get(this.apiUrl + "/get-user")
   }
+
+  requestResetPass(email: string): Observable<any>{
+    const params = new HttpParams()
+    .set('email', email);
+    return this.http.post(this.apiUrl + "/request-reset-password", {}, {params});
+  }
+
+  resetPassword(forgotPasswordDTO: any): Observable<any>{
+    return this.http.post(this.apiUrl + "/reset-password", forgotPasswordDTO);
+  }
 }

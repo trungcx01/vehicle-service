@@ -38,7 +38,8 @@
           [items]="addressOptions"
           bindLabel="description"
           bindValue="description"
-          (search)="onItemChange($event)"
+           (change)="onChange($event)"
+          (search)="onSearch($event)"
           [searchable]="true"
         ></ng-select>
       </div>

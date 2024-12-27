@@ -1,0 +1,77 @@
+.shop-statistic-container {
+    // padding: 20px;
+    max-width: 1000px;
+    min-height: 90vh;
+    // margin: 0 auto;
+    // font-family: 'Roboto', Arial, sans-serif;
+    // background: #f9f9f9; 
+    // border-radius: 8px;
+    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    // margin: 50px auto ;
+  }
+  
+  label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  #week-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    outline: none;
+    margin-bottom: 20px;
+  }
+  
+  #week-select:hover {
+    border-color: #007bff;
+  }
+  
+  #week-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  .chart-container {
+    margin-top: 20px;
+    padding: 10px;
+    background: #fff; 
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  canvasjs-chart {
+    display: block;
+    max-width: 100%;
+    height: auto; 
+  }
+  
+
+  @media (max-width: 768px) {
+    .shop-statistic-container {
+      padding: 15px;
+    }
+  
+    label {
+      font-size: 14px;
+    }
+  
+    #week-select {
+      font-size: 13px;
+    }
+  
+    .chart-container {
+      padding: 8px;
+    }
+  }
+  
+
+  

@@ -14,6 +14,10 @@ export class AppointmentService {
     return this.http.post(this.apiUrl, appointment);
   }
 
+  delete(id: number): Observable<any>{
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
   getAppointmentByCurrentCustomer(): Observable<any>{
     return this.http.get(this.apiUrl + "/customer");
   }
@@ -31,4 +35,15 @@ export class AppointmentService {
     return this.http.put(this.apiUrl + "/update-status/" + id, {}, { params });
   }
   
+  countByDate(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/count/" + date);
+  }
+
+  countByDateAndCurrentShop(date: string): Observable<any>{
+    return this.http.get(this.apiUrl + "/count-by-shop/" + date);
+  }
+
+  getAll(): Observable<any>{
+    return this.http.get(this.apiUrl);
+  }
 }

@@ -6,7 +6,8 @@ export interface IShopDTO{
     phoneNumber?:string,
     description?: string,
     openHour?: any,
-    closeHour?: any
+    closeHour?: any,
+    district?: any
 }
 
 export class ShopDTO implements IShopDTO{
@@ -18,6 +19,7 @@ export class ShopDTO implements IShopDTO{
         public description?: string,
         public phoneNumber?:string,
         public openHour?: any,
-        public closeHour?: any
+        public closeHour?: any,
+        public district?: any
     ) {}
 }

@@ -26,8 +26,8 @@
   }
   
   .account-card:hover {
-    transform: scale(1.02); /* Hiệu ứng phóng to khi hover */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng */
+    transform: scale(1.01); /* Hiệu ứng phóng to khi hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tăng đổ bóng */
   }
   
   .account-card img {
@@ -55,10 +55,5 @@
     color: white;
     border-radius: 5px;
     transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-  
-  .next-page .btn:hover {
-    background-color: #04666e;
-    transform: scale(1.1); /* Phóng to nhẹ */
   }
   

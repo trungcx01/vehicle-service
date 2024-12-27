@@ -1,0 +1,53 @@
+<div class="container mt-5 ms-5 col-11">
+    <h2>Quản lý Shop</h2>
+    <button class="btn btn-primary mb-3" (click)="addShop()">Thêm Shop</button>
+  
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Tên Shop</th>
+          <th>Địa chỉ</th>
+          <th>Số điện thoại</th>
+          <th>Thời gian hoạt động</th>
+          <th>Rating</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let shop of shops">
+          <td>{{ shop.id }}</td>
+          <td>{{ shop.name }}</td>
+          <td>{{ shop.address }}</td>
+          <td>{{ shop.phoneNumber }}</td>
+          <td>{{ shop.openHour }} - {{shop.closeHour}}</td>
+          <td>{{ shop.rating }}</td>
+         
+          <td>
+            <span
+              class="badge"
+              [ngClass]="shop.user.locked === true? 'bg-secondary' : 'bg-success'"
+            >
+              {{ shop.user.locked === true? 'Inactive' : 'Active' }}
+            </span>
+          </td>
+          <td>
+            <button
+              class="btn btn-sm btn-warning me-2"
+              (click)="updateStatus(shop.user.id, shop.user.locked)"
+            >
+              {{ shop.user.locked === true? 'Mở khóa tài khoản' : 'Khóa tài khoản' }}
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteShop(shop.id)"
+            >
+              Xóa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

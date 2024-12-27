@@ -1,0 +1,82 @@
+<div class="review-management ms-5 col-11 mt-5">
+    <!-- Header -->
+    <div class="header bg-primary text-white d-flex justify-content-between align-items-center mb-4 p-3 rounded shadow">
+      <h3 class="h4 m-0">Quản Lý Đánh Giá</h3>
+    </div>
+  
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark text-center">
+          <tr>
+            <th>ID</th>
+            <th>Khách Hàng</th>
+            <th>Nội dung</th>
+            <th>Ảnh</th>
+            <th>Loại Dịch Vụ</th>
+     
+            <th>Thông tin Dịch Vụ</th>
+        
+            <th>Đánh Giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let review of reviews" class="text-center">
+            <td class="fw-bold">{{ review.id }}</td>
+            <td>{{ review.customer.name }}</td>
+  
+            <td>{{ review.description || "Không có ghi chú" }}</td>
+            
+            <td>
+                <img *ngIf="review.imageUrl" [src]="review.imageUrl" alt="Review Image" class="img-thumbnail" width="100" />
+                <span *ngIf="!review.imageUrl">Không có ảnh</span>
+              </td>
+            <td>
+                <p><span class="badge" [ngClass]="{
+                    'bg-primary': review.serviceType === 'APPOINTMENT',
+                    'bg-dark': review.serviceType === 'EMERGENCY_REQUEST',
+                  }">{{ review.serviceType }}</span></p>
+            </td>
+         
+            <!-- Hiển thị thông tin dịch vụ -->
+            <td *ngIf="review.serviceType === 'APPOINTMENT'">
+              <div class="small text-muted">
+                <div><strong>Thời gian:</strong> {{ review.baseService.date | date: 'dd/MM/yyyy'}}, {{ review.baseService.time }}</div>
+                <div><strong>Loại Xe:</strong> {{ review.baseService.vehicleType }}</div>
+              </div>
+            </td>
+            <td *ngIf="review.serviceType === 'EMERGENCY_REQUEST'">
+              <div class="small text-muted">
+                <div><strong>Địa chỉ cứu hộ:</strong> {{ review.baseService.emergencyRequest.location }}</div>
+                <div><strong>Loại Xe:</strong> {{ review.baseService.emergencyRequest.vehicleType }}</div>
+                <div><strong>Mô tả tình trạng:</strong> {{ review.baseService.emergencyRequest.description }}</div>
+                <div><strong>Cửa hàng dự đoán tình trạng:</strong> {{ review.baseService.predict }}</div>
+                <div><strong>Giá đề xuất:</strong> {{ review.baseService.expectedPrice | number }} VNĐ</div>
+              </div>
+            </td>
+  
+    
+          
+            <td>{{ review.rate }}/5</td>
+            
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Phân trang -->
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-end">
+        <li class="page-item">
+          <a class="page-link" href="#"><i class="fa fa-angle-left"></i> Trước</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Sau <i class="fa fa-angle-right"></i></a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  

@@ -1,0 +1,121 @@
+<div class="mt-4 col-9 mx-auto">
+    <!-- Tiêu đề -->
+    <div class="title d-flex justify-content-between align-items-center  mb-4 mt-5 ">
+        <span class="fw-bold" style="font-size: 34px;">Danh sách yêu cầu khẩn cấp</span>
+        <a class="btn btn-primary" style="padding: 10px;" href="/emergency-request">Tạo mới</a>
+    </div>
+    <div *ngIf="emergencyRequests && emergencyRequests.length === 0" class="no-appointments col-12 text-center">
+        <div class="alert alert-warning p-4">
+            <h5 class="alert-heading">Chưa có  yêu cầu cứu trợ nào</h5>
+            <p class="mb-0 text-muted">Hiện tại không có yêu cầu nào!</p>
+        </div>
+    </div>
+  
+    <div class="row g-4 mb-5">
+      <div *ngFor="let request of emergencyRequests">
+        <div class="card border-0 shadow-sm">
+   
+          <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0">Cứu trợ khẩn cấp</h5>
+            <span class="small">Tạo lúc: {{ request.createAt | date : 'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+
+          <div class="card-body">
+  
+            <div *ngIf="request.imageDetail" class="mb-3">
+              <div class="row">
+                <div
+                  *ngFor="
+                    let image of request.imageDetail.split(' - ');
+                    let i = index
+                  "
+                  class="col-md-4 col-sm-6 mb-2"
+                >
+                  <img
+                    [src]="image"
+                    class="img-fluid rounded shadow-sm"
+                    alt="Hình ảnh yêu cầu"
+                    style="height: 150px; object-fit: cover"
+                  />
+                </div>
+              </div>
+            </div>
+  
+  
+            <p class="mb-2"><strong>ID: </strong> {{ request.id }}</p>
+            <p class="mb-2"><strong>Địa điểm: </strong> {{ request.location }}</p>
+            <p class="mb-2"><strong>Mô tả: </strong> {{ request.description }}</p>
+            <p class="mb-2">
+              <strong>Trạng thái:</strong>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'bg-warning text-dark': request.requestStatus === 'PENDING',
+                  'bg-info text-white': request.requestStatus === 'IN_PROGRESS',
+                  'bg-success text-white': request.requestStatus === 'FINISHED',
+                  'bg-secondary text-white': request.requestStatus === 'CANCELED'
+                }"
+              >
+                {{ request.requestStatus }}
+              </span>
+            </p>
+            <p class="mb-2"><strong>Biển số xe:</strong> {{ request.licensePlate }}</p>
+            <p class="mb-2"><strong>Loại xe:</strong> {{ request.vehicleType }}</p>
+            <p class="mb-2"><strong>Khách hàng:</strong> {{ request.customer.name }}</p>
+  
+        
+            <div
+              *ngIf="
+                request.proposals?.length > 0 &&
+                request.requestStatus !== 'CANCELED'
+              "
+              class="mt-3"
+            >
+              <h6 class="text-success">Đề xuất được chấp nhận:</h6>
+              <ng-container *ngFor="let proposal of request.proposals">
+                <div *ngIf="proposal.status === 'ACCEPTED'" class="mb-2">
+                  <p class="mb-1"><strong>Cửa hàng:</strong> {{ proposal.shop.name }}</p>
+                  <p class="mb-1"><strong>Chẩn đoán:</strong> {{ proposal.predict }}</p>
+                  <p class="mb-1"><strong>Giá dự kiến:</strong> {{ proposal.expectedPrice | currency:'VND' }}</p>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+  
+    
+          <div class="card-footer text-center bg-light border-top d-flex align-items-start">
+            <button
+              *ngIf="request.requestStatus === 'FINISHED' && !request.review"
+              class="btn btn-sm btn-outline-success mx-2 "
+              (click)="openReviewForm(request)"
+            >
+              Đánh giá
+            </button>
+
+            <button
+            *ngIf="request.review"
+            class="btn btn-outline-dark mx-2 "
+            (click)="openReviewDetail(request.review)"
+          >
+            Xem đánh giá
+          </button>
+            <button
+              *ngIf="request.requestStatus === 'IN_PROGRESS'"
+              class="btn btn-outline-primary mx-2 "
+            >
+              Theo dõi lộ trình
+            </button>
+
+            <button
+              *ngIf="request.requestStatus === 'IN_PROGRESS'"
+              class="btn btn-outline-secondary mx-2"
+              (click)="updateStatus(request.id, 'FINISHED')"
+            >
+              Đánh dấu hoàn thành
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

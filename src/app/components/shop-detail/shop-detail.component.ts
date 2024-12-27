@@ -6,6 +6,10 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import * as polyline from '@mapbox/polyline';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppointmentComponent } from '../appointment/appointment.component';
+import { ReviewService } from '../../services/review.service';
+import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomerService } from '../../services/customer.service';
 
 declare var goongjs: any;
 declare var GoongGeocoder: any;
@@ -18,20 +22,78 @@ declare var GoongGeocoder: any;
 })
 export class ShopDetailComponent implements OnInit {
   shop: any;
-  shopId: any;
+  reviews: any;
+ 
   shopLat: number | undefined;
   shopLng: number | undefined;
   currLat: number | undefined;
   currLng: number | undefined;
+  reviewForm!: FormGroup
   bounds = new goongjs.LngLatBounds();
   private map: any;
   private markers: any[] = [];
+  previewImage: any
+  image: any;
+  color: any;
+  customer: any;
   constructor(private othersService: OthersService ,private activatedRoute: ActivatedRoute,
-    private shopService: ShopService, private cdr: ChangeDetectorRef, private modalService: NgbModal
-  ) {}
+    private shopService: ShopService, private cdr: ChangeDetectorRef, private modalService: NgbModal,
+    private reviewService: ReviewService,
+    private toastr: ToastrService,
+    private fb: FormBuilder,
+    private customerService: CustomerService
+  ) {
+    // this.reviewForm = this.fb.group({
+    //   id: [''],
+    //   description: [''],
+    //   rate: ['', Validators.required],
+    //   shopId: ['', Validators.required],
+    //   customerId: ['', Validators.required]
+    // })
+  }
+
+  // reviews = [
+  //   {
+  //     name: 'Nguyễn Văn A',
+  //     rating: 5,
+  //     content: 'Dịch vụ rất tuyệt vời, nhân viên thân thiện và chuyên nghiệp.',
+  //     date: new Date('2023-12-03'),
+  //     imageUrl: ''
+  //   },
+  //   {
+  //     name: 'Trần Thị B',
+  //     rating: 4,
+  //     content: 'Dịch vụ tốt, tuy nhiên thời gian hoàn thành có thể nhanh hơn.',
+  //     date: new Date('2023-12-01'),
+  //     imageUrl: ''
+  //   },
+  //   {
+  //     name: 'Lê Minh C',
+  //     rating: 5,
+  //     content: 'Tôi rất hài lòng với dịch vụ ở đây. Nhân viên rất nhiệt tình và chuyên môn cao.',
+  //     date: new Date('2023-11-30'),
+  //     imageUrl: ''
+  //   },
+  //   {
+  //     name: 'Phan Quang D',
+  //     rating: 3,
+  //     content: 'Dịch vụ không tồi, nhưng có thể cải thiện về thái độ phục vụ.',
+  //     date: new Date('2023-11-28'),
+  //     imageUrl: ''
+  //   },
+  // ];
+
+  // Biến lưu thông tin đánh giá mới
+  newReview = {
+    name: '',
+    rating: 5,
+    content: '',
+  };
 
   
-  ngOnInit(): void {
+  
+  async ngOnInit(){
+  
     goongjs.accessToken = environment.mapKey;
     this.map = new goongjs.Map({
       container: 'map',
@@ -42,8 +104,9 @@ export class ShopDetailComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       const id = params['id'];
       this.shopService.getById(id).subscribe({
-        next: (res) => {
+        next: async (res) => {
           this.shop = res;
+          this.reviews = await this.getAllReviewsOfShop(res.id);
           this.cdr.detectChanges();
           console.log('oi', this.shop.address);
           this.convertToLatLng(this.shop.address);
@@ -54,6 +117,7 @@ export class ShopDetailComponent implements OnInit {
        })
     });
    
+    
   
    
 
@@ -72,6 +136,23 @@ export class ShopDetailComponent implements OnInit {
 
       this.getDirectionLines();
     });
+
+    this.customer = await this.getCurrentCustomer();
+    console.log('oll',this.customer);
+  }
+
+  async getCurrentCustomer(): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.customerService.getCurrentCustomer().subscribe({
+        next: (res) =>{
+          resolve(res);
+        }, 
+        error: (error) =>{
+          reject(error);
+          console.log(error);
+        }
+      })
+    })
   }
 
   initMarker(locations: any): void {
@@ -104,6 +185,23 @@ export class ShopDetailComponent implements OnInit {
         console.log(this.currLat, this.currLng);
       });
     }
+  }
+
+ 
+
+  async getAllReviewsOfShop(id: number): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.reviewService.getByShop(id).subscribe({
+        next: (data) =>{
+          console.log('fjkckd', data);
+          resolve(data);
+          
+        },
+        error: (error) =>{
+          reject(error);
+        }
+      })
+    })
   }
 
   getDirectionLines(): void {
@@ -155,11 +253,14 @@ export class ShopDetailComponent implements OnInit {
     });
   }
 
+  
+
   openAppointmentModal() {
     const modalRef = this.modalService.open(AppointmentComponent, { 
       // backdrop: 'static',
       // keyboard: false,
-      centered: true   
+      centered: true,
+      size: 'lg'
     });
     modalRef.componentInstance.shop = this.shop;
   }

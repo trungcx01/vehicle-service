@@ -1,17 +1,20 @@
-<div class="modal-dialog">
-    <div class="modal-content">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <!-- Header Modal -->
+    <div class="modal-header bg-dark text-light">
+      <h5 class="modal-title fw-bold" id="vehicleCareModalLabel">
+        {{ vehicleCare ? 'Cập nhật dịch vụ xe' : 'Thêm dịch vụ xe' }}
+      </h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+
+    <!-- Body Modal -->
+    <div class="modal-body">
       <form [formGroup]="vehicleCareForm" (ngSubmit)="onSubmit()">
-        <!-- Header với màu nền -->
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title" id="vehicleCareModalLabel">
-            {{ vehicleCare ? 'Cập nhật dịch vụ xe' : 'Thêm dịch vụ xe' }}
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-        </div>
-        
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="name" class="form-label">Tên dịch vụ</label>
+        <div class="row g-4">
+          <!-- Tên dịch vụ -->
+          <div class="col-md-6">
+            <label for="name" class="form-label fw-semibold">Tên dịch vụ</label>
             <input
               type="text"
               id="name"
@@ -21,38 +24,10 @@
               required
             />
           </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Mô tả</label>
-            <textarea
-              id="description"
-              class="form-control"
-              formControlName="description"
-              rows="3"
-              placeholder="Nhập mô tả"
-            ></textarea>
-          </div>
-          <div class="form-group mb-3">
-            <label>Hình Ảnh</label>
-            <div class="file-upload">
-              <input
-                type="file"
-             
-                id="fileInput"
-                (change)="onFileSelected($event)"
-              />
-              <label for="fileInput" class="file-upload-label"><i class="fa-solid fa-file-arrow-up"></i> Chọn Hình Ảnh</label>
-              <div class="preview-container">
-                <img
-                *ngIf="previewFile"
-                  [src]="previewFile"
-                  alt="Preview"
-                  class="preview-image"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="price" class="form-label">Giá</label>
+
+          <!-- Giá dịch vụ -->
+          <div class="col-md-6">
+            <label for="price" class="form-label fw-semibold">Giá</label>
             <input
               type="number"
               id="price"
@@ -62,8 +37,10 @@
               required
             />
           </div>
-          <div class="mb-3">
-            <label for="estimatedDuration" class="form-label">Thời gian ước tính</label>
+
+          <!-- Thời gian ước tính -->
+          <div class="col-md-6">
+            <label for="estimatedDuration" class="form-label fw-semibold">Thời gian ước tính</label>
             <input
               type="text"
               id="estimatedDuration"
@@ -73,24 +50,69 @@
               required
             />
           </div>
-          <div class="form-check mb-3 form-switch">
-            <input
-              type="checkbox"
-              id="available"
-              class="form-check-input"
-              formControlName="available"
-            />
-            <label for="available" class="form-check-label">Có sẵn</label>
+
+          <!-- Trạng thái -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Trạng thái</label>
+            <div class="form-check form-switch">
+              <input
+                type="checkbox"
+                id="available"
+                class="form-check-input"
+                formControlName="available"
+              />
+              <label for="available" class="form-check-label">Có sẵn</label>
+            </div>
           </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="submit" class="btn btn-primary">
-            {{ vehicleCare ? 'Cập nhật' : 'Thêm' }}
-          </button>
+
+          <!-- Mô tả dịch vụ -->
+          <div class="col-md-12">
+            <label for="description" class="form-label fw-semibold">Mô tả</label>
+            <textarea
+              id="description"
+              class="form-control"
+              formControlName="description"
+              rows="3"
+              placeholder="Nhập mô tả"
+            ></textarea>
+          </div>
+
+          <!-- Hình ảnh -->
+          <div class="col-md-12">
+            <label class="form-label fw-semibold">Hình Ảnh</label>
+            <div class="file-upload border p-3 rounded">
+              <input
+                type="file"
+                id="fileInput"
+                (change)="onFileSelected($event)"
+                class="form-control"
+              />
+              <label for="fileInput" class="file-upload-label mt-2 d-block text-center">
+                <i class="fa-solid fa-file-arrow-up me-2"></i> Chọn Hình Ảnh
+              </label>
+              <div class="text-center mt-2">
+                <img
+                  *ngIf="previewFile"
+                  [src]="previewFile"
+                  alt="Preview"
+                  class="img-thumbnail"
+                  style="max-width: 150px;"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </form>
     </div>
+
+    <!-- Footer Modal -->
+    <div class="modal-footer d-flex justify-content-between">
+      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+        Hủy
+      </button>
+      <button type="submit" (click)="onSubmit()" class="btn btn-success">
+        {{ vehicleCare ? 'Cập nhật' : 'Thêm mới' }}
+      </button>
+    </div>
   </div>
-  
+</div>

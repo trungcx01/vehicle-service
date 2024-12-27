@@ -1,30 +1,61 @@
-import { AppointmentService } from './../../../services/appointment.service';
+import { AppointmentService } from '../../../services/appointment.service';
 import { Component, OnInit } from '@angular/core';
 import { Route, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppointmentUpdateComponent } from '../appointment-update/appointment-update.component';
 import Swal from 'sweetalert2';
+import { PaymentService } from '../../../services/payment.service';
 
 @Component({
-  selector: 'app-appointment-manager',
-  templateUrl: './appointment-manager.component.html',
-  styleUrl: './appointment-manager.component.scss'
+  selector: 'app-appointment-shop-manager',
+  templateUrl: './appointment-shop-manager.component.html',
+  styleUrl: './appointment-shop-manager.component.scss'
 })
-export class AppointmentManagerComponent implements OnInit{
+export class AppointmentShopManagerComponent implements OnInit{
   appointments: any;
   constructor(private appointmentService: AppointmentService, private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private paymentService: PaymentService
   ){}
 
   ngOnInit(): void {
       this.appointmentService.getByCurrentShop().subscribe({
-        next: (res) =>{
-          console.log(res);
-          this.appointments = res;
+        next: (response) => {
+          Promise.all(
+            response.map(async (res: any) => {
+              const status = await this.getPaymentStatus(res.id);
+              console.log(status);
+              return {
+                ...res,
+                paymentStatus: status,
+              };
+             
+         
+            })
+          ).then((appointmentsWithStatus) => {
+            this.appointments = appointmentsWithStatus;
+            console.log(this.appointments);
+          }).catch((error) => {
+            console.error("Error while fetching appointments: ", error);
+          });
         },
         error: (err) => console.log(err)
       })
+  }
+
+  async getPaymentStatus(id: number): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.paymentService.getPaymentByAppointment(id).subscribe({
+        next: (response: any) => {
+          resolve(response === null ? "PENDING" : response!.status)
+        },
+        error: (error) => {
+          console.error(error);
+          reject(error);
+        }
+      })
+    })
   }
 
   openNew(){

@@ -9,6 +9,7 @@
           name="type"
           value="shop"
           id="searchGarage"
+          [(ngModel)]="type"
           formControlName="type"
         />
         <label class="form-check-label" for="searchGarage">Tìm kiếm theo Garage</label>
@@ -20,6 +21,7 @@
           name="type"
           id="searchService"
           value="vehicleCare"
+          [(ngModel)]="type"
           formControlName="type"
         />
         <label class="form-check-label" for="searchService">Tìm kiếm theo Dịch vụ</label>
@@ -39,15 +41,17 @@
 
   <!-- Phần Lọc -->
   <div class="filters d-flex justify-content-center mb-4">
-    <select class="form-select w-auto me-3" formControlName="location">
-      <option value="" disabled selected>Vị trí</option>
-      <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
+    <select class="form-select w-auto me-3" formControlName="district">
+      <option value="" selected>Chọn quận</option>
+      <option *ngFor="let district of districts" [value]="district.name">{{ district.name }}</option>
     </select>
-    <select class="form-select w-auto" formControlName="priceRange">
-      <option value="" disabled selected>Khoảng giá</option>
+  
+    <select *ngIf="type==='vehicleCare'" class="form-select w-auto" formControlName="priceRange">
+      <option value="" selected>Không giới hạn giá</option>
       <option *ngFor="let range of priceRanges" [value]="range">{{ range }}</option>
     </select>
   </div>
+  
 
   <div *ngIf="filteredResults.length === 0" class="text-center mt-4">
     <p>Không có kết quả phù hợp với tìm kiếm của bạn.</p>
@@ -57,44 +61,75 @@
     <div class="row">
       <div class="col-md-4 mb-4" *ngFor="let item of filteredResults">
         <!-- Hiển thị các thẻ cửa hàng -->
-        <ng-container *ngIf="type === 'shop'">
-          <div class="card garage-card" style="cursor: pointer;">
-            <div class="card-header">
-              <img width="200px" height="200px" [src]="item.imageUrl || 'https://via.placeholder.com/300'" alt="{{ item.name }}" class="card-img" />
+        <ng-container *ngIf="item.openHour">
+          <div class="card garage-card shadow" style="cursor: pointer; border-radius: 10px; overflow: hidden;">
+            <div class="card-header p-0" style="text-align: center; background-color: #f8f9fa;">
+              <img
+                width="100%"
+                height="auto"
+                [src]="item.user.imageUrl || 'assets/images/default-avatar.png'"
+                alt="{{ item.name }}"
+                class="card-img-top"
+                style="object-fit: cover; max-height: 200px;"
+              />
             </div>
-            <div class="card-body">
-              <h5 class="card-title">{{ item.name }}</h5>
-              <p class="card-rating">{{ item.rating || 4.6 }} ★★★☆☆</p>
-              <p class="card-address">{{ item.address }}</p>
+            <div class="card-body" style="padding: 15px;">
+              <h5 class="card-title text-primary" style="font-weight: bold; text-align: center;">{{ item.name }}</h5>
+              <div class="card-rating" style="text-align: center; margin-bottom: 10px;">
+                <span *ngFor="let star of [].constructor(5); let i = index" class="star" [class.filled]="i < item.rating">
+                  ★
+                </span>
+                <span style="color: #888; font-size: 0.9rem;">({{ item.rating || 4.6 }})</span>
+              </div>
+              <p class="card-address text-muted" style="font-size: 0.9rem; text-align: center;">
+                {{ item.address }}
+              </p>
             </div>
-            <div class="card-footer ">
-              <button class="btn btn-dark col-12" >Chi tiết</button>
+            <div class="card-footer p-2" style="background-color: #fff;">
+              <a class="btn btn-primary col-12" style="font-weight: bold;" [href]="'/shop-detail/' + item.id">
+                Chi tiết
+              </a>
             </div>
           </div>
         </ng-container>
+        
 
         <!-- Hiển thị các thẻ dịch vụ xe -->
-        <ng-container *ngIf="type === 'vehicleCare'">
-            <div class="service-card card">
-              <img
-                src="https://via.placeholder.com/200x200"
-                alt="Service Image"
-                class="card-img-top"
-              />
-              <div class="card-body">
-                <div class="availability">Available</div>
-                <h5 class="card-title">{{item.name}}</h5>
-                <p class="card-text">{{item.description}}</p>
-                <p class="estimate-duration">Thời gian: {{item.estimatedDuration}}</p>
-                <p class="price">Giá: {{item.price | number}} VNĐ</p>
-              </div>
-              <div class="card-footer d-flex gap-1">
-                <button class="btn btn-outline-success col-6" >Chi tiết</button>
-                <button class="btn btn-dark col-6" >Đặt lịch</button>
+        <ng-container *ngIf="item.price">
+          <div class="service-card card">
+            <img
+              [src]="item.imageUrl || 'assets/images/default-service.png'"
+              alt="Service Image"
+              class="card-img-top"
+            />
+            <div class="card-body">
+              <div class="availability badge bg-success rounded-pill">
+                Available
+            </div>
+              <h5 class="card-title text-light bg-primary">{{ item.name }}</h5>
+              <p class="card-text">Mô tả: {{ item.description || 'Không có' }}</p>
+              <p class="estimate-duration">
+                <strong>Thời gian:</strong> {{ item.estimatedDuration }}
+              </p>
+              <p class="price">
+                <strong>Giá:</strong> {{ item.price | number }} VNĐ
+              </p>
+              <div class="shop-info">
+                <p><strong>Cửa hàng:</strong> {{ item.shopName || 'Không rõ' }}</p>
+                <p>
+                  <strong>Địa chỉ:</strong> {{ item.shopAddress || 'Chưa cập nhật' }}
+                </p>
               </div>
             </div>
-
+            <div class="card-footer">
+              <a class="btn btn-outline-success col-6" [href]="'/shop-detail/' + item.shop.id">
+                Chi tiết
+              </a>
+              <button class="btn btn-dark col-5" (click)="openAppointmentModal(item.shop, item)">Đặt lịch</button>
+            </div>
+          </div>
         </ng-container>
+        
       </div>
     </div>
   

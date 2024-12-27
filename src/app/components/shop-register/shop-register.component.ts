@@ -30,17 +30,24 @@ export class ShopRegisterComponent implements OnInit {
     this.shopForm = this.fb.group({
       name: ['', Validators.required],
       phoneNumber: ['', Validators.required],
-      address: ['', Validators.required],
+      address: ['' , Validators.required],
       description: ['', Validators.required],
       openHour: ['', Validators.required],
       closeHour: ['', Validators.required],
+      district: ['', Validators.required]
     });
   }
 ngOnInit(): void {
     
 }
 
-  onItemChange(input: any) {
+onChange(e: any){
+  this.shopForm.patchValue({
+    district: e.compound.district,
+  })
+}
+
+  onSearch(input: any) {
     this.othersService.autocomplete(input.term).subscribe({
       next: (data: any) => {
         console.log('Dữ liệu trả về:', data);

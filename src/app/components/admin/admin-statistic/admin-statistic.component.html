@@ -1,0 +1,150 @@
+<div class="container mt-4 ms-5 col-11">
+  <!-- Tabs -->
+  <ul class="nav nav-tabs custom-tabs">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="selectedTab === 'overview'"
+        (click)="onTabChange('overview')"
+      >
+        Thống kê tổng quan
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="selectedTab === 'appointments'"
+        (click)="onTabChange('appointments')"
+      >
+        Lịch hẹn và Yêu cầu cứu trợ
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="selectedTab === 'topShops'"
+        (click)="onTabChange('topShops')"
+      >
+        Top 10 Shop
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [class.active]="selectedTab === 'userRegistrations'"
+        (click)="onTabChange('userRegistrations')"
+      >
+        Đăng ký người dùng
+      </a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content mt-4">
+    <!-- Overview Tab -->
+    <div *ngIf="selectedTab === 'overview'" class="tab-pane fade show active">
+      <h3 class="mb-3">Tổng quan</h3>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card bg-primary text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng số Lịch hẹn</h5>
+              <p class="card-text">{{ overviewData?.totalAppointments }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-danger text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng số Yêu cầu cứu trợ</h5>
+              <p class="card-text">{{ overviewData?.totalEmergencyRequests }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-success text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng doanh thu</h5>
+              <p class="card-text">{{ overviewData?.totalRevenue | currency }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card bg-warning text-white shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">Tổng số người dùng</h5>
+              <p class="card-text">{{ overviewData?.totalUsers }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appointments and Emergency Requests Tab -->
+    <div *ngIf="selectedTab === 'appointments'" class="tab-pane fade show active">
+      <h3 class="mb-3">Lịch hẹn và Yêu cầu cứu trợ</h3>
+      <div class="row">
+        <div class="col-md-3 mb-3">
+          <!-- <label for="appointmentDateStart" class="form-label">Từ ngày</label> -->
+          <div class="input-group">
+            <input
+              type="text"
+              placeholder="Chọn ngày bắt đầu"
+              class="form-control"
+              id="appointmentDateStart"
+              [(ngModel)]="dateStart"
+              ngbDatepicker
+              #d1="ngbDatepicker"
+            />
+            <span class="input-group-text" (click)="d1.toggle()">
+              <i class="fa-solid fa-calendar-days"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+          <!-- <label for="appointmentDateEnd" class="form-label">Đến ngày</label> -->
+          <div class="input-group">
+            <input
+              type="text"
+              placeholder="Chọn ngày Kết thúc"
+              class="form-control"
+              id="appointmentDateEnd"
+              [(ngModel)]="dateEnd"
+              ngbDatepicker
+              #d2="ngbDatepicker"
+            />
+            <span class="input-group-text" (click)="d2.toggle()">
+              <i class="fa-solid fa-calendar-days"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="col-md-3 mb-3 d-flex align-items-end">
+          <button
+            (click)="fetchAppointmentData()"
+            class="btn btn-primary w-100"
+          >
+            Lọc
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading">
+        <canvasjs-chart class="mt-5" [options]="appointmentChartOptions"></canvasjs-chart>
+      </div>
+    </div>
+
+    <!-- Top 10 Shops Tab -->
+    <div *ngIf="selectedTab === 'topShops'" class="tab-pane fade show active">
+      <h3 class="mb-3">Top 10 Shop có Doanh thu cao nhất</h3>
+      <canvasjs-chart class="mt-5" *ngIf="!isLoading" [options]="topShopsChartOptions"></canvasjs-chart>
+    </div>
+
+    <!-- User Registrations Tab -->
+    <div *ngIf="selectedTab === 'userRegistrations'" class="tab-pane fade show active">
+      <h3 class="mb-3">Số lượt Đăng ký Người dùng (5 tháng gần nhất)</h3>
+      <canvasjs-chart class="mt-5" [options]="userRegistrationChartOptions"></canvasjs-chart>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ShopService } from './../../services/shop.service';
 import { VehicleCareService } from './../../services/vehicle-care.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppointmentComponent } from '../appointment/appointment.component';
 
 @Component({
   selector: 'app-shop-list',
@@ -13,18 +15,49 @@ export class ShopListComponent implements OnInit {
   formSearch!: FormGroup;
   type = 'shop'; // Default type
   locations: string[] = ['Location 1', 'Location 2', 'Location 3'];
-  priceRanges: string[] = ['0-100', '100-500', '500-1000'];
+  priceRanges: string[] = ['0 - 20.000 VNĐ', '20.000 VNĐ - 50.000 VNĐ', '50.000 VNĐ - 100.000 VNĐ', '100.000 VNĐ - 200.000 VNĐ', '200.000 VNĐ-500.000 VNĐ'];
+  districts = [
+    { id: 1, name: 'Ba Đình' },
+    { id: 2, name: 'Hoàn Kiếm' },
+    { id: 3, name: 'Tây Hồ' },
+    { id: 4, name: 'Long Biên' },
+    { id: 5, name: 'Cầu Giấy' },
+    { id: 6, name: 'Đống Đa' },
+    { id: 7, name: 'Hai Bà Trưng' },
+    { id: 8, name: 'Hoàng Mai' },
+    { id: 9, name: 'Thanh Xuân' },
+    { id: 10, name: 'Nam Từ Liêm' },
+    { id: 11, name: 'Bắc Từ Liêm' },
+    { id: 12, name: 'Hà Đông' },
+    { id: 13, name: 'Sơn Tây' },
+    { id: 14, name: 'Ba Vì' },
+    { id: 15, name: 'Chương Mỹ' },
+    { id: 16, name: 'Đan Phượng' },
+    { id: 17, name: 'Hoài Đức' },
+    { id: 18, name: 'Mỹ Đức' },
+    { id: 19, name: 'Phú Xuyên' },
+    { id: 20, name: 'Thường Tín' },
+    { id: 21, name: 'Thanh Oai' },
+    { id: 22, name: 'Gia Lâm' },
+    { id: 23, name: 'Ứng Hòa' },
+    { id: 24, name: 'Sóc Sơn' },
+    { id: 25, name: 'Mê Linh' },
+    { id: 26, name: 'Tây Hồ' },
+    { id: 27, name: 'Vĩnh Phúc' }
+  ];
+  
 
   constructor(
     private shopService: ShopService,
     private vehicleCareService: VehicleCareService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private modalService: NgbModal
   ) {
     this.formSearch = this.fb.group({
-      location: [''],
+      district: [''],
       priceRange: [''],
       query: [''],
-      type: ['shop'] // Default type
+      type: ['shop']
     });
   }
 
@@ -33,35 +66,39 @@ export class ShopListComponent implements OnInit {
   }
 
   loadInitialResults(): void {
-    this.shopService.searchShopByName('').subscribe((data: any) => {
+    this.shopService.searchShop('','').subscribe((data: any) => {
       this.filteredResults = data;
     });
   }
 
   performSearch(): void {
-    const formValues = this.formSearch.value;
-    console.log(formValues);
+    const { query, district, priceRange, type } = this.formSearch.value;
 
-    // Extract price range
-    const [priceStart, priceEnd] = formValues.priceRange
-      ? formValues.priceRange.split('-').map(Number)
-      : [0, 1000000000000];
+    const [priceStart, priceEnd] = this.getPriceRange(priceRange);
 
-    if (formValues.type === 'vehicleCare') {
+    if (type === 'vehicleCare') {
       this.type = 'vehicleCare';
       this.vehicleCareService
-        .search(formValues.query, priceStart, priceEnd)
+        .search(query || '', district || '', priceStart, priceEnd)
         .subscribe((data: any) => {
           this.filteredResults = data;
         });
     } else {
       this.type = 'shop';
       this.shopService
-        .searchShopByName(formValues.query)
+        .searchShop(query || '', district || '')
         .subscribe((data: any) => {
           this.filteredResults = data;
         });
     }
+  }
+
+  private getPriceRange(priceRange: string | null): [number, number] {
+    if (!priceRange) {
+      return [0, 1000000000]; 
+    }
+    const [start, end] = priceRange.replace(/ VNĐ/g, '').replace(/\./g, '').trim().split('-').map(Number);
+    return [start || 0, end || 100000000]; 
   }
 
   viewDetails(id: number): void {
@@ -71,4 +108,15 @@ export class ShopListComponent implements OnInit {
   bookService(id: number): void {
     alert(`Booking service with ID: ${id}`);
   }
+
+  openAppointmentModal(shop: any, vehicleCare: any) {
+      const modalRef = this.modalService.open(AppointmentComponent, { 
+        // backdrop: 'static',
+        // keyboard: false,
+        centered: true,
+        size: 'lg'
+      });
+      modalRef.componentInstance.shop = shop;
+      modalRef.componentInstance.vehicleCare = vehicleCare;
+    }
 }
