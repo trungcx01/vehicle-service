@@ -1,36 +1,113 @@
 import { Component, OnInit } from '@angular/core';
 import { AppointmentService } from '../../../services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-management',
   templateUrl: './appointment-management.component.html',
-  styleUrl: './appointment-management.component.scss'
+  styleUrl: './appointment-management.component.scss',
 })
-export class AppointmentManagementComponent implements OnInit{
+export class AppointmentManagementComponent implements OnInit {
   appointments: any[] = [];
-  constructor(private appointmentSevice: AppointmentService, private toastr: ToastrService){}
+  searchTerm: string = '';
 
-  ngOnInit(): void {
-      this.appointmentSevice.getAll().subscribe({
-        next: (data) => {
-          this.appointments = data.content;
-        },
-        error: (error) => {
-          console.error('Error:', error);
-        }
-      })
-  }
+  currentPage: number = 1;
+    itemsPerPage: number = 10; 
+    totalRecords: number = 0; 
+    private searchSubject: Subject<string> = new Subject<string>();
+  
+    ngOnInit(): void {
+      this.getCustomers();
+  
+  
+      this.searchSubject
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((searchTerm) => {
+          this.currentPage = 1; 
+          if (searchTerm) {
+            this.searchCustomers();
+          } else {
+            this.getCustomers();
+          }
+        });
+    }
+  
+  
+    getCustomers(): void {
+      this.appointmentSevice
+        .getAll(this.currentPage - 1, this.itemsPerPage)
+        .subscribe({
+          next: (response: any) => {
+            this.appointments = response.content;
+            this.totalRecords = response.totalElements;
+          },
+          error: (error) => {
+            console.error('Error fetching customers:', error);
+            this.toastr.error('Lỗi khi tải danh sách khách hàng!');
+          },
+        });
+    }
+  
+  
+    searchCustomers(): void {
+      this.appointmentSevice
+        .searchAppointments(this.currentPage - 1, this.itemsPerPage, this.searchTerm)
+        .subscribe({
+          next: (response: any) => {
+            console.log('kdie', response)
+            this.appointments = response.content;
+            this.totalRecords = response.totalElements;
+          },
+          error: (error: any) => {
+            console.error('Error searching customers:', error);
+            this.toastr.error('Lỗi khi tìm kiếm khách hàng!');
+          },
+        });
+    }
+  
+  
+    onSearchChange(): void {
+      this.searchSubject.next(this.searchTerm);
+    }
+  
+  
+    nextPage(): void {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.searchTerm ? this.searchCustomers() : this.getCustomers();
+      }
+    }
+  
+  
+    previousPage(): void {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.searchTerm ? this.searchCustomers() : this.getCustomers();
+      }
+    }
+  
+    get totalPages(): number {
+      return Math.ceil(this.totalRecords / this.itemsPerPage);
+    }
 
-  delete(id: number){
+  constructor(
+    private appointmentSevice: AppointmentService,
+    private toastr: ToastrService
+  ) {}
+
+
+  delete(id: number) {
     this.appointmentSevice.delete(id).subscribe({
       next: (data) => {
         this.toastr.success('Appointment deleted successfully');
-        this.appointments = this.appointments.filter(appointment => appointment.id !== id);
+        this.appointments = this.appointments.filter(
+          (appointment) => appointment.id !== id
+        );
       },
       error: (error) => {
         console.error('Error:', error);
-      }
-    })
+      },
+    });
   }
 }

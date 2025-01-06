@@ -1,10 +1,8 @@
 <div class="header">
   <nav class="navbar navbar-expand-lg bg-light-subtle shadow-sm">
     <div class="container">
-      <!-- Logo hoặc tên brand -->
       <a class="navbar-brand fw-bold text-primary" href="#">Vehicle S</a>
 
-      <!-- Nút toggle khi màn hình nhỏ -->
       <button
         class="navbar-toggler"
         type="button"
@@ -17,30 +15,15 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Menu Navbar -->
+
       <div class="collapse navbar-collapse" id="navbarNav" >
         <ul class="navbar-nav ms-auto flex-lg-row flex-column" style="align-items: center;"> <!-- Thêm flex-column cho màn hình nhỏ -->
-          <!-- Thanh tìm kiếm -->
-          <li class="nav-item" *ngIf="!router.url.endsWith('search')">
-            <div class="d-flex search-bar">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search"
-                (keydown.enter)="onSearch()"
-              />
-            </div>
-          </li>
 
-          <!-- Service Dropdown -->
           <li class="nav-item">
             <a
               class="nav-link"
               [ngClass]="router.url.endsWith('/vehicle-care-list') ? 'active' : ''"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+              href="/vehicle-care-list"
             >
               Hạng mục
             </a>
@@ -51,21 +34,18 @@
             style="cursor: pointer;" href="/shop-list">Cửa hàng</a>
           </li>
 
-          <!-- Appointment Link -->
           <li class="nav-item">
             <a class="nav-link"
               [ngClass]="router.url.endsWith('appointment-history') ? 'active' : ''"
              style="cursor: pointer;" href="/appointment-history">Lịch hẹn</a>
           </li>
 
-          <!-- Emergency Request Link -->
           <li class="nav-item">
             <a class="nav-link" 
             [ngClass]="router.url.endsWith('emergency-requests') ? 'active' : ''"
             style="cursor: pointer;" href="/emergency-requests">Khẩn cấp</a>
           </li>
 
-          <!-- Notifications Dropdown -->
           <li class="nav-item dropdown">
             <a
               class="nav-link notification-icon"
@@ -77,7 +57,6 @@
               <i class="fa-solid fa-bell d-none d-lg-inline"></i>
               <span class="d-lg-none ">Thông báo</span>
               <span class="notification-dot bg-danger" *ngIf="notifications.length > 0"></span>
-              <!-- <span class="notification-badge bg-danger text-white" *ngIf="notifications.length > 0">{{ countUnread }}</span> -->
             </a>
             <ul class="dropdown-menu dropdown-menu-end notify-dropdown-width" aria-labelledby="navbarDropdown">
               <li *ngIf="notifications.length === 0" class="dropdown-item text-center">
@@ -100,7 +79,6 @@
             </ul>
           </li>
 
-          <!-- User Dropdown -->
           <li class="nav-item dropdown user-dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -110,23 +88,20 @@
               aria-expanded="false"
             >
               <i class="fa fa-user d-none d-lg-inline"></i>
-              <span class="d-lg-none">Tài khoản</span>
+              <!-- <span class="d-lg-none">Tài khoản</span> -->
             </a>
-            <ul class="dropdown-menu custom-dropdown-menu">
+            <ul class="dropdown-menu custom-dropdown-menu" [ngStyle]="{'transform': 'translateX(-30px)'}">
               <li><a *ngIf="isLogin" class="dropdown-item" href="/info">Tài khoản của tôi</a></li>
               <li><a *ngIf="isLogin" class="dropdown-item text-danger" [routerLink]="url" (click)="logout()">{{ name }}</a></li>
               <li><a *ngIf="!isLogin" class="dropdown-item text-primary" [routerLink]="url">{{ name }}</a></li>
             </ul>
           </li>
 
-          <li class="nav-item d-lg-none"> <!-- Hiển thị chỉ trên màn hình nhỏ -->
+          <li class="nav-item d-lg-none"> 
             <a class="nav-link" href="/info">Tài khoản của tôi</a>
             <a *ngIf="isLogin" class="nav-link text-danger" [routerLink]="url" (click)="logout()">{{ name }}</a>
             <a *ngIf="!isLogin" class="nav-link text-primary" [routerLink]="url">{{ name }}</a>
           </li>
-          <!-- <li class="nav-item d-lg-none user">
-            <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">Đăng xuất</a>
-          </li> -->
         </ul>
       </div>
     </div>

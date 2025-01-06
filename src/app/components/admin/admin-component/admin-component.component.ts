@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -9,12 +9,25 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AdminComponentComponent {
   isCollapsed = false; 
-
-  constructor(public router: Router, private toastr: ToastrService) {}
-
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed; 
-  }
+   screenWidth!: number;
+  
+    constructor(public router: Router, private toastr: ToastrService) {}
+    ngOnInit(): void {
+      this.checkScreenSize();
+    }
+  
+    toggleSidebar() {
+      this.isCollapsed = !this.isCollapsed; 
+    }
+    @HostListener('window:resize', [])
+    onResize(): void {
+      this.checkScreenSize();
+    }
+  
+    checkScreenSize(): void {
+      this.screenWidth = window.innerWidth;
+      this.isCollapsed = this.screenWidth <= 800; 
+    }
 
   logout(): void {
     localStorage.removeItem('token');   

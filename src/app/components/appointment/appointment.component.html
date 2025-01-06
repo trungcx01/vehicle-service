@@ -23,15 +23,15 @@
       <!-- Loại xe -->
       <div class="form-group mb-4">
         <label for="vehicleType" class="form-label fw-bold">Loại xe</label>
-        <select
-          class="form-select"
-          id="vehicleType"
-          formControlName="vehicleType"
-        >
-          <option value="MOTORBIKE">Motorbike</option>
-          <option value="BIKE">Bike</option>
+        <select class="form-select" id="vehicleType" formControlName="vehicleType">
+          <option value="XE_SO">Xe số</option>
+          <option value="XE_TAY_GA">Xe tay ga</option>
+          <option value="XE_CON_TAY">Xe côn tay</option>
+          <option value="XE_PHAN_KHOI_LON">Xe phân khối lớn</option>
+          <option value="XE_DIEN">Xe điện</option>
         </select>
       </div>
+      
 
       <!-- Thời gian hẹn -->
       <div class="row g-3">
@@ -50,7 +50,7 @@
               #d="ngbDatepicker"
               placeholder="Chọn ngày"
             />
-            <button class="btn btn-outline-primary" (click)="d.toggle()">
+            <button class="btn btn-outline-secondary" (click)="d.toggle()">
               <i class="fa-solid fa-calendar-days"></i>
             </button>
           </div>

@@ -23,9 +23,10 @@ export class AppComponent {
       }
   
       if (event instanceof NavigationEnd) {
-        setTimeout(() => {
-          this.loading = false; 
-        }, 600);
+        this.loading = false; 
+        // setTimeout(() => {
+         
+        // }, 600);
         
       }
     });

@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AppointmentUpdateComponent } from '../appointment-update/appointment-update.component';
 import Swal from 'sweetalert2';
 import { PaymentService } from '../../../services/payment.service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-appointment-shop-manager',
@@ -13,36 +14,106 @@ import { PaymentService } from '../../../services/payment.service';
   styleUrl: './appointment-shop-manager.component.scss'
 })
 export class AppointmentShopManagerComponent implements OnInit{
-  appointments: any;
+  appointments: any[] = [];
+    searchTerm: string = '';
+  
+    currentPage: number = 1;
+      itemsPerPage: number = 10; 
+      totalRecords: number = 0; 
+      private searchSubject: Subject<string> = new Subject<string>();
+    
+      ngOnInit(): void {
+        this.getAppointments();
+    
+    
+        this.searchSubject
+          .pipe(debounceTime(300), distinctUntilChanged())
+          .subscribe((searchTerm) => {
+            this.currentPage = 1; 
+            if (searchTerm) {
+              this.searchAppointments();
+            } else {
+              this.getAppointments();
+            }
+          });
+      }
+    
+    
+      getAppointments(): void {
+        const page = this.currentPage - 1; 
+        const size = this.itemsPerPage;    
+
+        this.appointmentService.getByCurrentShop(page, size).subscribe({
+          next: (response) => {
+            Promise.all(
+              response.content.map(async (res: any) => { 
+                const status = await this.getPaymentStatus(res.id);
+                console.log(status);
+                return {
+                  ...res,
+                  paymentStatus: status,
+                };
+              })
+            ).then((appointmentsWithStatus) => {
+              this.appointments = appointmentsWithStatus;
+              this.totalRecords = response.totalElements;
+              console.log(this.appointments);
+            }).catch((error) => {
+              console.error("Error while fetching appointments: ", error);
+            });
+          },
+          error: (err) => console.log(err)
+        });
+      }
+      
+    
+    
+      searchAppointments(): void {
+        this.appointmentService
+          .searchAppointments(this.currentPage - 1, this.itemsPerPage, this.searchTerm)
+          .subscribe({
+            next: (response: any) => {
+              console.log('kdieju', response)
+              this.appointments = response.content;
+              this.totalRecords = response.totalElements;
+            },
+            error: (error: any) => {
+              console.error('Error searching customers:', error);
+              this.toastr.error('Lỗi khi tìm kiếm khách hàng!');
+            },
+          });
+      }
+    
+    
+      onSearchChange(): void {
+        this.searchSubject.next(this.searchTerm);
+      }
+    
+    
+      nextPage(): void {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+          this.searchTerm ? this.searchAppointments() : this.getAppointments();
+        }
+      }
+    
+    
+      previousPage(): void {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+          this.searchTerm ? this.searchAppointments() : this.searchAppointments();
+        }
+      }
+    
+      get totalPages(): number {
+        return Math.ceil(this.totalRecords / this.itemsPerPage);
+      }
+
   constructor(private appointmentService: AppointmentService, private toastr: ToastrService,
     private modalService: NgbModal,
     private paymentService: PaymentService
   ){}
 
-  ngOnInit(): void {
-      this.appointmentService.getByCurrentShop().subscribe({
-        next: (response) => {
-          Promise.all(
-            response.map(async (res: any) => {
-              const status = await this.getPaymentStatus(res.id);
-              console.log(status);
-              return {
-                ...res,
-                paymentStatus: status,
-              };
-             
-         
-            })
-          ).then((appointmentsWithStatus) => {
-            this.appointments = appointmentsWithStatus;
-            console.log(this.appointments);
-          }).catch((error) => {
-            console.error("Error while fetching appointments: ", error);
-          });
-        },
-        error: (err) => console.log(err)
-      })
-  }
 
   async getPaymentStatus(id: number): Promise<any>{
     return new Promise((resolve, reject) =>{
@@ -96,4 +167,22 @@ export class AppointmentShopManagerComponent implements OnInit{
       })
     
   }
+
+  translateVehicleType(type: string): string {
+    switch (type) {
+      case 'XE_SO':
+        return 'Xe số';
+      case 'XE_TAY_GA':
+        return 'Xe tay ga';
+      case 'XE_CON_TAY':
+        return 'Xe côn tay';
+      case 'XE_PHAN_KHOI_LON':
+        return 'Xe phân khối lớn';
+      case 'XE_DIEN':
+        return 'Xe điện';
+      default:
+        return 'Không xác định';
+    }
+  }
+  
 }

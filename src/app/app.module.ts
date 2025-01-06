@@ -63,6 +63,7 @@ import { AdminStatisticComponent } from './components/admin/admin-statistic/admi
 import { AdminComponentComponent } from './components/admin/admin-component/admin-component.component';
 import { ReviewManagerComponent } from './components/review-manager/review-manager.component';
 import { NotificationListComponent } from './components/notification-list/notification-list.component';
+import { ImageModalComponent } from './image-modal/image-modal.component';
 
 
 
@@ -114,6 +115,7 @@ import { NotificationListComponent } from './components/notification-list/notifi
     AdminComponentComponent,
     ReviewManagerComponent,
     NotificationListComponent,
+    ImageModalComponent,
 
 
   ],

@@ -38,7 +38,7 @@ export class EmergencyRequestService {
     return this.http.post(this.apiUrl, formData);
   }
 
-  getAll(): Observable<any> {
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
   }
 
@@ -62,5 +62,21 @@ export class EmergencyRequestService {
     return this.http.get(this.apiUrl + "/current-customer");
   }
 
+  count(): Observable<any>{
+    return this.http.get(this.apiUrl + "/count");
+  }
+
+  countByCurrentShop(): Observable<any>{
+    return this.http.get(this.apiUrl + "/count-by-shop");
+  }
+
+  searchEmergencyRequests(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
   
+    return this.http.get(`${this.apiUrl}/search`, { params });
+  }
 }

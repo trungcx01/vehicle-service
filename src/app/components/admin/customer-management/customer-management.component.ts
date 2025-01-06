@@ -1,8 +1,9 @@
+import { UserService } from './../../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
 import { ToastrService } from 'ngx-toastr';
-import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-customer-management',
@@ -11,23 +12,90 @@ import Swal from 'sweetalert2';
 })
 export class CustomerManagementComponent implements OnInit {
   customers: any[] = [];
+  searchTerm: string = '';
+  currentPage: number = 1;
+  itemsPerPage: number = 10; 
+  totalRecords: number = 0; 
+  private searchSubject: Subject<string> = new Subject<string>();
 
-  constructor(private customerService: CustomerService,
+  constructor(
+    private customerService: CustomerService,
     private userService: UserService,
-     private toastr: ToastrService){}
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.customerService.getAll().subscribe({
-      next: (response) => {
-        this.customers = response.content;
-      },
-      error: (error) => {
-        console.error('Error:', error);
-      }
-    })
+    this.getCustomers();
+
+
+    this.searchSubject
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchTerm) => {
+        this.currentPage = 1; 
+        if (searchTerm) {
+          this.searchCustomers();
+        } else {
+          this.getCustomers();
+        }
+      });
   }
 
 
+  getCustomers(): void {
+    this.customerService
+      .getAll(this.currentPage - 1, this.itemsPerPage)
+      .subscribe({
+        next: (response: any) => {
+          this.customers = response.content;
+          this.totalRecords = response.totalElements;
+        },
+        error: (error) => {
+          console.error('Error fetching customers:', error);
+          this.toastr.error('Lỗi khi tải danh sách khách hàng!');
+        },
+      });
+  }
+
+
+  searchCustomers(): void {
+    this.customerService
+      .searchCustomers(this.currentPage - 1, this.itemsPerPage, this.searchTerm)
+      .subscribe({
+        next: (response: any) => {
+          this.customers = response.content;
+          this.totalRecords = response.totalElements;
+        },
+        error: (error) => {
+          console.error('Error searching customers:', error);
+          this.toastr.error('Lỗi khi tìm kiếm khách hàng!');
+        },
+      });
+  }
+
+
+  onSearchChange(): void {
+    this.searchSubject.next(this.searchTerm);
+  }
+
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.searchTerm ? this.searchCustomers() : this.getCustomers();
+    }
+  }
+
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.searchTerm ? this.searchCustomers() : this.getCustomers();
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.itemsPerPage);
+  }
   addCustomer(): void {
     alert('Add customer functionality not implemented yet.');
   }

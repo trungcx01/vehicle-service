@@ -1,40 +1,49 @@
 <div class="container mt-4 ms-5 col-11">
-  <!-- Tabs -->
-  <ul class="nav nav-tabs custom-tabs">
+  <div class="card bg-dark text-white shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+      <h3 class="h4 mb-0">Thống kê Admin</h3>
+    </div>
+  </div>
+  <ul class="nav nav-tabs justify-content-center mb-4 border-0">
     <li class="nav-item">
       <a
-        class="nav-link"
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill"
         [class.active]="selectedTab === 'overview'"
         (click)="onTabChange('overview')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        Thống kê tổng quan
+        Tổng quan
       </a>
     </li>
     <li class="nav-item">
       <a
-        class="nav-link"
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill"
         [class.active]="selectedTab === 'appointments'"
         (click)="onTabChange('appointments')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        Lịch hẹn và Yêu cầu cứu trợ
+        Lịch hẹn & cứu trợ
       </a>
     </li>
     <li class="nav-item">
       <a
-        class="nav-link"
-        [class.active]="selectedTab === 'topShops'"
-        (click)="onTabChange('topShops')"
-      >
-        Top 10 Shop
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        class="nav-link"
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill"
         [class.active]="selectedTab === 'userRegistrations'"
         (click)="onTabChange('userRegistrations')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        Đăng ký người dùng
+        Số người dùng đăng kí mới
+      </a>
+    </li>
+
+    <li class="nav-item">
+      <a
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill"
+        [class.active]="selectedTab === 'topShops'"
+        (click)="onTabChange('topShops')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
+      >
+        Top 10 Cửa hàng doanh thu cao nhất
       </a>
     </li>
   </ul>
@@ -44,9 +53,9 @@
     <!-- Overview Tab -->
     <div *ngIf="selectedTab === 'overview'" class="tab-pane fade show active">
       <h3 class="mb-3">Tổng quan</h3>
-      <div class="row">
+      <div class="row align-items-stretch">
         <div class="col-md-3">
-          <div class="card bg-primary text-white shadow-sm">
+          <div class="card bg-primary text-white shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Tổng số Lịch hẹn</h5>
               <p class="card-text">{{ overviewData?.totalAppointments }}</p>
@@ -54,23 +63,27 @@
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card bg-danger text-white shadow-sm">
+          <div class="card bg-danger text-white shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Tổng số Yêu cầu cứu trợ</h5>
-              <p class="card-text">{{ overviewData?.totalEmergencyRequests }}</p>
+              <p class="card-text">
+                {{ overviewData?.totalEmergencyRequests }}
+              </p>
             </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card bg-success text-white shadow-sm">
+          <div class="card bg-success text-white shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Tổng doanh thu</h5>
-              <p class="card-text">{{ overviewData?.totalRevenue | currency }}</p>
+              <p class="card-text">
+                {{ overviewData?.totalRevenue | number }} VNĐ
+              </p>
             </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card bg-warning text-white shadow-sm">
+          <div class="card bg-warning text-white shadow-sm h-100">
             <div class="card-body">
               <h5 class="card-title">Tổng số người dùng</h5>
               <p class="card-text">{{ overviewData?.totalUsers }}</p>
@@ -78,73 +91,321 @@
           </div>
         </div>
       </div>
+      
     </div>
 
-    <!-- Appointments and Emergency Requests Tab -->
-    <div *ngIf="selectedTab === 'appointments'" class="tab-pane fade show active">
-      <h3 class="mb-3">Lịch hẹn và Yêu cầu cứu trợ</h3>
-      <div class="row">
-        <div class="col-md-3 mb-3">
-          <!-- <label for="appointmentDateStart" class="form-label">Từ ngày</label> -->
-          <div class="input-group">
-            <input
-              type="text"
-              placeholder="Chọn ngày bắt đầu"
-              class="form-control"
-              id="appointmentDateStart"
-              [(ngModel)]="dateStart"
-              ngbDatepicker
-              #d1="ngbDatepicker"
-            />
-            <span class="input-group-text" (click)="d1.toggle()">
-              <i class="fa-solid fa-calendar-days"></i>
-            </span>
+    <div *ngIf="selectedTab === 'appointments'" class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="mb-4 text-center fw-bold">Thống kê Lịch hẹn và Cứu trợ</h4>
+
+        <!-- Bộ lọc ngày -->
+        <div class="row g-4 align-items-end">
+          <div class="col-md-4">
+            <label for="dateStart" class="form-label fw-semibold"
+              >Từ ngày:</label
+            >
+            <div class="input-group shadow-sm">
+              <input
+                type="text"
+                placeholder="Chọn ngày bắt đầu"
+                class="form-control"
+                id="appointmentDateStart"
+                [(ngModel)]="dateStart"
+                ngbDatepicker
+                #d1="ngbDatepicker"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="d1.toggle()"
+              >
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="dateEnd" class="form-label fw-semibold"
+              >Đến ngày:</label
+            >
+            <div class="input-group shadow-sm">
+              <input
+                type="text"
+                placeholder="Chọn ngày kết thúc"
+                class="form-control"
+                id="appointmentDateEnd"
+                [(ngModel)]="dateEnd"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="d2.toggle()"
+              >
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button
+              class="btn btn-primary w-100 shadow-sm fw-bold"
+              (click)="fetchAppointmentData()"
+              style="padding: 10px 20px"
+            >
+              Lọc dữ liệu
+            </button>
           </div>
         </div>
 
-        <div class="col-md-3 mb-3">
-          <!-- <label for="appointmentDateEnd" class="form-label">Đến ngày</label> -->
-          <div class="input-group">
-            <input
-              type="text"
-              placeholder="Chọn ngày Kết thúc"
-              class="form-control"
-              id="appointmentDateEnd"
-              [(ngModel)]="dateEnd"
-              ngbDatepicker
-              #d2="ngbDatepicker"
-            />
-            <span class="input-group-text" (click)="d2.toggle()">
-              <i class="fa-solid fa-calendar-days"></i>
-            </span>
-          </div>
-        </div>
-
-        <div class="col-md-3 mb-3 d-flex align-items-end">
-          <button
-            (click)="fetchAppointmentData()"
-            class="btn btn-primary w-100"
+        <!-- Biểu đồ -->
+        <div
+          class="chart-container mt-5"
+          *ngIf="
+            !isLoading && app_emergency_data && app_emergency_data?.length !== 0
+          "
+        >
+          <canvasjs-chart
+            [options]="appointmentChartOptions"
+            [styles]="{ width: '100%', height: '400px' }"
           >
-            Lọc
-          </button>
+          </canvasjs-chart>
         </div>
-      </div>
 
-      <div *ngIf="!isLoading">
-        <canvasjs-chart class="mt-5" [options]="appointmentChartOptions"></canvasjs-chart>
+        <!-- Bảng dữ liệu -->
+        <table
+          *ngIf="app_emergency_data"
+          class="table table-hover text-center mt-5 shadow-sm"
+          style="border-collapse: collapse"
+        >
+          <thead>
+            <tr
+              style="
+                background-color: #f1f1f1;
+                border-bottom: 2px solid #d1d1d1;
+              "
+            >
+              <th scope="col" class="fw-bold">Ngày</th>
+              <th scope="col" class="fw-bold">Số lượng Lịch hẹn</th>
+              <th scope="col" class="fw-bold">Số lượng Cứu trợ khẩn cấp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let data of paginatedData"
+              style="border-bottom: 1px solid #e1e1e1"
+            >
+              <td>{{ data.date | date : "dd/MM/yyyy" }}</td>
+              <td>{{ data.app_count }}</td>
+              <td>{{ data.emer_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav *ngIf="app_emergency_data" aria-label="Page navigation" class="mt-3">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button 
+                class="page-link" 
+                (click)="changePage(currentPage - 1)" 
+                >
+                Trước
+              </button>
+            </li>
+        
+            <li class="page-item">
+              <span class="page-link" aria-live="polite">{{ currentPage }}/{{totalPages.length}}</span>
+            </li>
+        
+            <li class="page-item" [class.disabled]="currentPage === totalPages.length">
+              <button 
+                class="page-link" 
+                (click)="changePage(currentPage + 1)" 
+              >
+                Sau
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
 
-    <!-- Top 10 Shops Tab -->
-    <div *ngIf="selectedTab === 'topShops'" class="tab-pane fade show active">
-      <h3 class="mb-3">Top 10 Shop có Doanh thu cao nhất</h3>
-      <canvasjs-chart class="mt-5" *ngIf="!isLoading" [options]="topShopsChartOptions"></canvasjs-chart>
+    <div *ngIf="selectedTab === 'topShops'" class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="mb-4 text-center fw-bold">
+          Top 10 Shop có Doanh thu cao nhất
+        </h4>
+        <div
+          class="chart-container mt-3 p-4 shadow rounded"
+          *ngIf="!isLoading && top_shop_data && top_shop_data.length !== 0"
+        >
+          <canvasjs-chart
+            [options]="topShopsChartOptions"
+         
+          >
+          </canvasjs-chart>
+        </div>
+        <div
+          *ngIf="!isLoading && (!top_shop_data || top_shop_data.length === 0)"
+          class="alert alert-warning text-center mt-4 shadow-sm"
+        >
+          Không có dữ liệu để hiển thị biểu đồ.
+        </div>
+
+        <table *ngIf="top_shop_data" class="table table-hover text-center mt-5 shadow-sm" style="border-collapse: collapse;">
+          <thead>
+            <tr style="background-color: #f1f1f1; border-bottom: 2px solid #d1d1d1;">
+              <th scope="col" class="fw-bold">Cửa hàng</th>
+              <th scope="col" class="fw-bold">Doanh thu (đơn vị VNĐ)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of top_shop_data" style="border-bottom: 1px solid #e1e1e1;">
+              <td>{{ data.shopName}}</td>
+              <td>{{ data.revenue | number}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div
+      *ngIf="selectedTab === 'userRegistrations'"
+      class="card shadow-sm mb-4"
+    >
+      <div class="card-body">
+        <h4 class="mb-4 text-center fw-bold">Thống kê số lượt đăng kí mới</h4>
+
+        <!-- Bộ lọc ngày -->
+        <div class="row g-4 align-items-end">
+          <div class="col-md-4">
+            <label for="dateStart" class="form-label fw-semibold"
+              >Từ ngày:</label
+            >
+            <div class="input-group shadow-sm">
+              <input
+                type="text"
+                placeholder="Chọn ngày bắt đầu"
+                class="form-control"
+                id="appointmentDateStart"
+                [(ngModel)]="dateStart"
+                ngbDatepicker
+                #d1="ngbDatepicker"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="d1.toggle()"
+              >
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="dateEnd" class="form-label fw-semibold"
+              >Đến ngày:</label
+            >
+            <div class="input-group shadow-sm">
+              <input
+                type="text"
+                placeholder="Chọn ngày kết thúc"
+                class="form-control"
+                id="appointmentDateEnd"
+                [(ngModel)]="dateEnd"
+                ngbDatepicker
+                #d2="ngbDatepicker"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="d2.toggle()"
+              >
+                <i class="fa-solid fa-calendar-days"></i>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button
+              class="btn btn-primary w-100 shadow-sm fw-bold"
+              (click)="fetchUserRegistrationData()"
+              style="padding: 10px 20px"
+            >
+              Lọc dữ liệu
+            </button>
+          </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div
+          class="chart-container mt-5"
+          *ngIf="
+            !isLoading &&
+            user_registration_data &&
+            user_registration_data?.length !== 0
+          "
+        >
+          <canvasjs-chart
+            [options]="userRegistrationChartOptions"
+            [styles]="{ width: '100%', height: '400px' }"
+          >
+          </canvasjs-chart>
+        </div>
+
+        <!-- Bảng dữ liệu -->
+        <table
+          *ngIf="userRegistrationPaginatedData"
+          class="table table-hover text-center mt-5 shadow-sm"
+          style="border-collapse: collapse"
+        >
+          <thead>
+            <tr
+              style="
+                background-color: #f1f1f1;
+                border-bottom: 2px solid #d1d1d1;
+              "
+            >
+              <th scope="col" class="fw-bold">Ngày</th>
+              <th scope="col" class="fw-bold">Số lượng người dùng mới</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let data of userRegistrationPaginatedData"
+              style="border-bottom: 1px solid #e1e1e1"
+            >
+              <td>{{ data.date | date : "dd/MM/yyyy" }}</td>
+              <td>{{ data.user_cnt }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav *ngIf="user_registration_data" aria-label="Page navigation" class="mt-3">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="userRegistrationCurrentPage === 1">
+              <button 
+                class="page-link" 
+                (click)="changeUserRegistrationPage(userRegistrationCurrentPage - 1)" 
+                >
+                Trước
+              </button>
+            </li>
+        
+            <li class="page-item">
+              <span class="page-link" aria-live="polite">{{ userRegistrationCurrentPage }}/{{userRegistrationTotalPages.length}}</span>
+            </li>
+        
+            <li class="page-item" [class.disabled]="userRegistrationCurrentPage === userRegistrationTotalPages.length">
+              <button 
+                class="page-link" 
+                (click)="changeUserRegistrationPage(userRegistrationCurrentPage + 1)" 
+              >
+                Sau
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
 
     <!-- User Registrations Tab -->
-    <div *ngIf="selectedTab === 'userRegistrations'" class="tab-pane fade show active">
-      <h3 class="mb-3">Số lượt Đăng ký Người dùng (5 tháng gần nhất)</h3>
-      <canvasjs-chart class="mt-5" [options]="userRegistrationChartOptions"></canvasjs-chart>
-    </div>
   </div>
 </div>

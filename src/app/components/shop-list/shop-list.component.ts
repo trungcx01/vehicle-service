@@ -4,6 +4,7 @@ import { ShopService } from './../../services/shop.service';
 import { VehicleCareService } from './../../services/vehicle-care.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppointmentComponent } from '../appointment/appointment.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-shop-list',
@@ -13,7 +14,7 @@ import { AppointmentComponent } from '../appointment/appointment.component';
 export class ShopListComponent implements OnInit {
   filteredResults: any[] = [];
   formSearch!: FormGroup;
-  type = 'shop'; // Default type
+  type: any; 
   locations: string[] = ['Location 1', 'Location 2', 'Location 3'];
   priceRanges: string[] = ['0 - 20.000 VNĐ', '20.000 VNĐ - 50.000 VNĐ', '50.000 VNĐ - 100.000 VNĐ', '100.000 VNĐ - 200.000 VNĐ', '200.000 VNĐ-500.000 VNĐ'];
   districts = [
@@ -51,28 +52,41 @@ export class ShopListComponent implements OnInit {
     private shopService: ShopService,
     private vehicleCareService: VehicleCareService,
     private fb: FormBuilder,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private router: Router
   ) {
     this.formSearch = this.fb.group({
       district: [''],
       priceRange: [''],
       query: [''],
-      type: ['shop']
+      rating: [0],
+      type: [this.type]
     });
   }
 
   ngOnInit(): void {
+    if (this.router.url.endsWith("/vehicle-care-list")){
+      this.type = 'vehicleCare'
+    }else{
+      this.type = 'shop'
+    }
     this.loadInitialResults();
   }
 
   loadInitialResults(): void {
-    this.shopService.searchShop('','').subscribe((data: any) => {
+   if (this.type === 'shop'){
+    this.shopService.searchShop('','',0).subscribe((data: any) => {
       this.filteredResults = data;
     });
+   }else{
+    this.vehicleCareService.search('','',0, 100000000).subscribe((data: any) => {
+      this.filteredResults = data;
+    });
+   }
   }
 
   performSearch(): void {
-    const { query, district, priceRange, type } = this.formSearch.value;
+    const { query, district, priceRange, type, rating } = this.formSearch.value;
 
     const [priceStart, priceEnd] = this.getPriceRange(priceRange);
 
@@ -86,7 +100,7 @@ export class ShopListComponent implements OnInit {
     } else {
       this.type = 'shop';
       this.shopService
-        .searchShop(query || '', district || '')
+        .searchShop(query || '', district || '', rating)
         .subscribe((data: any) => {
           this.filteredResults = data;
         });

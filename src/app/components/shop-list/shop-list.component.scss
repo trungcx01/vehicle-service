@@ -4,10 +4,6 @@
   overflow: hidden;
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
 
 .card-address{
   display: -webkit-box;
@@ -50,10 +46,6 @@
   transition: box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.service-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-}
 
 .card-img-top {
   height: 200px;
@@ -119,9 +111,7 @@
   transition: transform 0.2s ease;
 }
 
-.card-footer button:hover {
-  transform: scale(1.02);
-}
+
 
 
 select {

@@ -23,7 +23,7 @@ export class ReviewService {
     return this.http.post(this.apiUrl, formData);
   }
 
-  getAll(): Observable<any>{
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
   }
 
@@ -38,7 +38,31 @@ export class ReviewService {
     return this.http.get(this.apiUrl + "/get-by-shop/" + id);
   }
 
+  getByCurrentShop(page?: number, size?: number,): Observable<any>{
+    return this.http.get(this.apiUrl + "/get-by-current-shop");
+  }
+
   delete(id: number): Observable<any>{
     return this.http.delete(this.apiUrl + "/" + id);
+  }
+
+  searchReviews(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search`, { params });
+  }
+
+  searchReviewsInShop(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search-in-shop`, { params });
   }
 }

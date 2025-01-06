@@ -5,3 +5,10 @@
     box-shadow: none;
   }
 }
+
+input, select, textarea{
+  &:focus{
+    box-shadow: none;
+    
+  }
+}

@@ -26,7 +26,7 @@ export class AppointmentService {
     return this.http.get(this.apiUrl + "/" + id);
   }
 
-  getByCurrentShop(): Observable<any>{
+  getByCurrentShop(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl + "/shop");
   }
 
@@ -43,7 +43,35 @@ export class AppointmentService {
     return this.http.get(this.apiUrl + "/count-by-shop/" + date);
   }
 
-  getAll(): Observable<any>{
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
+  }
+
+  count(): Observable<any>{
+    return this.http.get(this.apiUrl + "/count");
+  }
+
+  countByCurrentShop(): Observable<any>{
+    return this.http.get(this.apiUrl + "/count-by-shop");
+  }
+
+  searchAppointments(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search`, { params });
+  }
+
+  searchAppointmentsInShop(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search`, { params });
   }
 }

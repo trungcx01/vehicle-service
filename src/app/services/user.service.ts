@@ -16,8 +16,8 @@ export class UserService {
     return this.http.put(`${this.apiUrl}/update-avatar`, formData)
   }
 
-  getByMonth(date: string){
-    return this.http.get(`${this.apiUrl}/get-by-month/${date}`)
+  getByDate(date: string){
+    return this.http.get(`${this.apiUrl}/get-by-date/${date}`)
   }
 
   lockAccount(userId: number): Observable<any>{
@@ -26,5 +26,9 @@ export class UserService {
 
   unlockAccount(userId: number): Observable<any>{
     return this.http.put(this.apiUrl + "/unlock/" + userId, {});
+  }
+
+  count(): Observable<any>{
+    return this.http.get(this.apiUrl + "/count");
   }
 }

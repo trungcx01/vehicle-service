@@ -67,9 +67,7 @@ export class ShopMapComponent {
     this.setMapCenter();
     [this.fastestTime, this.shortestDistance] = await this.getDistanceAndTime();
     this.getDirectionLines(String(this.i));
-
-   
-      this.startShopSimulation();
+    this.startShopSimulation();
     
     
   }
@@ -81,7 +79,7 @@ export class ShopMapComponent {
         this.proposalService.getById(proposalId).subscribe({
           next: (data) => {
             const origin = data.shop.address;
-            const destination = data.emergencyRequest.customer.address;
+            const destination = data.emergencyRequest.location;
             resolve([proposalId, origin, destination]);
           },
           error: (error) => {
@@ -126,9 +124,7 @@ export class ShopMapComponent {
   this.markers.push(marker);
   }
 
-
-
-startShopSimulation(): void {
+  startShopSimulation(): void {
   const intervalId = setInterval(() => {
     this.origin_lat += (this.destination_lat - this.origin_lat) / this.TOTAL_STEP;
     this.origin_lng += (this.destination_lng - this.origin_lng) / this.TOTAL_STEP;
@@ -177,31 +173,6 @@ startShopSimulation(): void {
     console.log(message);
   }
 
-  // updateShopPosition(data: string): void {
-  //   console.log('dcmdiejde')
-  //   const [lat, lng] = data.split(' ')[1].split(',').map(Number);
-  //   const shopMarker = this.markers.find(
-  //     (marker) => marker.getElement().className === 'shop-marker'
-  //   );
-  //   if (shopMarker) {
-  //     shopMarker.setLngLat([lng, lat]);
-  //   } else {
-  //     this.addMarker(lng, lat, 'shop');
-  //   }
-
-  //   if (this.role === 'CUSTOMER' && this.checkIfArrived(lat, lng)) {
-  //     Swal.fire({
-  //       title: 'Cửa hàng đã đến!',
-  //       text: 'Cảm ơn bạn đã sử dụng dịch vụ!',
-  //       icon: 'info',
-  //       confirmButtonText: 'OK',
-  //     });
-  //   }
-  //   this.markers.pop()!.remove();
-  //       this.map.removeLayer(String(this.i));
-  //       this.map.removeSource(String(this.i));
-  //   this.getDirectionLines(String(this.i++));
-  // }
 
   checkIfArrived(lat: number = this.origin_lat, lng: number = this.origin_lng): boolean {
     const distance = this.calculateDistance(
@@ -210,7 +181,7 @@ startShopSimulation(): void {
       this.destination_lat,
       this.destination_lng
     );
-    return distance < 0.05; // 50 meters threshold
+    return distance < 0.05;
   }
 
   calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -259,7 +230,6 @@ startShopSimulation(): void {
         next: (data : any) =>{
           const fastestTime = data.rows[0].elements[0].duration.text;
           const shortestDistance = data.rows[0].elements[0].distance.text;
-          // console.log(fastestTime, shortestDistance);
           resolve([fastestTime, shortestDistance])
         }, 
         error: (error) => {
@@ -331,287 +301,3 @@ startShopSimulation(): void {
       }
     }
     
-
-
-//   async ngOnInit(): Promise<void> {
-//     [this.proposalId, this.origin, this.destination] = await this.init();
-//     this.notificationService.connectLocation(this.proposalId);
-//     this.notificationService.getNotifications().subscribe({
-//       next: (data) => {
-//         if (data.startsWith('LIVE_TRACKING_SHOP')){
-//           this.updateShopPosition(data);
-//         }
-//       },
-//       error: (error) => {
-//       }
-//     })
-//     goongjs.accessToken = environment.mapKey;
-//     this.map = new goongjs.Map({
-//       container: 'map',
-//       zoom: 12,
-//       style: 'https://tiles.goong.io/assets/goong_map_web.json',
-//     });
-
-//     [this.destination_lng, this.destination_lat] = await this.convertToLatLng(
-//       this.destination
-//     );
-//     [this.origin_lng, this.origin_lat] = await this.convertToLatLng(
-//       this.origin
-//     );
-//     [this.fastestTime, this.shortestDistance] = await this.getDistanceAndTime();
-//     this.addMarker(this.destination_lng, this.destination_lat, 'customer');
-//     this.addMarker(this.origin_lng, this.origin_lat, 'shop');
-//     this.setMapCenter();
-//     this.getCurrentLocation();
-//     this.getDirectionLines(String(this.i));
-//     const distanceLngByStep = this.caculateByStep(
-//       this.origin_lng,
-//       this.destination_lng
-//     );
-//     const distanceLatByStep = this.caculateByStep(
-//       this.origin_lat,
-//       this.destination_lat
-//     );
-//     const intervalId = setInterval(() => {
-//       this.updatePosition(distanceLatByStep, distanceLngByStep);
-
-//       // Send the updated shop position to the customer
-//       this.sendUpdatedPositionToCustomer(this.origin_lat, this.origin_lng);
-//       if (this.i === this.TOTAL_STEP) {
-//         Swal.fire({
-//           title: "Congratulation!",
-//           text: "Cửa hàng đã đến. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!",
-//           icon: 'success',
-//           showLoaderOnConfirm: true,
-//           allowOutsideClick: false, 
-//           allowEscapeKey: false,  
-//           confirmButtonText: 'Đánh giá cửa hàng',
-//           showClass: {
-//             popup: 'animate__animated animate__fadeInDown'
-//           },
-//           hideClass: {
-//             popup: 'animate__animated animate__fadeOutUp'
-//           },
-//         }).then((result) => {
-//           if (result.isConfirmed) {
-//             window.location.href = "shop-detail/" + this.proposal.shop.id;
-//           }
-//         });
-        
-//         clearInterval(intervalId);
-//       }
-//     }, 6000);
-//   }
-
-//   setVisible(){
-//     this.visible = !this.visible;
-//   }
-
-//   async init(): Promise<[number, string, string]>{
-//     return new Promise((resolve, reject) => {
-//       this.activatedRoute.paramMap.subscribe(params =>{
-//         const proposalId = Number(params.get("proposalId"));
-//         console.log(proposalId);
-//         this.proposalService.getById(proposalId).subscribe({
-//           next: (data) => {
-//             console.log('dmfrm', data.shop.address);
-//             const origin = data.shop.address;
-//             const destination = data.emergencyRequest.customer.address;
-//             this.proposal = data;
-//             resolve([proposalId, origin, destination])
-//           },
-//           error: (error) => {
-//             console.error(error);
-//             reject(error);
-//           }
-//         })
-//       })
-//     })
-//   }
-
-//   async getDistanceAndTime(): Promise<[number, number]>{
-//     return new Promise((resolve, reject) =>{
-//       const origins = `${this.origin_lat},${this.origin_lng}`;
-//       const destinations = `${this.destination_lat},${this.destination_lng}`;
-//       console.log(origins);
-//       this.othersService.getDistanceAndTime(origins, destinations).subscribe({
-//         next: (data : any) =>{
-//           const fastestTime = data.rows[0].elements[0].duration.text;
-//           const shortestDistance = data.rows[0].elements[0].distance.text;
-//           // console.log(fastestTime, shortestDistance);
-//           resolve([fastestTime, shortestDistance])
-//         }, 
-//         error: (error) => {
-//           console.error(error);
-//           reject(error);
-//         }
-//       })
-//     })
-//   }
-
-//   resetCenter(){
-//     this.setMapCenter();
-//   }
-//   goBack(){
-//     this.router.navigate([''])
-//   }
-//   setMapCenter(): void {
-//     const center_lat = (this.origin_lat + this.destination_lat) / 2;
-//     const center_lng = (this.origin_lng + this.destination_lng) / 2;
-//     this.map.setCenter([center_lng, center_lat]);
-//   }
-//   sendUpdatedPositionToCustomer(lat: number, lng: number) {
-//     const message = `LIVE_TRACKING_SHOP ${lat},${lng}`;
-//     this.notificationService.sendLocation(this.proposalId.toString(), message);
-//   }
-
-//   // Process shop position update
-//   updateShopPosition(data: string) {
-//     const [lat, lng] = data.split(' ')[1].split(',').map(Number);
-//     this.updateMarkerPosition(lat, lng);
-//   }
-
-//   // Update the shop's marker on the map
-//   updateMarkerPosition(lat: number, lng: number) {
-//     const shopMarker = this.markers.find((marker) => marker.getElement() && marker.getElement().className === 'shop-marker');
-//     if (shopMarker) {
-//       shopMarker.setLngLat([lng, lat]);
-//     } else {
-//       this.addMarker(lng, lat, 'shop');
-//     }
-//   }
-//   updatePosition(distanceLatByStep: number, distanceLngByStep: number) {
-//     this.origin_lat += distanceLatByStep;
-//     this.origin_lng += distanceLngByStep;
-//     this.markers.pop()!.remove();
-//     this.map.removeLayer(String(this.i));
-//     this.map.removeSource(String(this.i));
-//     this.addMarker(this.origin_lng, this.origin_lat, 'shop');
-//     this.i++;
-//     // this.setMapCenter();
-//     this.getDirectionLines(String(this.i));
-//   }
-
-//   caculateByStep(start: number, end: number): number {
-//     return (end - start) / this.TOTAL_STEP;
-//   }
-
-//   async getRole(): Promise<any>{
-//     return new Promise((resolve, reject) =>{
-//       this.authService.getCurrentUser().subscribe({
-//         next: (user) => {
-//           resolve(user.roles[0]);
-//         },
-//         error: (error) => {
-//           reject(error);
-//         }
-//       })
-//     }) 
-//   }
-
-//   // initMarker(locations: any): void {
-//   //   locations.forEach((e: any) => {
-//   //     const marker = new goongjs.Marker().setLngLat(e.coord).addTo(this.map);
-//   //     this.markers.push(marker);
-//   //   });
-//   // } // thêm marker
-
-//   addMarker(lng: number, lat: number, role: string) {
-//     const customMarker = document.createElement('div');
-//     customMarker.className = role === 'shop' ? 'shop-marker' : 'custom-marker';
-//     customMarker.style.backgroundImage =
-//       role === 'shop'
-//         ? 'url(https://res.cloudinary.com/dmwkcepna/image/upload/v1732774699/shop_marker.png)'
-//         : 'url(https://res.cloudinary.com/dmwkcepna/image/upload/v1732774699/customer_marker.png)';
-//     customMarker.style.backgroundSize = 'cover'; // Đảm bảo icon không bị biến dạng
-//     customMarker.style.width = '40px'; // Kích thước của marker
-//     customMarker.style.height = '40px'; // Kích thước của marker
-//     customMarker.style.cursor = 'pointer'; // Để biểu tượng có thể được nhấp
-    
-//     const marker = new goongjs.Marker({
-//       element: customMarker,
-//     })
-//       .setLngLat([lng, lat])
-//       .addTo(this.map);
-//     this.markers.push(marker);
-//   }
-
-
-//   getCurrentLocation(): void {
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition((position) => {
-//         // this.origin_lat = position.coords.latitude;
-//         // this.origin_lng = position.coords.longitude;
-//       });
-//     }
-//   }
-
-//   async convertToLatLng(address: string): Promise<[number, number]> {
-//     return new Promise((resolve, reject) => {
-//       this.othersService.getLatLng(address).subscribe({
-//         next: (data: any) => {
-//           const lat = Number(data.results[0].geometry.location.lat);
-//           const lng = Number(data.results[0].geometry.location.lng);
-//           resolve([lng, lat]);
-//         },
-//         error: (err: any) => {
-//           console.log(err);
-//           reject(err);
-//         },
-//       });
-//     });
-//   }
-
-//   getDirectionLines(id: string): void {
-//     const origin = this.origin_lat + ',' + this.origin_lng;
-//     const destination = this.destination_lat + ',' + this.destination_lng;
-
-//     console.log('Fetching directions from:', origin, 'to:', destination);
-
-//     this.othersService.getDirections(origin, destination).subscribe({
-//       next: (response) => {
-//         const route = response.routes[0];
-//         console.log('Route details:', route);
-
-//         const geometryString = route.overview_polyline?.points;
-
-//         let coordinates = polyline
-//           .decode(geometryString)
-//           .map((coord: number[]) => [coord[1], coord[0]]);
-//         coordinates = coordinates.filter(
-//           ([lng, lat]) => !isNaN(lng) && !isNaN(lat)
-//         );
-//         console.log('Filtered coordinates:', coordinates);
-
-//         this.map.addSource(id, {
-//           type: 'geojson',
-//           data: {
-//             type: 'Feature',
-//             properties: {},
-//             geometry: {
-//               type: 'LineString',
-//               coordinates: coordinates,
-//             },
-//           },
-//         });
-
-//         this.map.addLayer({
-//           id: id,
-//           type: 'line',
-//           source: id,
-//           layout: {
-//             'line-join': 'round',
-//             'line-cap': 'round',
-//           },
-//           paint: {
-//             'line-color': '#1fe80d',
-//             'line-width': 6,
-//           },
-//         });
-//       },
-//       error: (err) => {
-//         console.error('Error fetching directions:', err);
-//       },
-//     });
-//   }
-// }

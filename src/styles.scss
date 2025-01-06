@@ -10,7 +10,7 @@
   
   
   
-html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .timepicker-overlay {
@@ -20,4 +20,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .timepicker-backdrop-overlay {
   z-index: 10000000 !important;
 }
+
+html, body {
+  background-color: #F0F0F0; /* Đặt màu nền giống sidebar */
+}
+
 

@@ -32,4 +32,8 @@ export class PaymentService {
   totalAmountByDateAndCurrentShop(date: string): Observable<any>{
     return this.http.get(this.apiUrl + "/total-by-shop/" + date);
   }
+
+  getTotalRevenue(): Observable<any>{
+    return this.http.get(this.apiUrl + "/get_total_revenue");
+  }
 }

@@ -1,3 +1,4 @@
+import { OthersService } from './../../services/others.service';
 import { CustomerService } from './../../services/customer.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import {
@@ -28,6 +29,9 @@ export class UserInfoComponent implements OnInit {
   avatar: any;
   type: any;
   edit = true;
+  coverImage: any;
+  cover: any;
+  addressOptions: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +41,7 @@ export class UserInfoComponent implements OnInit {
     private customerService: CustomerService,
     private shopService: ShopService,
     private userService: UserService,
+    private othersService: OthersService,
     private cdr: ChangeDetectorRef
   ) {
     this.customerInfoForm = this.fb.group({
@@ -45,6 +50,7 @@ export class UserInfoComponent implements OnInit {
       address: [{ value: '', disabled: this.edit }, Validators.required],
       phoneNumber: [{ value: '', disabled: this.edit }, Validators.required],
       dob: [{ value: '', disabled: this.edit }],
+      district: [{ value: '', disabled: this.edit }],
     });
 
     this.shopInfoForm = this.fb.group({
@@ -55,6 +61,7 @@ export class UserInfoComponent implements OnInit {
       closeHour: [{ value: '', disabled: this.edit }],
       openHour: [{ value: '', disabled: this.edit }],
       description: [{ value: '', disabled: this.edit }],
+      district: [{ value: '', disabled: this.edit }],
     });
 
     this.changePasswordForm = this.fb.group({
@@ -63,6 +70,34 @@ export class UserInfoComponent implements OnInit {
       confirmPassword: ['', Validators.required],
     });
   }
+
+  onChange(e: any){
+    if (this.role === 'CUSTOMER'){
+      this.customerInfoForm.patchValue({
+        district: e.compound.district,
+      })
+    }else{
+      this.shopInfoForm.patchValue({
+        district: e.compound.district,
+      })
+    }
+  }
+  
+    onSearch(input: any) {
+      this.othersService.autocomplete(input.term).subscribe({
+        next: (data: any) => {
+          console.log('Dữ liệu trả về:', data);
+          if (data.predictions) {
+            this.addressOptions = data.predictions;
+          } else {
+            this.addressOptions = []; 
+          }
+        },
+        error: (err) => {
+          console.log('Lỗi:', err);
+        },
+      });
+    }
 
   ngOnInit() {
     if (!this.router.url.startsWith('/shop-home')) {
@@ -103,6 +138,20 @@ export class UserInfoComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  onCoverImageSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      this.cover = file;
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.coverImage = e.target.result; // Hiển thị ảnh bìa mới
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+
   updateCustomerForm(customer: any) {
     this.customerInfoForm.patchValue({
       avatar: customer.user.imageUrl,
@@ -111,12 +160,12 @@ export class UserInfoComponent implements OnInit {
       address: customer.address,
       phoneNumber: customer.phoneNumber,
       dob: customer.dob,
+      district: customer.district
     });
     console.log('io', this.customerInfoForm.value);
   }
 
   updateShopForm(shop: any) {
-    // const time = String(shop.openingHour).split('-');
     this.shopInfoForm.patchValue({
       avatar: shop.user.imageUrl,
       id: shop.id,
@@ -126,7 +175,12 @@ export class UserInfoComponent implements OnInit {
       openHour: shop.openHour.substring(0,5),
       closeHour: shop.closeHour.substring(0,5),
       description: shop.description,
+      district: shop.district,
+      revenue: shop.revenue
     });
+    this.coverImage = shop.coverImage;
+
+    console.log('ieow', this.shopInfoForm.value);
   }
 
   modify(){
@@ -139,7 +193,7 @@ export class UserInfoComponent implements OnInit {
   }
   saveInfo() {
     if (this.role === 'SHOP') {
-      const shop = {
+      let shop = {
         id: this.shopInfoForm.value.id,
         name: this.shopInfoForm.value.name,
         address: this.shopInfoForm.value.address,
@@ -147,13 +201,19 @@ export class UserInfoComponent implements OnInit {
         openHour: this.shopInfoForm.value.openHour,
         closeHour: this.shopInfoForm.value.closeHour,
         description: this.shopInfoForm.value.description,
+        district: this.shopInfoForm.value.district,
+        revenue: this.shopInfoForm.value.revenue,
+        coverImage: this.coverImage || null
       };
 
-      console.log(shop)
 
-      this.shopService.update(shop).subscribe({
+      console.log('ieo', shop)
+      console.log("fed", this.cover)
+
+      this.shopService.update(shop, this.cover).subscribe({
         next: (res) => {
           this.shopInfoForm.disable();
+          console.log(res);
           this.edit= true;
           if (this.avatar) {
             this.userService.updateAvatar(this.avatar).subscribe({
@@ -195,6 +255,7 @@ export class UserInfoComponent implements OnInit {
         address: this.customerInfoForm.value.address,
         phoneNumber: this.customerInfoForm.value.phoneNumber,
         dob: this.customerInfoForm.value.dob,
+        district: this.customerInfoForm.value.district,
       };
 
       console.log(customer);

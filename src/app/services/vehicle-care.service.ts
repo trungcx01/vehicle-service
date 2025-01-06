@@ -14,7 +14,7 @@ export class VehicleCareService {
     return this.http.get(this.apiUrl + "/shop-" + id);
   }
 
-  getByCurrentShop(): Observable<any>{
+  getByCurrentShop(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl + "/current-shop");
   }
 
@@ -49,7 +49,27 @@ export class VehicleCareService {
   search(name: string, district: string, start: any, end: any): Observable<any>{
     return this.http.get(`${this.apiUrl}/search?name=${name}&district=${district}&priceFrom=${start}&priceTo=${end}`);
   }
-  getAll(): Observable<any>{
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
+  }
+
+  searchVehicleCares(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search-all`, { params });
+  }
+
+  searchInCurrentShop(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search-all`, { params });
   }
 }

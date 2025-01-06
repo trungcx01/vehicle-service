@@ -4,6 +4,9 @@ import { AppointmentService } from '../../../services/appointment.service';
 import { EmergencyRequestService } from '../../../services/emergency-request.service';
 import { PaymentService } from '../../../services/payment.service';
 import { UserService } from '../../../services/user.service';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ShopService } from '../../../services/shop.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -17,140 +20,261 @@ export class AdminStatisticComponent implements OnInit {
   appointmentChartOptions: any;
   topShopsChartOptions: any;
   userRegistrationChartOptions: any;
-  dateStart: any = new Date();
-  dateEnd: any = new Date();
+  dateStart: any;
+  dateEnd: any;
   isLoading: boolean = false;
+  monthStart: NgbDateStruct | undefined; 
+  monthEnd: NgbDateStruct | undefined;  
+  top_shop_data: any;
+  app_emergency_data: any;
+  user_registration_data: any;
 
   constructor(
     private appointmentService: AppointmentService,
     private emergencyRequestService: EmergencyRequestService,
     private paymentService: PaymentService,
     private util: Util,
-    private userService: UserService // Inject service cho user
+    private userService: UserService,
+    private shopService: ShopService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.initializeCharts();
     this.fetchOverviewData();
-    this.fetchUserRegistrationData();
-    this.dateStart = this.util.dateToNgbDateStruct(new Date());
-    this.dateEnd = this.util.dateToNgbDateStruct(new Date());
+    this.updateUserRegistrationPaginatedData();
+    this.updatePaginatedData();
+  }
+  currentPage = 1;
+  itemsPerPage = 10;
+  paginatedData: any;
+  
+  userRegistrationCurrentPage = 1;
+  userRegistrationItemsPerPage = 10;
+  userRegistrationPaginatedData: any;
+  
+
+  get totalPages() {
+    return Array.from(
+      { length: Math.ceil(this.app_emergency_data?.length / this.itemsPerPage) },
+      (_, i) => i + 1
+    );
+  }
+  
+  get userRegistrationTotalPages() {
+    return Array.from(
+      { length: Math.ceil(this.user_registration_data?.length / this.userRegistrationItemsPerPage) },
+      (_, i) => i + 1
+    );
+  }
+  
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages.length) {
+      this.currentPage = page;
+      this.updatePaginatedData();
+    }
+  }
+  
+
+  changeUserRegistrationPage(page: number) {
+    if (page >= 1 && page <= this.userRegistrationTotalPages.length) {
+      this.userRegistrationCurrentPage = page;
+      this.updateUserRegistrationPaginatedData();
+    }
+  }
+  
+  updatePaginatedData() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedData = this.app_emergency_data.slice(start, end);
+  }
+  
+
+  updateUserRegistrationPaginatedData() {
+    const start = (this.userRegistrationCurrentPage - 1) * this.userRegistrationItemsPerPage;
+    const end = start + this.userRegistrationItemsPerPage;
+    this.userRegistrationPaginatedData = this.user_registration_data.slice(start, end);
+  }
+  
+  validateDateRange(): boolean {
+    if (this.dateStart && this.dateEnd) {
+      const start = new Date(this.dateStart.year, this.dateStart.month - 1, this.dateStart.day);
+      const end = new Date(this.dateEnd.year, this.dateEnd.month - 1, this.dateEnd.day);
+      const today = new Date(); 
+
+      if (end > today) {
+        this.toastr.error('Bạn không thể chọn ngày kết thúc vượt quá hôm nay', 'Lỗi');
+        return false;
+      } else{
+        if (end < start) {
+          this.toastr.error('Ngày kết thúc không thể nhỏ hơn ngày bắt đầu', 'Lỗi');
+          return false;
+        }
+  
+        const diffTime = Math.abs(end.getTime() - start.getTime());
+        const diffDays = diffTime / (1000 * 3600 * 24); 
+  
+        if (diffDays > 60) {
+          this.toastr.error('Khoảng cách giữa ngày bắt đầu và ngày kết thúc không thể quá 60 ngày', 'Lỗi');
+          return false;
+        }
+      }
+
+      return true; 
+    }
+
+    return true; 
   }
 
-  filter() {
-    console.log(this.dateStart, this.dateEnd);
+  calculateDateDifference(): number {
+    if (this.dateStart && this.dateEnd) {
+      const start = new Date(this.dateStart.year, this.dateStart.month - 1, this.dateStart.day);
+      const end = new Date(this.dateEnd.year, this.dateEnd.month - 1, this.dateEnd.day);
+    const startTime = start.getTime();
+    const endTime = end.getTime();
+    const timeDifference = endTime - startTime;
+  
+    const dayDifference = timeDifference / (1000 * 3600 * 24);
+  
+    return Math.abs(dayDifference); 
+    }
+    return 0;
   }
 
   initializeCharts(): void {
-    this.appointmentChartOptions = {
-      animationEnabled: true,
-      exportEnabled: true,
-      theme: 'light2',
-      title: {
-        text: 'Thống kê Lịch hẹn và Yêu cầu cứu trợ',
+  // Appointment Chart
+  this.appointmentChartOptions = {
+    animationEnabled: true,
+    exportEnabled: true,
+    backgroundColor: "#ffffff", 
+    theme: "light2", 
+    title: {
+      text: "Thống kê Lịch hẹn và Yêu cầu cứu trợ",
+      fontSize: 20,
+      fontWeight: "bold",
+      margin: 15, 
+    },
+    axisX: {
+      title: "Ngày",
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555", 
+      gridColor: "#e0e0e0", 
+      valueFormatString: "DD/MM",
+    },
+    axisY: {
+      title: "Số lượng",
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555",
+      gridColor: "#e0e0e0",
+    },
+    toolTip: { shared: true },
+    legend: {
+      cursor: 'pointer',
+      itemclick: (e: any) => {
+        e.dataSeries.visible = e.dataSeries.visible === undefined || e.dataSeries.visible ? false : true;
+        e.chart.render();
       },
-      axisX: {
-        valueFormatString: 'DD/MM',
-      },
-      axisY: {
-        title: 'Số lượng',
-        includeZero: false,
-      },
-      toolTip: {
-        shared: true,
-      },
-      legend: {
-        cursor: 'pointer',
-        itemclick: (e: any) => {
-          if (
-            typeof e.dataSeries.visible === 'undefined' ||
-            e.dataSeries.visible
-          ) {
-            e.dataSeries.visible = false;
-          } else {
-            e.dataSeries.visible = true;
-          }
-          e.chart.render();
-        },
-      },
-      data: [
-        // {
-        //   type: "column",
-        //   showInLegend: true,
-        //   name: "Lịch hẹn",
-        //   dataPoints: [
-        //     { x: new Date(2024, 0, 1), y: 10 },
-        //     { x: new Date(2024, 0, 2), y: 15 },
-        //     { x: new Date(2024, 0, 3), y: 5 },
-        //     { x: new Date(2024, 0, 4), y: 8 },
-        //     { x: new Date(2024, 0, 5), y: 12 },
-        //     { x: new Date(2024, 0, 6), y: 9 },
-        //     { x: new Date(2024, 0, 7), y: 6 }
-        //   ]
-        // },
-        // {
-        //   type: "column",
-        //   showInLegend: true,
-        //   name: "Yêu cầu cứu trợ",
-        //   dataPoints: [
-        //     { x: new Date(2024, 0, 1), y: 4 },
-        //     { x: new Date(2024, 0, 2), y: 2 },
-        //     { x: new Date(2024, 0, 3), y: 3 },
-        //     { x: new Date(2024, 0, 4), y: 5 },
-        //     { x: new Date(2024, 0, 5), y: 7 },
-        //     { x: new Date(2024, 0, 6), y: 6 },
-        //     { x: new Date(2024, 0, 7), y: 4 }
-        //   ]
-        // }
-      ],
-    };
+    },
+    dpiScale: window.devicePixelRatio || 1,
+    data: [], 
+  };
 
-    this.topShopsChartOptions = {
-      animationEnabled: true,
-      exportEnabled: true,
-      theme: 'light2',
-      title: {
-        text: 'Top 10 shop có doanh thu cao nhất',
-      },
-      axisX: {
-        title: 'Shop',
-        interval: 1,
-      },
-      axisY: {
-        title: 'Doanh thu',
-      },
-      data: [],
-    };
 
-    this.userRegistrationChartOptions = {
-      animationEnabled: true,
-      exportEnabled: true,
-      theme: 'light2',
-      title: {
-        text: 'Số lượt đăng ký trong 5 tháng gần nhất',
+  this.topShopsChartOptions = {
+    animationEnabled: true,
+    exportEnabled: true,
+    backgroundColor: "#ffffff", 
+    theme: "light2", 
+    // title: {
+    //   text: "Top 10 Shop có doanh thu cao nhất",
+    //   fontSize: 20,
+    //   fontWeight: "bold",
+    //   margin: 15, 
+    // },
+    axisX: {
+      title: "Shop",
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555",
+      gridColor: "#e0e0e0",
+    },
+    axisY: {
+      title: "Doanh thu",
+      maximum: 1000000,
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555", 
+      gridColor: "#e0e0e0", 
+    },
+    legend: {
+      cursor: 'pointer',
+      itemclick: (e: any) => {
+        e.dataSeries.visible = e.dataSeries.visible === undefined || e.dataSeries.visible ? false : true;
+        e.chart.render();
       },
-      axisX: {
-        title: 'Tháng',
-      },
-      axisY: {
-        title: 'Số lượng người dùng',
-      },
-      data: [],
-    };
-  }
+    },
+    dpiScale: window.devicePixelRatio || 1,
+    data: [], 
+  };
 
-  fetchOverviewData(): void {
-    // Lấy dữ liệu tổng quan (mô phỏng)
+  // User Registration Chart
+  this.userRegistrationChartOptions = {
+    animationEnabled: true,
+    exportEnabled: true,
+    backgroundColor: "#ffffff", 
+    theme: "light2",
+    title: {
+      text: "Số lượt Đăng ký Người dùng",
+      fontSize: 20,
+      fontWeight: "bold",
+      margin: 15, 
+    },
+    axisX: {
+      title: "Tháng",
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555", 
+      gridColor: "#e0e0e0", 
+    },
+    axisY: {
+      title: "Số lượng người dùng",
+      titleFontSize: 14,
+      labelFontSize: 12,
+      labelFontColor: "#555", 
+      gridColor: "#e0e0e0", 
+    },
+    dpiScale: window.devicePixelRatio || 1,
+    legend: {
+      cursor: 'pointer',
+      itemclick: (e: any) => {
+        e.dataSeries.visible = e.dataSeries.visible === undefined || e.dataSeries.visible ? false : true;
+        e.chart.render();
+      },
+    },
+    data: [], 
+  };
+}
+
+  
+
+  async fetchOverviewData(): Promise<void> {
+    const x = await this.countAppointment();
+    const y = await this.countEmergencyRequest();
+    const z = await this.getTotalRevenue()
+        // Lấy dữ liệu tổng quan (mô phỏng)
     this.overviewData = {
-      totalAppointments: 120,
-      totalEmergencyRequests: 45,
-      totalRevenue: 1500000,
-      totalUsers: 500,
+      totalAppointments: x,
+      totalEmergencyRequests: y,
+      totalRevenue: z,
+      totalUsers: (await this.countUser()),
     };
   }
 
   async fetchAppointmentData(): Promise<void> {
-    this.isLoading = true;
+    if (this.validateDateRange()){
+      this.isLoading = true;
     let app_emer_data = [];
     let date = this.dateStart;
     while (
@@ -172,17 +296,24 @@ export class AdminStatisticComponent implements OnInit {
       date = this.util.dateToNgbDateStruct(d);
     }
     console.log(app_emer_data);
-
+    this.app_emergency_data = app_emer_data;
+    this.updatePaginatedData();
     this.updateAppointmentChart(app_emer_data);
+    }
   }
 
   updateAppointmentChart(data: any[]): void {
+    this.appointmentChartOptions.axisX= {
+      ...this.appointmentChartOptions.axisX,
+      valueFormatString: 'DD/MM',
+      interval: this.calculateDateDifference() < 10 ? 1 : null,
+      intervalType: "day",
+    }
     this.appointmentChartOptions.data = [
       {
         type: 'column',
         showInLegend: true,
         name: 'Lịch hẹn',
-        xValueFormatString: 'DD/MM/YYYY',
         dataPoints: data.map((item) => ({ x: item.date, y: item.app_count })),
       },
       {
@@ -190,6 +321,24 @@ export class AdminStatisticComponent implements OnInit {
         showInLegend: true,
         name: 'Yêu cầu cứu trợ',
         dataPoints: data.map((item) => ({ x: item.date, y: item.emer_count })),
+      },
+    ];
+    this.isLoading = false;
+  }
+
+  updateUserRegistrationChart(data: any[]){
+    this.userRegistrationChartOptions.axisX= {
+      ...this.userRegistrationChartOptions.axisX,
+      valueFormatString: 'DD/MM',
+      interval: this.calculateDateDifference() < 10 ? 1 : null,
+      intervalType: "day",
+    }
+    this.userRegistrationChartOptions.data = [
+      {
+        type: 'column',
+        showInLegend: true,
+        name: 'Số lượng đăng kí mới',
+        dataPoints: data.map((item) => ({ x: item.date, y: item.user_cnt })),
       },
     ];
     this.isLoading = false;
@@ -226,74 +375,80 @@ export class AdminStatisticComponent implements OnInit {
     });
   }
 
-  fetchTopShopsData(): void {
-    // this.paymentService.getTop10Shops().subscribe((data) => {
-    //   this.topShopsChartOptions.data = [
-    //     {
-    //       type: 'bar',
-    //       dataPoints: data.map((shop) => ({
-    //         label: shop.name,
-    //         y: shop.revenue,
-    //       })),
-    //     },
-    //   ];
-    // });
-  }
-
-  fetchUserRegistrationData(): void {
+  async fetchTopShopsData(): Promise<void> {
     this.isLoading = true;
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const date = [
-      (month - 3 > 0 ? month - 3 : month + 9) + '-' + (month - 3 > 0 ? year : year - 1),
-      (month - 2 > 0 ? month - 2 : month + 10) + '-' + (month - 2 > 0 ? year : year - 1),
-      (month - 1 > 0 ? month - 1 : month + 11) + '-' + (month - 1 > 0 ? year : year - 1),
-      month + '-' + year,
-      (month + 1 <= 12 ? month + 1 : 1) + '-' + (month + 1 <= 12 ? year : year + 1),
+    const top10Shop = await this.getTop10Revenue();
+    const data = top10Shop.map((s: any)=>{
+      return {
+        shopName: s.name,
+        revenue: s.revenue,
+      }
+    })
+    this.top_shop_data = data;
+    console.log(data)
+    this.updateTop10ShopChart(data);
+  }
+
+  async getTop10Revenue(): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.shopService.getTop10Revenue().subscribe({
+        next: (res) =>{
+          resolve(res);
+        },
+        error: (error) =>{
+          reject(error);
+        }
+      })
+    })
+  }
+
+  updateTop10ShopChart(data: any[]){
+    const maxRevenue = Math.max(...data.map((item) => item.revenue));
+    this.topShopsChartOptions.axisY = {
+      ... this.topShopsChartOptions.axisY,
+      maximum: maxRevenue * 1.5,
+    }
+    this.topShopsChartOptions.data = [
+      {
+        type: 'column',
+        showInLegend: true,
+        name: 'Top 10 cửa hàng có doanh thu cao nhất',
+        dataPoints: data.map((item) => ({ label: item.shopName, y: item.revenue })),
+      },
     ];
-    console.log(date);
-  
+    this.isLoading = false;
+  }
+
+  async fetchUserRegistrationData(): Promise<void>{
+   if (this.validateDateRange()){
+    this.isLoading = true;
     let countUser: any[] = [];
-
-    Promise.all(
-      date.map(async (d: any) => {
-        const cnt = await this.getUserByMonth(d);
-        console.log(cnt);
-        return {
-          label: d,
-          y: cnt,
-        };
-      })
-    )
-      .then((result) => {
-        countUser = result;
-        console.log('iueh', countUser);
-  
-        this.userRegistrationChartOptions.data = [
-          {
-            type: 'column',
-     
-            dataPoints: countUser.map((item: any) => ({
-              label: item.label,
-              y: item.y,
-            })),
-          },
-        ];
-
-        this.isLoading = true;
-  
-        console.log('p', this.userRegistrationChartOptions.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching user registration data', error);
+    let date = this.dateStart;
+    while (
+      this.util.ngbDateStructToDate(date) <=
+      this.util.ngbDateStructToDate(this.dateEnd)
+    ) {
+      const user_cnt = await this.getUserByDate(date);
+      countUser.push({
+        date: this.util.ngbDateStructToDate(date),
+        user_cnt: user_cnt,
       });
+      const d = this.util.ngbDateStructToDate(date);
+      d.setDate(d.getDate() + 1);
+      date = this.util.dateToNgbDateStruct(d);
+    }
+
+    console.log(countUser);
+    this.user_registration_data = countUser;
+    this.updateUserRegistrationPaginatedData();
+    this.updateUserRegistrationChart(countUser);
+   }
   }
   
 
-  async getUserByMonth(d: any): Promise<any> {
+  async getUserByDate(d: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.userService.getByMonth(d).subscribe({
+      this.userService.getByDate(this.util.convertDate(d)).subscribe({
         next: (data) => {
           console.log('ue', data);
           resolve(data);
@@ -306,21 +461,86 @@ export class AdminStatisticComponent implements OnInit {
     });
   }
 
+  async getTotalRevenue(): Promise<any>{
+   return new Promise((resolve, reject) =>{
+      this.paymentService.getTotalRevenue().subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) =>{
+          reject(err);
+        }
+      })
+    })
+
+  }
+
+  async countAppointment(): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.appointmentService.count().subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) =>{
+          reject(err);
+        }
+      })
+    })
+
+  }
+
+  async countEmergencyRequest(): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.emergencyRequestService.count().subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) =>{
+          reject(err);
+        }
+      })
+    })
+  }
+
+  async countUser(): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.userService.count().subscribe({
+        next: (data) => {
+          resolve(data);
+        },
+        error: (err) =>{
+          reject(err);
+        }
+      })
+    })
+
+  }
   onTabChange(tab: string): void {
     this.selectedTab = tab;
 
     switch (tab) {
       case 'appointments':
-        this.fetchAppointmentData();
+        this.dateStart = null;
+        this.dateEnd = null;
+        this.app_emergency_data = null;
+        this.user_registration_data = null;
         break;
       case 'topShops':
-        this.fetchTopShopsData();
+        this.dateStart = null;
+        this.dateEnd = null;
+        this.app_emergency_data = null;
+        this.user_registration_data = null;
+        this.fetchTopShopsData()
         break;
       case 'userRegistrations':
-        this.fetchUserRegistrationData();
+        this.dateStart = null;
+        this.dateEnd = null;
+        this.app_emergency_data = null;
+        this.user_registration_data = null;
         break;
       default:
         break;
     }
   }
+
 }

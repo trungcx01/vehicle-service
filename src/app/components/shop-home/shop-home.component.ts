@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
@@ -7,13 +7,26 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './shop-home.component.html',
   styleUrl: './shop-home.component.scss'
 })
-export class ShopHomeComponent {
-  isCollapsed = false; // State to toggle the sidebar
+export class ShopHomeComponent implements OnInit{
+  isCollapsed = false; 
+  screenWidth!: number;
 
   constructor(public router: Router, private toastr: ToastrService) {}
+  ngOnInit(): void {
+    this.checkScreenSize();
+  }
 
   toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed; // Toggle sidebar state
+    this.isCollapsed = !this.isCollapsed; 
+  }
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.checkScreenSize();
+  }
+
+  checkScreenSize(): void {
+    this.screenWidth = window.innerWidth;
+    this.isCollapsed = this.screenWidth <= 800; 
   }
 
   logout(): void {

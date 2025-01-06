@@ -1,40 +1,13 @@
 
-.card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
+.card-title {
+  height: 3rem;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  .card-body {
-    flex-grow: 1;
-  }
-  
 
-  .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-4px);
-    transition: all 0.3s ease-in-out;
+  canvas {
+    image-rendering: crisp-edges; /* Tăng độ nét */
+    backface-visibility: hidden; /* Loại bỏ các hiệu ứng mờ */
   }
-  
-
-  .row .col-md-3 {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .custom-tabs .nav-link {
-    font-weight: 600;
-  }
-  
-
-  .custom-tabs .nav-item {
-    margin-right: 20px;
-  }
-  
-  .custom-tabs .nav-item a.active {
-    background-color: #007bff;
-    border-color: #007bff;
-  }
-  

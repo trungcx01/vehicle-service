@@ -29,13 +29,24 @@ export class CustomerService {
     return this.http.get(this.apiUrl + "/get-by-phone", {params: params})
   }
 
-  getAll(): Observable<any>{
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
   }
 
   delete(id: number): Observable<any>{
     return this.http.delete(this.apiUrl + "/" + id);
   }
+
+  searchCustomers(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search`, { params });
+  }
+  
  
 
   // updateInfo(avatar: File, customer: ICustomerDTO): Observable<any>{

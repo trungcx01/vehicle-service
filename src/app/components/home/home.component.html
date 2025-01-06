@@ -6,7 +6,6 @@
   data-bs-ride="carousel"
   data-bs-interval="2300"
 >
-      <!-- 10000 ms = 10s -->
       <div class="carousel-inner">
         <div
           class="carousel-item active"
@@ -20,7 +19,6 @@
             <a href="#emergency" class="btn btn-custom">Hỗ trợ khẩn cấp</a>
           </div>
         </div>
-        <!-- Slide 2: Sửa xe máy -->
         <div
           class="carousel-item"
           style="
@@ -29,7 +27,7 @@
         >
           <div class="carousel-caption">
             <h1>Vehicle S</h1>
-            <a href="#services" class="btn btn-custom">Dịch vụ xe</a>
+            <a href="#services" class="btn btn-custom">Đặt lịch hẹn</a>
             <a href="#emergency" class="btn btn-custom">Hỗ trợ khẩn cấp</a>
           </div>
         </div>
@@ -202,53 +200,77 @@
     </div>
   </section>
 
-  <section class="customer-reviews py-5">
+  <section class="customer-reviews py-5" style="background-color: #f8f9fa;">
     <div class="container">
-      <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); font-weight: 600;">Đánh Giá Từ Cửa Hàng</h4>
-      <div id="customerReviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+      <h4 class="text-center mb-4" style="text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1); font-weight: 600; color: #212529;">
+        Đánh Giá Từ Cửa Hàng
+      </h4>
+      <div id="customerReviewsCarousel" class="carousel slide position-relative" data-bs-ride="carousel" data-bs-interval="4000">
         <div class="carousel-inner">
-          <div *ngFor="let item of top8ReviewNewest; let i = index" class="carousel-item" [ngClass]="{'active': i === 0}">
-            <div class="review-card card p-5 shadow-sm">
-              <div class="row ms-5 me-5">
+          <div
+            *ngFor="let item of top8ReviewNewest; let i = index"
+            class="carousel-item"
+            [ngClass]="{'active': i === 0}"
+          >
+            <div class="review-card card p-5 shadow-sm mx-auto" style="max-width: 900px; background-color: #ffffff; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 1;">
+              <div class="row">
                 <div class="col-md-3 text-center">
-                  <img [src]="item.customer.user.imageUrl" alt="Avatar" class="rounded-circle" width="80" height="80" />
-                  <h5 class="fw-bold mt-2">{{ item.customer.name }}</h5>
-                  <p class="text-muted">{{ item.createAt | date:'short' }}</p>
+                  <img
+                    [src]="item.serviceType === 'APPOINTMENT' ? item.baseService.customer.user.imageUrl : item.baseService.emergencyRequest.customer.user.imageUrl"
+                    alt="Avatar"
+                    class="rounded-circle shadow-sm"
+                    width="80"
+                    height="80"
+                    style="border: 2px solid #e9ecef;"
+                  />
+                  <h5 class="fw-bold mt-2" style="color: #212529;">
+                    {{ item.serviceType === 'APPOINTMENT' ? item.baseService.customer.name : item.baseService.emergencyRequest.customer.name }}
+                  </h5>
+                  <p class="text-muted" style="font-size: 14px;">
+                    {{ item.createAt | date: 'dd/MM/yyyy HH:mm' }}
+                  </p>
                 </div>
                 <div class="col-md-9 m-auto d-flex flex-column align-items-center">
-                  <p class="text-muted" style="font-size: 16px;">
-                    Đánh giá cho <strong *ngIf="item.serviceType === 'EMERGENCY_REQUEST'" class="fs-5">{{  item.baseService.shop.name }}</strong>
-                    <strong *ngIf="item.serviceType !== 'EMERGENCY_REQUEST'" class="fs-5">{{  item.baseService.vehicleCares[0].shop.name}}</strong>
+                  <p class="text-muted mb-1" style="font-size: 16px;">
+                    Đánh giá cho 
+                    <strong class="fs-5 text-primary">
+                      {{ item.serviceType === 'EMERGENCY_REQUEST' ? item.baseService.shop.name : item.baseService.vehicleCares[0].shop.name }}
+                    </strong>
                   </p>
-                  
-                  <p class="text-muted" style="font-size: 16px;">
-                    Dịch vụ sử dụng: <strong class="fs-5">{{  item.serviceType }}</strong>
-                    
+                  <p class="text-muted mb-2" style="font-size: 16px;">
+                    Dịch vụ sử dụng: <strong class="fs-5 text-success">{{ item.serviceType }}</strong>
                   </p>
-                  
-                
-                    <div class="review-rating text-warning fs-5">
-                      {{ "★".repeat(item.rate) + "☆".repeat(5 - item.rate) }}
-                    </div>
-             
-  
-      
-                  <p class="review-content">
+                  <div class="review-rating text-warning fs-5 mb-3">
+                    {{ "★".repeat(item.rate) + "☆".repeat(5 - item.rate) }}
+                  </div>
+                  <p class="review-content text-secondary" style="font-size: 15px;">
                     {{ item.description }}
                   </p>
-                  
                 </div>
               </div>
             </div>
           </div>
         </div>
+  
 
-        <button class="carousel-control-prev text-dark p-2" type="button" data-bs-target="#customerReviewsCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#customerReviewsCarousel"
+          data-bs-slide="prev"
+          style="width: 50px; height: 50px; border: 2px solid #6c757d; border-radius: 50%; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 2; position: absolute; top: 50%; transform: translateY(-50%); left: -25px;"
+        >
+          <span class="carousel-control-prev-icon" style="filter: invert(1);" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next text-dark p-2" type="button" data-bs-target="#customerReviewsCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#customerReviewsCarousel"
+          data-bs-slide="next"
+          style="width: 50px; height: 50px; border: 2px solid #6c757d; border-radius: 50%; background-color: #ffffff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); z-index: 2; position: absolute; top: 50%; transform: translateY(-50%); right: -25px;"
+        >
+          <span class="carousel-control-next-icon" style="filter: invert(1);" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
       </div>

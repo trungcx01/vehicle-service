@@ -31,4 +31,8 @@ export class ProposalService {
     const params = new HttpParams().set('status', status);  
     return this.http.put(this.apiUrl + "/update-status/" + id, {}, { params });
   }
+
+  getShopLastLocation(proposalId: any): Observable<any>{
+    return this.http.get("http://localhost:8080/api/get-shop-last-location/" + proposalId);
+  }
 }

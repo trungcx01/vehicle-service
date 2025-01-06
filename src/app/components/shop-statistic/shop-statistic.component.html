@@ -4,149 +4,197 @@
       <h3 class="h4 mb-0">Thống kê cửa hàng</h3>
     </div>
   </div>
-
   <ul class="nav nav-tabs justify-content-center mb-4 border-0">
     <li class="nav-item">
-      <a
-        class="nav-link px-4 py-2"
-        [class.active]="selectedTab === 'overview'"
-        (click)="selectedTab = 'overview'"
+      <a 
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill" 
+        [class.active]="selectedTab === 'overview'" 
+        (click)="onTabChange('overview')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        🌍 Tổng quan
+        Tổng quan
       </a>
     </li>
     <li class="nav-item">
-      <a
-        class="nav-link px-4 py-2"
-        [class.active]="selectedTab === 'appointments'"
-        (click)="selectedTab = 'appointments'"
+      <a 
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill" 
+        [class.active]="selectedTab === 'appointments'" 
+        (click)="onTabChange('appointments')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        📅 Lịch hẹn & cứu trợ
+        Lịch hẹn & cứu trợ
       </a>
     </li>
     <li class="nav-item">
-      <a
-        class="nav-link px-4 py-2"
-        [class.active]="selectedTab === 'turnover'"
-        (click)="selectedTab = 'turnover'"
+      <a 
+        class="nav-link px-4 py-2 text-secondary border-0 rounded-pill" 
+        [class.active]="selectedTab === 'turnover'" 
+        (click)="onTabChange('turnover')"
+        style="transition: all 0.3s; font-weight: 500; cursor: pointer"
       >
-        💰 Doanh thu
+        Doanh thu
       </a>
     </li>
   </ul>
-
+  
 
   <div class="tab-content">
-
     <div *ngIf="selectedTab === 'overview'" class="tab-pane fade show active">
-      <h3 class="mb-3">Tổng quan</h3>
       <div class="row">
+        <!-- Tổng số Lịch hẹn -->
         <div class="col-md-4">
-          <div class="card bg-primary text-white shadow-sm">
-            <div class="card-body">
+          <div class="card bg-dark text-white shadow-sm">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-calendar-check fa-2x mb-3"></i>
               <h5 class="card-title">Tổng số Lịch hẹn</h5>
-              <p class="card-text">{{ overviewData?.totalAppointments }}</p>
+              <p class="card-text fw-bold">{{ overviewData?.totalAppointments }}</p>
             </div>
           </div>
         </div>
+  
+        <!-- Tổng số Yêu cầu cứu trợ -->
         <div class="col-md-4">
           <div class="card bg-danger text-white shadow-sm">
-            <div class="card-body">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-triangle-exclamation fa-2x mb-3"></i>
               <h5 class="card-title">Tổng số Yêu cầu cứu trợ</h5>
-              <p class="card-text">{{ overviewData?.totalEmergencyRequests }}</p>
+              <p class="card-text fw-bold">{{ overviewData?.totalEmergencyRequests }}</p>
             </div>
           </div>
         </div>
+  
+        <!-- Tổng doanh thu -->
         <div class="col-md-4">
           <div class="card bg-success text-white shadow-sm">
-            <div class="card-body">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-dollar-sign fa-2x mb-3"></i>
               <h5 class="card-title">Tổng doanh thu</h5>
-              <p class="card-text">{{ overviewData?.totalRevenue | currency }}</p>
+              <p class="card-text fw-bold">{{ overviewData?.totalRevenue | number }} VNĐ</p>
             </div>
           </div>
         </div>
-       
       </div>
     </div>
 
-    <div *ngIf="selectedTab === 'appointments'" class="card shadow-sm">
+  
+
+    <div *ngIf="selectedTab === 'appointments'" class="card shadow-sm mb-4">
       <div class="card-body">
-        <h4 class="mb-4">📅 Thống kê Lịch hẹn và Cứu trợ</h4>
-        <div class="row">
+        <h4 class="mb-4 text-center fw-bold">Thống kê Lịch hẹn và Cứu trợ</h4>
+        
+        <!-- Bộ lọc ngày -->
+        <div class="row g-4 align-items-end">
           <div class="col-md-4">
-            <label for="dateStart" class="form-label">Từ ngày:</label>
-            <div class="input-group">
-              <input
-                type="text"
-                placeholder="Chọn ngày bắt đầu"
-                class="form-control"
-                id="appointmentDateStart"
-                [(ngModel)]="dateStart"
-                ngbDatepicker
-                #d1="ngbDatepicker"
+            <label for="dateStart" class="form-label fw-semibold">Từ ngày:</label>
+            <div class="input-group shadow-sm">
+              <input 
+                type="text" 
+                placeholder="Chọn ngày bắt đầu" 
+                class="form-control" 
+                id="appointmentDateStart" 
+                [(ngModel)]="dateStart" 
+                ngbDatepicker 
+                #d1="ngbDatepicker" 
+                [minDate]="minDate" 
+                [maxDate]="maxDate" 
               />
-              <span class="input-group-text" (click)="d1.toggle()">
+              <span class="input-group-text" style="cursor: pointer;" (click)="d1.toggle()">
                 <i class="fa-solid fa-calendar-days"></i>
               </span>
             </div>
           </div>
           <div class="col-md-4">
-            <label for="dateEnd" class="form-label">Đến ngày:</label>
-            <div class="input-group">
-              <input
-                type="text"
-                placeholder="Chọn ngày kết thúc"
-                class="form-control"
-                id="appointmentDateEnd"
-                [(ngModel)]="dateEnd"
-                ngbDatepicker
-                #d2="ngbDatepicker"
+            <label for="dateEnd" class="form-label fw-semibold">Đến ngày:</label>
+            <div class="input-group shadow-sm">
+              <input 
+                type="text" 
+                placeholder="Chọn ngày kết thúc" 
+                class="form-control" 
+                id="appointmentDateEnd" 
+                [(ngModel)]="dateEnd" 
+                ngbDatepicker 
+                #d2="ngbDatepicker" 
               />
-              <span class="input-group-text" (click)="d2.toggle()">
+              <span class="input-group-text" style="cursor: pointer;" (click)="d2.toggle()">
                 <i class="fa-solid fa-calendar-days"></i>
               </span>
             </div>
           </div>
-          <div class="col-md-4 d-flex align-items-end">
-            <button
-              class="btn btn-primary w-100 btn-lg hover-effect"
-              (click)="fetchAppointmentData()"
+          <div class="col-md-4">
+            <button 
+              class="btn btn-primary w-100 shadow-sm fw-bold" 
+              (click)="fetchAppointmentData()" 
+              style="padding: 10px 20px;"
             >
               Lọc dữ liệu
             </button>
           </div>
         </div>
-
-        <div *ngIf="isLoading" class="text-center mt-4">
-          <div class="spinner-border text-primary" role="status"></div>
-          <p>Đang tải dữ liệu...</p>
+    
+        <!-- Biểu đồ -->
+        <div class="chart-container mt-5" *ngIf="!isLoading && appointment_emergency_data && appointment_emergency_data?.length !== 0">
+          <canvasjs-chart 
+            [options]="chartOptions" 
+            [styles]="{ width: '100%', height: '400px' }">
+          </canvasjs-chart>
         </div>
-
-        <div class="chart-container mt-4" *ngIf="!isLoading">
-          <canvasjs-chart
-            [options]="chartOptions"
-            [styles]="{ width: '100%', height: '400px' }"
-          ></canvasjs-chart>
-        </div>
+    
+        <!-- Bảng dữ liệu -->
+        <table *ngIf="appointment_emergency_data" class="table table-striped table-hover text-center mt-5 shadow-sm" style="border-collapse: collapse;">
+          <thead>
+            <tr style="background-color: #f1f1f1; border-bottom: 2px solid #d1d1d1;">
+              <th scope="col" class="fw-bold">Ngày</th>
+              <th scope="col" class="fw-bold">Số lượng Lịch hẹn</th>
+              <th scope="col" class="fw-bold">Số lượng Cứu trợ khẩn cấp</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of paginatedData" style="border-bottom: 1px solid #e1e1e1;">
+              <td>{{ data.date | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ data.app_count }}</td>
+              <td>{{ data.emer_count }}</td>
+            </tr>
+          </tbody>
+        </table>
+    
+        <nav *ngIf="appointment_emergency_data" aria-label="Page navigation" class="mt-3">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button 
+                class="page-link" 
+                (click)="changePage(currentPage - 1)" 
+                >
+                Trước
+              </button>
+            </li>
+        
+            <li class="page-item">
+              <span class="page-link" aria-live="polite">{{ currentPage }}/{{totalPages.length}}</span>
+            </li>
+        
+            <li class="page-item" [class.disabled]="currentPage === totalPages.length">
+              <button 
+                class="page-link" 
+                (click)="changePage(currentPage + 1)" 
+              >
+                Sau
+              </button>
+            </li>
+          </ul>
+        </nav>
+        
       </div>
     </div>
+    
 
-    <div *ngIf="selectedTab === 'turnover'" class="card shadow-sm">
+    <div *ngIf="selectedTab === 'turnover'" class="card shadow-sm mb-4">
       <div class="card-body">
-        <h4 class="mb-4">💰 Thống kê Doanh thu</h4>
+        <h4 class="mb-4 text-center fw-bold">Thống kê Doanh thu</h4>
         <div class="row">
           <div class="col-md-4">
             <label for="dateStart" class="form-label">Từ ngày:</label>
             <div class="input-group">
-              <input
-                type="text"
-                placeholder="Chọn ngày bắt đầu"
-                class="form-control"
-                id="turnoverDateStart"
-                [(ngModel)]="dateStart"
-                ngbDatepicker
-                #d3="ngbDatepicker"
-              />
+              <input type="text" placeholder="Chọn ngày bắt đầu" class="form-control" id="turnoverDateStart" [(ngModel)]="dateStart" ngbDatepicker #d3="ngbDatepicker" />
               <span class="input-group-text" (click)="d3.toggle()">
                 <i class="fa-solid fa-calendar-days"></i>
               </span>
@@ -155,44 +203,50 @@
           <div class="col-md-4">
             <label for="dateEnd" class="form-label">Đến ngày:</label>
             <div class="input-group">
-              <input
-                type="text"
-                placeholder="Chọn ngày kết thúc"
-                class="form-control"
-                id="turnoverDateEnd"
-                [(ngModel)]="dateEnd"
-                ngbDatepicker
-                #d4="ngbDatepicker"
-              />
+              <input type="text" placeholder="Chọn ngày kết thúc" class="form-control" id="turnoverDateEnd" [(ngModel)]="dateEnd" ngbDatepicker #d4="ngbDatepicker" />
               <span class="input-group-text" (click)="d4.toggle()">
                 <i class="fa-solid fa-calendar-days"></i>
               </span>
             </div>
           </div>
           <div class="col-md-4 d-flex align-items-end">
-            <button
-              class="btn btn-primary w-100 btn-lg hover-effect"
-              (click)="fetchTurnoverData()"
-            >
-              Lọc dữ liệu
-            </button>
+            <button  style="padding: 10px 20px;"  class="btn btn-primary w-100 shadow-sm fw-bold"  (click)="fetchTurnoverData()">Lọc dữ liệu</button>
           </div>
         </div>
 
-        <div *ngIf="isLoading" class="text-center mt-4">
-          <div class="spinner-border text-primary" role="status"></div>
-          <p>Đang tải dữ liệu...</p>
+        <div class="chart-container mt-4" *ngIf="!isLoading && turnover_data && turnover_data?.length !== 0">
+          <canvasjs-chart [options]="turnoverChartOptions" [styles]="{ width: '100%', height: '400px' }"></canvasjs-chart>
+          <p class="text-center mt-3 fw-bold">Tổng doanh thu: {{ sumTurnOver | number }} VNĐ</p>
         </div>
 
-        <div class="chart-container mt-4" *ngIf="!isLoading">
-          <canvasjs-chart
-            [options]="turnoverChartOptions"
-            [styles]="{ width: '100%', height: '400px' }"
-          ></canvasjs-chart>
-          <p class="text-center mt-3 fw-bold">
-            Tổng doanh thu: {{ sumTurnOver | number }} VNĐ
-          </p>
-        </div>
+        <table *ngIf="turnover_data" class="table table-striped table-hover table-bordered text-center shadow mt-4">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Ngày</th>
+              <th scope="col">Doanh thu (đơn vị VNĐ)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of paginatedTurnoverData">
+              <td>{{ data.date | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ data.total |number }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav aria-label="Page navigation" *ngIf="turnoverTotalPages.length > 1">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="turnoverCurrentPage === 1">
+              <button class="page-link" (click)="changeTurnoverPage(turnoverCurrentPage - 1)">Trước</button>
+            </li>
+            <li class="page-item">
+              <span class="page-link" aria-live="polite">{{ turnoverCurrentPage }}/{{turnoverTotalPages.length}}</span>
+            </li>
+            <li class="page-item" [class.disabled]="turnoverCurrentPage === turnoverTotalPages.length">
+              <button class="page-link" (click)="changeTurnoverPage(turnoverCurrentPage + 1)">Sau</button>
+            </li>
+          </ul>
+        </nav>      
       </div>
     </div>
   </div>

@@ -1,147 +1,110 @@
-<div class="mt-5">
-    <h3 class="fw-bold text-center" style="font-size: 34px;">Lịch Sử Lịch Hẹn</h3>
+<div class="mt-5 page">
+    <h3 class="fw-bold text-center mb-4" style="font-size: 34px;">Lịch sử lịch hẹn</h3>
   
     <div class="row justify-content-center">
-      <!-- Không có lịch hẹn -->
-      <div
-        *ngIf="appointments && appointments.length === 0"
-        class="no-appointments col-12 text-center"
-      >
-        <div class="alert alert-warning p-4 rounded-3 shadow-sm">
-          <h5 class="alert-heading mb-2">Chưa có lịch hẹn</h5>
-          <p class="mb-0 text-muted">
-            Hiện tại không có lịch hẹn nào. Hãy lên kế hoạch ngay hôm nay!
-          </p>
+      <div *ngIf="appointments && appointments.length === 0" class=" text-center col-10 mx-auto">
+        <div class="alert alert-warning shadow">
+          <h5 class="alert-heading ">Chưa có lịch hẹn</h5>
+          <span style="font-size: 13px;" class="text-muted">Hãy lên kế hoạch ngay hôm nay!</span>
         </div>
       </div>
   
-      <!-- Danh sách lịch hẹn -->
-      <div class="col-12 col-md-8" *ngFor="let appointment of appointments">
-        <div class="card appointment-card mb-4 shadow-sm border-0 rounded">
-          <!-- Tiêu đề card -->
-          <div
-            class="card-header bg-dark d-flex justify-content-between align-items-center border-bottom"
-          >
-            <h5 class="mb-0 text-light">
-              <i class="fa-solid fa-calendar-check me-2"></i>
-              {{ appointment.date | date: 'dd/MM/yyyy' }} | {{ appointment.time }}
-            </h5>
-          </div>
+      <div *ngIf="appointments && appointments.length !== 0" class="col-lg-10">
+        <div class="shadow-lg p-4 rounded-3 bg-white">
+          <div class="row g-4">
+            <div class="col-12 col-md-6" *ngFor="let appointment of appointments">
+              <div class="card h-100 shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center rounded-top">
+                  <h5 class="mb-0">
+                    <i class="fa-solid fa-calendar-check me-2"></i>
+                    {{ appointment.dateAndTime | date: 'dd/MM/yyyy HH:mm' }}
+                  </h5>
+                </div>
   
-          <!-- Nội dung card -->
-          <div class="card-body">
-            <div class="appointment-info mb-4">
-              <p><strong>Loại xe:</strong> {{ appointment.vehicleType }}</p>
-              <p><strong>Ghi chú:</strong> {{ appointment.note || 'Không có' }}</p>
-              <p><strong>Shop:</strong> {{ appointment.vehicleCares[0].shop.name }}</p>
-              <p><strong>Địa chỉ:</strong> {{ appointment.vehicleCares[0].shop.address }}</p>
+
+                <div class="card-body py-3">
+                  <div class="appointment-info mb-4">
+                    <p><strong>Loại xe:</strong> {{ appointment.vehicleType }}</p>
+                    <p><strong>Ghi chú:</strong> {{ appointment.note || 'Không có' }}</p>
+                    <p><strong>Cửa hàng:</strong> {{ appointment.vehicleCares[0].shop.name }}</p>
+                    <p><strong>Địa chỉ:</strong> {{ appointment.vehicleCares[0].shop.address }}</p>
   
-              <!-- Danh sách dịch vụ -->
-              <p><strong>Dịch vụ:</strong></p>
-              <ul class="list-group list-group-flush rounded">
-                <li
-                  *ngFor="let item of appointment.vehicleCares"
-                  class="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  <span><i class="fa-solid fa-wrench text-primary me-2"></i>{{ item.name }}</span>
-                  <span class="text-success fw-bold">{{ item.price | number }} VNĐ</span>
-                </li>
-              </ul>
-            </div>
+     
+                    <p><strong>Danh sách dịch vụ:</strong></p>
+                    <table class="table table-bordered table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Tên dịch vụ</th>
+                          <th>Giá (VNĐ)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of appointment.vehicleCares">
+                          <td>{{ item.name }}</td>
+                          <td class="text-success fw-bold">{{ item.price | number:'1.0-0' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
   
-            <!-- Trạng thái -->
-            <div class="status-info d-flex flex-column gap-3">
-              <div>
-                <strong class="me-2">Trạng thái lịch hẹn:</strong>
-                <span
-                  *ngIf="appointment.status === 'PENDING'"
-                  class="badge bg-warning text-dark"
-                  >Chờ xử lý</span
-                >
-                <span
-                  *ngIf="appointment.status === 'PAID'"
-                  class="badge bg-success"
-                  >Đã thanh toán</span
-                >
-                <span
-                  *ngIf="appointment.status === 'ACCEPTED'"
-                  class="badge bg-primary"
-                  >Đã chấp nhận</span
-                >
-                <span
-                  *ngIf="appointment.status === 'DECLINED'"
-                  class="badge bg-danger"
-                  >Từ chối</span
-                >
-                <span
-                  *ngIf="appointment.status === 'CANCELED'"
-                  class="badge bg-secondary"
-                  >Đã hủy</span
-                >
-                <span
-                  *ngIf="appointment.status === 'FINISHED'"
-                  class="badge bg-info"
-                  >Hoàn tất</span
-                >
+    
+                  <div class="status-info d-flex flex-column gap-2">
+                    <div>
+                      <strong class="me-2">Trạng thái lịch hẹn:</strong>
+                      <span *ngIf="appointment.status === 'PENDING'" class="badge bg-warning text-dark">Chờ xử lý</span>
+                      <span *ngIf="appointment.status === 'PAID'" class="badge bg-success">Đã thanh toán</span>
+                      <span *ngIf="appointment.status === 'ACCEPTED'" class="badge bg-info">Đã chấp nhận</span>
+                      <span *ngIf="appointment.status === 'DECLINED'" class="badge bg-danger">Từ chối</span>
+                      <span *ngIf="appointment.status === 'CANCELED'" class="badge bg-secondary">Đã hủy</span>
+                      <span *ngIf="appointment.status === 'FINISHED'" class="badge bg-primary">Hoàn tất</span>
+                    </div>
+                    <div *ngIf="appointment.status !== 'CANCELED'">
+                      <strong class="me-2">Trạng thái thanh toán:</strong>
+                      <span *ngIf="appointment.paymentStatus === ''" class="badge bg-warning text-dark">Chưa thanh toán</span>
+                      <span *ngIf="appointment.paymentStatus === 'CANCELED'" class="badge bg-danger">Đã hủy</span>
+                      <span *ngIf="appointment.paymentStatus === 'FINISHED'" class="badge bg-success">Đã thanh toán</span>
+                    </div>
+                  </div>
+                </div>
+  
+  
+                <div class="card-footer bg-light border-top d-flex gap-2 justify-content-end rounded-bottom">
+                  <button
+                    (click)="navToPayment(appointment.id)"
+                    *ngIf="
+                      appointment.status === 'ACCEPTED' &&
+                      appointment.paymentStatus !== 'FINISHED' &&
+                      appointment.paymentStatus !== 'CANCELED'
+                    "
+                    class="btn btn-primary shadow-sm"
+                  >
+                    Thanh toán
+                  </button>
+  
+                  <button
+                    class="btn btn-danger shadow-sm"
+                    *ngIf="appointment.status === 'PENDING'"
+                    (click)="cancel(appointment.id)"
+                  >
+                    Hủy
+                  </button>
+  
+                  <button
+                    class="btn btn-outline-danger shadow-sm"
+                    *ngIf="appointment.status === 'FINISHED' && !appointment.review"
+                    (click)="openReviewForm(appointment.id)"
+                  >
+                    Đánh giá
+                  </button>
+                  <button
+                    class="btn btn-outline-dark shadow-sm"
+                    *ngIf="appointment.review"
+                    (click)="openReviewDetail(appointment.review)"
+                  >
+                    Xem đánh giá
+                  </button>
+                </div>
               </div>
-              <div *ngIf="appointment.status !== 'CANCELED'">
-                <strong class="me-2">Trạng thái thanh toán:</strong>
-                <span
-                  *ngIf="appointment.paymentStatus === ''"
-                  class="badge bg-warning text-dark"
-                  >Chưa thanh toán</span
-                >
-                <span
-                  *ngIf="appointment.paymentStatus === 'CANCELED'"
-                  class="badge bg-danger"
-                  >Đã hủy</span
-                >
-                <span
-                  *ngIf="appointment.paymentStatus === 'FINISHED'"
-                  class="badge bg-success"
-                  >Đã thanh toán</span
-                >
-              </div>
-            </div>
-          </div>
-  
-          <!-- Footer card -->
-          <div class="card-footer bg-light border-top">
-            <div class="d-flex gap-2">
-              <button
-                (click)="navToPayment(appointment.id)"
-                *ngIf="
-                  appointment.status === 'ACCEPTED' &&
-                  appointment.paymentStatus !== 'FINISHED' &&
-                  appointment.paymentStatus !== 'CANCELED'
-                "
-                class="btn btn-primary"
-              >
-                Thanh toán
-              </button>
-  
-              <button
-                class="btn btn-danger"
-                *ngIf="appointment.status === 'PENDING'"
-                (click)="cancel(appointment.id)"
-              >
-                Hủy
-              </button>
-  
-              <button
-                class="btn btn-outline-danger"
-                *ngIf="appointment.status === 'FINISHED' && !appointment.review"
-                (click)="openReviewForm(appointment.id)"
-              >
-                Đánh giá
-              </button>
-              <button
-                class="btn btn-outline-dark"
-                *ngIf="appointment.review"
-                (click)="openReviewDetail(appointment.review)"
-              >
-                Xem đánh giá
-              </button>
             </div>
           </div>
         </div>

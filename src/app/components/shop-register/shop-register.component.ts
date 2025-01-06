@@ -18,6 +18,8 @@ declare var GoongGeocoder: any;
 export class ShopRegisterComponent implements OnInit {
   address: any;
   addressOptions: any[] = [];
+  coverPreview: string | ArrayBuffer | null = null;
+  cover: any;
   shopForm: any;
   constructor(
     private cdr: ChangeDetectorRef,
@@ -47,6 +49,18 @@ onChange(e: any){
   })
 }
 
+onCoverChange(event: any): void {
+  const file = event.target.files[0];
+  this.cover = file;
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.coverPreview = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
   onSearch(input: any) {
     this.othersService.autocomplete(input.term).subscribe({
       next: (data: any) => {
@@ -66,7 +80,7 @@ onChange(e: any){
   submit(){
     const token = localStorage.getItem("token");
     console.log(this.shopForm.value)
-    this.shopService.createShop(this.shopForm.value).subscribe({
+    this.shopService.createShop(this.shopForm.value, this.cover).subscribe({
       next: (res) =>{
         console.log('Dữ liệu trả về:', res);
         this.toastr.success("Đăng kí thành công!")

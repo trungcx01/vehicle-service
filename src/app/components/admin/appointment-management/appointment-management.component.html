@@ -1,77 +1,91 @@
-<div class="container mt-5 ms-5 col-11">
-  <h2 class="text-center mb-4">Danh sách Lịch Hẹn</h2>
+<div class="container mt-5">
+  <!-- Tiêu đề -->
+  <h2 class="text-center mb-4 fw-bold">Quản lý Lịch Hẹn</h2>
 
-  <!-- <div class="d-flex justify-content-between mb-3">
-      <button class="btn btn-primary" (click)="openAppointmentModal()">Thêm Lịch Hẹn</button>
-      <input type="text" class="form-control w-25" placeholder="Tìm kiếm..." [(ngModel)]="searchTerm">
-    </div> -->
+  <div class="mb-4 d-flex justify-content-end">
+    <div class="col-lg-4 col-sm-12">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm kiếm..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
+    </div>
+  </div>
 
-  <table class="table table-hover table-bordered text-center">
-    <thead class="table-light">
-      <tr>
-        <th>ID</th>
-        <th>Ghi Chú</th>
-        <th>Thời Gian</th>
-        <th>Loại Xe</th>
-        <th style="width: 150px">Dịch Vụ</th>
-        <th>Khách Hàng</th>
-        <th>Trạng Thái</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of appointments">
-        <td class="text-center fw-bold">{{ item.id }}</td>
-        <td>{{ item.note || "Không có ghi chú" }}</td>
-        <td>
-          {{ item.date | date : "dd/MM/yyyy" }}<br />
-          {{ item.time }}
-        </td>
-        <td>{{ item.vehicleType }}</td>
-        <td>
-          <ul class="list-unstyled mb-0">
-            <li
-              *ngFor="let v of item.vehicleCares"
-              class="d-flex align-items-center"
+  <!-- Bảng lịch hẹn -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Ghi Chú</th>
+          <th>Thời Gian</th>
+          <th>Loại Xe</th>
+          <th>Dịch Vụ</th>
+          <th>Khách Hàng</th>
+          <th>Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of appointments">
+          <td>{{ item.id }}</td>
+          <td>{{ item.note || "Không có ghi chú" }}</td>
+          <td>
+            {{ item.dateAndTime | date : "dd/MM/yyyy HH:mm:ss" }} <br />
+          </td>
+          <td>{{ item.vehicleType }}</td>
+          <td>
+            <div
+              class="d-grid gap-2"
+              style="grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));"
             >
-              <span class="text-success fw-bold me-2">•</span>
-              <span>{{ v.name }}</span>
-            </li>
-          </ul>
-        </td>
-        <td class="text-center fw-semibold">{{ item.customer.name }}</td>
-        <td class="text-center">
-          <div class="justify-content-center align-items-center">
-            <span *ngIf="item.status === 'ACCEPTED'" class="badge bg-success"
-              >Đã Chấp Nhận</span
+              <div
+                *ngFor="let v of item.vehicleCares"
+                class="p-2 rounded shadow-sm border text-center"
+                style="background-color: #f8f9fa; font-size: 14px"
+              >
+                <div class="fw-bold text-truncate" title="{{ v.name }}">{{ v.name }}</div>
+                <div class="text-success fw-bold">{{ v.price | number:'1.0-0' }} VNĐ</div>
+              </div>
+            </div>
+          </td>
+          <td>{{ item.customer.name }}</td>
+          <td>
+            <span
+              *ngIf="item.status === 'ACCEPTED'"
+              class="badge bg-success"
+              >ACCEPTED</span
             >
             <span
               *ngIf="item.status === 'PENDING'"
               class="badge bg-warning text-dark"
-              >Đang Xử Lý</span
+              >PENDING</span
             >
             <span *ngIf="item.status === 'CANCELED'" class="badge bg-danger"
-              >Đã Hủy</span
+              >CANCELED</span
             >
-            <span *ngIf="item.status === 'FINISHED'" class="badge bg-info"
-              >Hoàn Thành</span
+            <span *ngIf="item.status === 'FINISHED'" class="badge bg-info text-light"
+              >FINISHED</span
             >
-          </div>
-          <div *ngIf="item.status !== 'CANCELED' && item.status !== 'FINISHED'">
-            <span
-              *ngIf="item.paymentStatus === 'FINISHED'"
-              class="badge bg-primary"
-              >Đã Thanh Toán</span
-            >
-            <span
-              *ngIf="item.paymentStatus !== 'FINISHED'"
-              class="badge bg-secondary"
-              >Chưa Thanh Toán</span
-            >
-          </div>
-        </td>
-     
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <nav>
+    <ul class="pagination justify-content-center mt-3">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="previousPage()">Trước</button>
+      </li>
+      <li class="page-item disabled">
+        <span class="page-link">Trang {{ currentPage }} / {{ totalPages }}</span>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <button class="page-link" (click)="nextPage()">Sau</button>
+      </li>
+    </ul>
+  </nav>
 </div>

@@ -9,3 +9,20 @@ input{
 .form-control{
   padding: 12px;
 }
+
+::ng-deep ng-select {
+  width: 100% !important; /* Đảm bảo chiếm toàn bộ chiều rộng container */
+}
+
+::ng-deep ng-select .ng-select-container {
+  padding: 1.5rem 0 1.3rem !important; /* Tăng padding trên và hai bên */
+  border-radius: 0.25rem; /* Bo góc đồng bộ với Bootstrap */
+  border: 1px solid #ced4da; /* Đường viền nhẹ */
+  height: calc(1.5em + 0.75rem + 2px); /* Đảm bảo chiều cao khớp với form-control */
+  font-size: 16px !important;
+}
+
+::ng-deep ng-select[disabled] .ng-select-container {
+  background-color: #3a3a3a !important;
+}
+

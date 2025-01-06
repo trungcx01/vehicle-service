@@ -10,6 +10,7 @@ import { ReviewService } from '../../services/review.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomerService } from '../../services/customer.service';
+import { VehicleCareService } from '../../services/vehicle-care.service';
 
 declare var goongjs: any;
 declare var GoongGeocoder: any;
@@ -22,7 +23,7 @@ declare var GoongGeocoder: any;
 })
 export class ShopDetailComponent implements OnInit {
   shop: any;
-  reviews: any;
+  reviews: any[] = [];
  
   shopLat: number | undefined;
   shopLng: number | undefined;
@@ -36,64 +37,78 @@ export class ShopDetailComponent implements OnInit {
   image: any;
   color: any;
   customer: any;
+  vehicleCares: any[] = []
+
+  averageRating: number = 0;
+  totalReviews: number = 0;
+  ratingCounts: { [key: number]: number } = {};
+
+
   constructor(private othersService: OthersService ,private activatedRoute: ActivatedRoute,
     private shopService: ShopService, private cdr: ChangeDetectorRef, private modalService: NgbModal,
     private reviewService: ReviewService,
     private toastr: ToastrService,
     private fb: FormBuilder,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private vehicleCareService: VehicleCareService
   ) {
-    // this.reviewForm = this.fb.group({
-    //   id: [''],
-    //   description: [''],
-    //   rate: ['', Validators.required],
-    //   shopId: ['', Validators.required],
-    //   customerId: ['', Validators.required]
-    // })
   }
 
-  // reviews = [
-  //   {
-  //     name: 'Nguyễn Văn A',
-  //     rating: 5,
-  //     content: 'Dịch vụ rất tuyệt vời, nhân viên thân thiện và chuyên nghiệp.',
-  //     date: new Date('2023-12-03'),
-  //     imageUrl: ''
-  //   },
-  //   {
-  //     name: 'Trần Thị B',
-  //     rating: 4,
-  //     content: 'Dịch vụ tốt, tuy nhiên thời gian hoàn thành có thể nhanh hơn.',
-  //     date: new Date('2023-12-01'),
-  //     imageUrl: ''
-  //   },
-  //   {
-  //     name: 'Lê Minh C',
-  //     rating: 5,
-  //     content: 'Tôi rất hài lòng với dịch vụ ở đây. Nhân viên rất nhiệt tình và chuyên môn cao.',
-  //     date: new Date('2023-11-30'),
-  //     imageUrl: ''
-  //   },
-  //   {
-  //     name: 'Phan Quang D',
-  //     rating: 3,
-  //     content: 'Dịch vụ không tồi, nhưng có thể cải thiện về thái độ phục vụ.',
-  //     date: new Date('2023-11-28'),
-  //     imageUrl: ''
-  //   },
-  // ];
+  calculateRatings(): void {
+    if (this.reviews && this.reviews.length > 0) {
+      this.totalReviews = this.reviews.length;
+      this.averageRating =
+        this.reviews.reduce((sum, review) => sum + review.rate, 0) /
+        this.totalReviews;
 
-  // Biến lưu thông tin đánh giá mới
-  newReview = {
-    name: '',
-    rating: 5,
-    content: '',
-  };
+      this.ratingCounts = this.reviews.reduce((counts, review) => {
+        counts[review.rate] = (counts[review.rate] || 0) + 1;
+        return counts;
+      }, {});
+    }
+  }
 
+  getStarPercentage(star: number): number {
+    return this.ratingCounts[star]
+      ? (this.ratingCounts[star] / this.totalReviews) * 100
+      : 0;
+  }
+
+  getReviewerAvatar(review: any): string {
+    return review.serviceType === 'APPOINTMENT'
+      ? review.baseService.customer.user.imageUrl
+      : review.baseService.emergencyRequest.customer.user.imageUrl;
+  }
+
+  getReviewerName(review: any): string {
+    return review.serviceType === 'APPOINTMENT'
+      ? review.baseService.customer.name
+      : review.baseService.emergencyRequest.customer.name;
+  }
+
+
+  async getAllVehicleCareOfShop(id: number) : Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.vehicleCareService.getByShop(id).subscribe({
+        next: (response) => {
+         resolve(response)
+        },
+        error: (err) =>{
+        reject(err);
+          console.log(err);
+        }
+      })
+    })
+  }
+  
+  getRatingStars(averageRating: number): string {
+    const fullStars = Math.round(averageRating); // Số sao đầy
+    const emptyStars = 5 - fullStars; // Số sao rỗng
+    return '★'.repeat(fullStars) + '☆'.repeat(emptyStars);
+  }
   
   
   async ngOnInit(){
-  
     goongjs.accessToken = environment.mapKey;
     this.map = new goongjs.Map({
       container: 'map',
@@ -101,12 +116,14 @@ export class ShopDetailComponent implements OnInit {
       style: 'https://tiles.goong.io/assets/goong_map_web.json',
     });
     this.getCurrentLocation();
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(async params => {
       const id = params['id'];
+      this.vehicleCares = await this.getAllVehicleCareOfShop(id);
       this.shopService.getById(id).subscribe({
         next: async (res) => {
           this.shop = res;
           this.reviews = await this.getAllReviewsOfShop(res.id);
+          this.calculateRatings();
           this.cdr.detectChanges();
           console.log('oi', this.shop.address);
           this.convertToLatLng(this.shop.address);

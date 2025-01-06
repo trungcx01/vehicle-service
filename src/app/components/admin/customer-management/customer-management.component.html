@@ -1,8 +1,21 @@
-<!-- customer-management.component.html -->
-<div class="container mt-5 ms-5 col-11">
-    <h1 class="mb-4">Customer Management</h1>
-  
-    <table class="table table-bordered">
+<div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bold">Quản lý Khách hàng</h2>
+
+  <div class="mb-4 d-flex justify-content-end">
+    <div class="col-lg-4 col-sm-12">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm kiếm..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
+    </div>
+  </div>
+
+  <!-- Bảng lịch hẹn -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
       <thead class="table-light">
         <tr>
           <th>#</th>
@@ -20,13 +33,15 @@
           <td>{{ customer.name }}</td>
           <td>{{ customer.phoneNumber }}</td>
           <td>{{ customer.address }}</td>
-          <td>{{ customer.dob | date: 'dd/MM/yyyy'}}</td>
+          <td>{{ customer.dob | date : "dd/MM/yyyy" }}</td>
           <td>
             <span
               class="badge"
-              [ngClass]="customer.user.locked === true? 'bg-secondary' : 'bg-success'"
+              [ngClass]="
+                customer.user.locked === true ? 'bg-secondary' : 'bg-success'
+              "
             >
-              {{ customer.user.locked === true? 'Inactive' : 'Active' }}
+              {{ customer.user.locked === true ? "Inactive" : "Active" }}
             </span>
           </td>
           <td>
@@ -34,7 +49,11 @@
               class="btn btn-sm btn-warning me-2"
               (click)="updateStatus(customer.user.id, customer.user.locked)"
             >
-              {{ customer.user.locked === true? 'Mở khóa tài khoản' : 'Khóa tài khoản' }}
+              {{
+                customer.user.locked === true
+                  ? "Mở khóa tài khoản"
+                  : "Khóa tài khoản"
+              }}
             </button>
             <button
               class="btn btn-sm btn-danger"
@@ -46,5 +65,21 @@
         </tr>
       </tbody>
     </table>
+
+    <nav>
+      <ul class="pagination justify-content-center mt-4">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="previousPage()">Trước</button>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link"
+            >Trang {{ currentPage }} / {{ totalPages }}</span
+          >
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="nextPage()">Sau</button>
+        </li>
+      </ul>
+    </nav>
   </div>
-  
+</div>

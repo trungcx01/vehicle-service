@@ -29,6 +29,7 @@ export class EmergencyRequestCustomerComponent implements OnInit{
                 return p.status === 'ACCEPTED'
               })[0].id;
               const review = await this.getReviewOfProposal(proposalId);
+              console.log(res);
               return {
                 ...res,
                 review: review

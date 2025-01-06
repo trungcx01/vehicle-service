@@ -130,6 +130,12 @@ const routes: Routes = [
     canActivate: [roleGuard], 
     data: { roles: ['CUSTOMER'] } 
   },
+  { 
+    path: 'vehicle-care-list', 
+    component: ShopListComponent, 
+    canActivate: [roleGuard], 
+    data: { roles: ['CUSTOMER'] } 
+  },
 
   // Các đường dẫn dành cho SHOP
   {
@@ -185,7 +191,7 @@ const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: ['SHOP'] }
       },
-      { path: 'unauthorized', component: UnauthorizedComponent },
+    
     ]
   },
 
@@ -197,10 +203,9 @@ const routes: Routes = [
     children: [
       {
         path: '', 
-        redirectTo: 'dashboard', 
+        redirectTo: 'customer-management', 
         pathMatch: 'full'
       },
-      { path: 'dashboard', component: DashboardComponent },
       { path: 'unauthorized', component: UnauthorizedComponent },
       { 
         path: 'customer-management', 

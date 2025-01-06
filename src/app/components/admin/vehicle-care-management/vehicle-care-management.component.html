@@ -1,47 +1,91 @@
-<section class="vehicle-care-management py-5 ms-5 mt-5 col-11">
+<section class="vehicle-care-management mt-5 col-12">
     <div class="container">
-      <h2 class="text-center mb-4">Quản Lý Dịch Vụ VehicleCare</h2>
-<!--   
-      Add vehicleCare Button
-      <div class="text-end mb-4">
-        <button class="btn btn-primary" (click)="openAddvehicleCareModal()">Thêm Dịch Vụ</button>
-      </div> -->
-  
-      <!-- Vehicle Care Table -->
-      <table class="table table-bordered">
-        <thead class="table-light">
-          <tr>
-            <th>#</th>
-            <th>Tên Dịch Vụ</th>
-            <th>Mô Tả</th>
-            <th>Giá</th>
-            <th>Thời Gian Ước Tính</th>
-            <th>Trạng Thái</th>
-            <th>Hình Ảnh</th>
-            <th>Hành Động</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let vehicleCare of vehicleCares; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ vehicleCare.name }}</td>
-            <td>{{ vehicleCare.description }}</td>
-            <td>{{ vehicleCare.price | currency:'VND' }}</td>
-            <td>{{ vehicleCare.estimatedDuration }}</td>
-            <td>
-              <span [class]="vehicleCare.available ? 'text-success' : 'text-danger'">
-                {{ vehicleCare.available ? 'Có Sẵn' : 'Không Có Sẵn' }}
-              </span>
-            </td>
-            <td>
-              <img [src]="vehicleCare.imageUrl" alt="vehicleCare Image" class="img-fluid" width="100">
-            </td>
-            <td>
-              <button class="btn btn-danger" (click)="delete(vehicleCare.id)">Xóa</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <h2 class="text-center mb-4 fw-bold">Quản lý Hạng mục Chăm sóc xe</h2>
+      <div class="mb-4 d-flex justify-content-end">
+        <div class="col-lg-4 col-sm-12">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tìm kiếm..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+          />
+        </div>
+      </div>
+    
+      <!-- Bảng lịch hẹn -->
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Trạng Thái</th>
+              <th>Tên Dịch Vụ</th>
+              <th>Giá</th>
+              <th>Thời Gian Ước Tính</th>
+              <th>Hình Ảnh</th>
+              <th>Mô Tả</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let item of vehicleCares; let i = index" class="align-middle">
+            <tr>
+              <td class="text-center fw-bold">{{ item.id }}</td>
+              <td class="text-center">
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': item.available,
+                    'bg-secondary': !item.available
+                  }"
+                >
+                  {{ item.available ? 'Available' : 'Unavailable' }}
+                </span>
+              </td>
+              <td>{{ item.name }}</td>
+              <td class="text-end">{{ item.price | number }} VNĐ</td>
+              <td class="text-center">{{ item.estimatedDuration }} phút</td>
+              <td>
+                <img
+                  [src]="item.imageUrl"
+                  alt="Dịch vụ"
+                  (click)="openImageModal(item.imageUrl)"
+                  class="img-thumbnail rounded shadow-sm"
+                  width="80"
+                  height="80"
+                />
+              </td>
+              <td class="text-truncate" style="max-width: 200px;" title="{{ item.description }}">
+                {{ item.description }}
+              </td>
+              <td class="text-center">
+                <div class="btn-group">
+                  <button (click)="delete(item.id)" class="btn btn-danger btn-sm">
+                    <i class="fa fa-trash me-1"></i> Xóa
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav>
+          <ul class="pagination justify-content-center mt-4">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button class="page-link" (click)="previousPage()">Trước</button>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link"
+                >Trang {{ currentPage }} / {{ totalPages }}</span
+              >
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button class="page-link" (click)="nextPage()">Sau</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      </div>
+
   </section>
   

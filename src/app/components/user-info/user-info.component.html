@@ -1,29 +1,37 @@
 <div class="container mt-5 mb-5">
   <div class="row justify-content-center">
     <div class="col-lg-10 col-md-12 col-sm-12">
+      <!-- Header -->
+      <div *ngIf="role === 'SHOP'" class="card bg-primary text-white shadow-sm mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <h3 class="h4 mb-0">Tài khoản của tôi</h3>
+        </div>
+      </div>
 
-      <!-- Tabs -->
-      <ul class="nav nav-tabs mb-4" id="accountTabs" role="tablist">
+      <!-- Tab Navigation -->
+      <ul class="nav nav-tabs justify-content-center mb-4 border-0">
         <li class="nav-item">
           <a
-            class="nav-link active"
+            class="nav-link px-4 py-2 text-secondary border-0 rounded-pill active"
             id="accountInfoTab"
             data-bs-toggle="tab"
             href="#accountInfo"
             role="tab"
             aria-controls="accountInfo"
+            style="transition: all 0.3s; font-weight: 500; cursor: pointer"
             aria-selected="true">
             Thông tin tài khoản
           </a>
         </li>
         <li class="nav-item">
           <a
-            class="nav-link"
+            class="nav-link px-4 py-2 text-secondary border-0 rounded-pill"
             id="changePasswordTab"
             data-bs-toggle="tab"
             href="#changePassword"
             role="tab"
             aria-controls="changePassword"
+            style="transition: all 0.3s; font-weight: 500; cursor: pointer"
             aria-selected="false">
             Đổi mật khẩu
           </a>
@@ -34,197 +42,144 @@
       <div class="tab-content bg-light p-4 rounded shadow-sm" id="accountTabsContent">
 
         <!-- Thông tin tài khoản -->
-        <div
-          class="tab-pane fade show active"
-          id="accountInfo"
-          role="tabpanel"
-          aria-labelledby="accountInfoTab">
+        <div class="tab-pane fade show active" id="accountInfo" role="tabpanel" aria-labelledby="accountInfoTab">
           <h4 class="mb-4 text-center">Thông tin tài khoản</h4>
 
-          <!-- CUSTOMER Form -->
+          <!-- Customer Form -->
           <form *ngIf="role === 'CUSTOMER'" [formGroup]="customerInfoForm">
             <div class="text-center mb-4">
               <label for="avatar">
                 <img
                   [src]="previewImage"
                   class="rounded-circle img-thumbnail shadow-sm"
-                  style="width: 120px; height: 120px; cursor: pointer;"
+                  style="width: 120px; height: 120px; cursor: pointer; border: 3px solid #fff;"
                   alt="Avatar" />
               </label>
               <input type="file" id="avatar" name="avatar" (change)="onFileSelected($event)" hidden [disabled]="edit" />
               <p class="text-muted">Nhấp để thay đổi ảnh đại diện</p>
             </div>
+
+            <!-- Form Fields -->
             <div class="mb-3">
               <label for="username" class="form-label">Tên đăng nhập</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                [value]="username"
-                disabled />
+              <input type="text" class="form-control" id="username" [value]="username" disabled />
             </div>
             <div class="mb-3">
               <label for="name" class="form-label">Họ và tên</label>
-              <input
-              [disabled]="edit"
-                type="text"
-                class="form-control"
-                id="name"
-                formControlName="name" />
+              <input [disabled]="edit" type="text" class="form-control" id="name" formControlName="name" />
             </div>
-            <div class="mb-3">
-              <label for="address" class="form-label">Địa chỉ</label>
-              <input
-              [disabled]="edit"
-                type="text"
-                class="form-control"
-                id="address"
-                formControlName="address" />
+
+            <div class="form-group mb-3">
+              <label class="form-control-label" for="field_address">Địa chỉ</label>
+             <ng-select
+             formControlName="address"
+              id="field_address"
+              style="font-family: roboto"
+              [items]="addressOptions" bindLabel="description"  bindValue="description"  (change)="onChange($event)"
+              (search)="onSearch($event)" 
+              [searchable]="true"></ng-select>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="phoneNumber" class="form-label">Số điện thoại</label>
-                <input
-                [disabled]="edit"
-                  type="text"
-                  class="form-control"
-                  id="phoneNumber"
-                  formControlName="phoneNumber" />
+                <input [disabled]="edit" type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber" />
               </div>
               <div class="col-md-6 mb-3">
                 <label for="dob" class="form-label">Ngày sinh</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="dob"
-                  formControlName="dob"
-                   />
+                <input type="date" class="form-control" id="dob" formControlName="dob" />
               </div>
             </div>
+
+            <!-- Action Buttons -->
             <div class="mt-3 row gap-3 justify-content-start">
               <button (click)="modify()" [disabled]="!edit" class="btn btn-danger col-1">Sửa</button>
               <button (click)="saveInfo()" class="btn btn-primary col-2">Lưu thông tin</button>
             </div>
           </form>
 
-          <!-- SHOP Form -->
+          <!-- Shop Form -->
           <form *ngIf="role === 'SHOP'" [formGroup]="shopInfoForm">
-            <div class="text-center mb-4">
-              <label for="avatar">
-                <img
+            <div class="text-center mb-5 position-relative">
+              <label for="coverImageInput" class="w-100 position-relative" style="cursor: pointer;">
+                <div *ngIf="coverImage" 
+                     [ngStyle]="{'background-image': 'url(' + coverImage + ')'}" 
+                     class="cover-image mb-3" 
+                     style="height: 250px; background-size: cover; background-position: center; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                </div>
+                <input [disabled]="edit" type="file" id="coverImageInput" name="coverImage" (change)="onCoverImageSelected($event)" hidden />
+              </label>
+            
+              <!-- Avatar Section -->
+              <label for="avatar" class="position-absolute" style="top: 170px; left: 50%; transform: translateX(-50%);">
+                <img 
                   [src]="previewImage"
-                  class="rounded-circle img-thumbnail shadow-sm"
-                  style="width: 120px; height: 120px; cursor: pointer;"
+                  class="rounded-circle img-thumbnail shadow-sm border border-light" 
+                  style="width: 120px; height: 120px; cursor: pointer; border: 5px solid white;" 
                   alt="Avatar" />
               </label>
-              <input type="file" id="avatar" name="avatar" (change)="onFileSelected($event)" hidden [disabled]="edit"/>
-              <p class="text-muted">Nhấp để thay đổi ảnh đại diện</p>
+              <input type="file" id="avatar" name="avatar" (change)="onFileSelected($event)" hidden [disabled]="edit" />
             </div>
 
+            <!-- Form Fields -->
             <div class="mb-3">
               <label for="username" class="form-label">Tên đăng nhập</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                [value]="username"
-                disabled />
+              <input type="text" class="form-control" id="username" [value]="username" disabled />
             </div>
             <div class="mb-3">
               <label for="name" class="form-label">Họ và tên</label>
-              <input
-              [disabled]="edit"
-                type="text"
-                class="form-control"
-                id="name"
-                name="name"
-                formControlName="name" />
+              <input [disabled]="edit" type="text" class="form-control" id="name" name="name" formControlName="name" />
             </div>
-            <div class="mb-3">
-              <label for="address" class="form-label">Địa chỉ</label>
-              <input
-              [disabled]="edit"
-                type="text"
-                class="form-control"
-                id="address"
-                name="address"
-                formControlName="address" />
+            <div class="form-group mb-3">
+              <label class="form-control-label" for="field_address">Địa chỉ</label>
+             <ng-select
+             formControlName="address"
+              id="field_address"
+              style="font-family: roboto"
+              [items]="addressOptions" bindLabel="description"  bindValue="description"  (change)="onChange($event)"
+              (search)="onSearch($event)" 
+              [searchable]="true"></ng-select>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="openingTime" class="form-label">Thời gian mở cửa</label>
-                <input
-                [disabled]="edit"
-                  formControlName="openHour"
-                  class="form-control"
-                  [ngxTimepicker]="timePicker1"
-                  [format]="24"
-                  name="openingTime"
-                  readonly />
+                <input [disabled]="edit" formControlName="openHour" class="form-control" [ngxTimepicker]="timePicker1" [format]="24" name="openHour" readonly />
                 <ngx-material-timepicker #timePicker1></ngx-material-timepicker>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="closingTime" class="form-label">Thời gian đóng cửa</label>
-                <input
-                [disabled]="edit"
-                  formControlName="closeHour"
-                  class="form-control"
-                  [ngxTimepicker]="timePicker2"
-                  [format]="24"
-                  name="closingTime"
-                  readonly />
+                <input [disabled]="edit" formControlName="closeHour" class="form-control" [ngxTimepicker]="timePicker2" [format]="24" name="closeHour" readonly />
                 <ngx-material-timepicker #timePicker2></ngx-material-timepicker>
               </div>
 
               <div class="mb-3">
                 <label for="description" class="form-label">Mô tả</label>
-                <input
-                [disabled]="edit"
-                  type="text"
-                  class="form-control"
-                  id="description"
-                  name="description"
-                  formControlName="description" />
+                <input [disabled]="edit" type="text" class="form-control" id="description" name="description" formControlName="description" />
               </div>
             </div>
+
+            <!-- Action Buttons -->
             <div class="mt-3 row gap-3 justify-content-start">
               <button (click)="modify()" [disabled]="!edit" class="btn btn-danger col-1">Sửa</button>
-              <button (click)="saveInfo()" class="btn btn-primary col-2">Lưu thông tin</button>
+              <button (click)="saveInfo()" [disabled]="edit" class="btn btn-primary col-2">Lưu thông tin</button>
             </div>
           </form>
         </div>
 
-        <!-- Đổi mật khẩu -->
-        <div
-          class="tab-pane fade"
-          id="changePassword"
-          role="tabpanel"
-          aria-labelledby="changePasswordTab">
+        <!-- Change Password -->
+        <div class="tab-pane fade" id="changePassword" role="tabpanel" aria-labelledby="changePasswordTab">
           <h4 class="mb-4 text-center">Đổi mật khẩu</h4>
           <form [formGroup]="changePasswordForm">
             <div class="mb-3">
               <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
-              <input
-                type="password"
-                class="form-control"
-                id="oldPassword"
-                formControlName="oldPassword" />
+              <input type="password" class="form-control" id="oldPassword" formControlName="oldPassword" />
             </div>
             <div class="mb-3">
               <label for="newPassword" class="form-label">Mật khẩu mới</label>
-              <input
-                type="password"
-                class="form-control"
-                id="newPassword"
-                formControlName="newPassword" />
+              <input type="password" class="form-control" id="newPassword" formControlName="newPassword" />
             </div>
             <div class="mb-3">
               <label for="confirmPassword" class="form-label">Nhập lại mật khẩu mới</label>
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                formControlName="confirmPassword" />
+              <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" />
             </div>
             <button (click)="changePassword()" type="submit" class="btn btn-success w-100">Đổi mật khẩu</button>
           </form>

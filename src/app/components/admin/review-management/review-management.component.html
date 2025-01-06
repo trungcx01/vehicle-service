@@ -1,56 +1,97 @@
-<div class="container mt-5 ms-5 col-11">
-  <h2 class="text-center mb-4">Quản Lý Đánh Giá</h2>
+<div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bold">Quản lý Đánh giá</h2>
 
-  <div class="d-flex justify-content-between mb-3">
-    <!-- <button class="btn btn-primary" (click)="openReviewModal()">
-      Thêm Đánh Giá
-    </button> -->
-    <!-- <input
-      type="text"
-      class="form-control w-25"
-      placeholder="Tìm kiếm..."
-      [(ngModel)]="searchTerm"
-    /> -->
+  <div class="mb-4 d-flex justify-content-end">
+    <div class="col-lg-4 col-sm-12">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Tìm kiếm..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
+    </div>
   </div>
 
-  <table class="table table-hover table-bordered table-responsive">
-    <thead class="table-dark">
-      <tr>
-        <th>#</th>
-        <th>Mô Tả</th>
-        <th>Điểm Đánh Giá</th>
-        <th>Loại Dịch Vụ</th>
-        <th>Hình Ảnh</th>
-        <th>Khách Hàng</th>
-        <th>Thao Tác</th>
+  <!-- Bảng lịch hẹn -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Khách Hàng</th>
+          <th>Nội dung</th>
+          <th>Ảnh</th>
+          <th>Loại Dịch Vụ</th>
+          <th>Thông tin Dịch Vụ</th>
+          <th>Đánh Giá</th>
+          <th>Hành Động</th>
       </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let review of reviews; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ review.description || "Không có mô tả" }}</td>
-        <td>{{ review.rate }}/5</td>
-        <td>{{ review.serviceType }}</td>
-        <td>
-          <img
-            *ngIf="review.imageUrl"
-            [src]="review.imageUrl"
-            alt="Hình Ảnh"
-            class="img-thumbnail"
-            style="width: 100px"
-          />
-          <span *ngIf="!review.imageUrl">Không có hình ảnh</span>
-        </td>
-        <td>{{ review.customer.name }}</td>
-        <td>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="delete(review.id)"
-          >
-            Xóa
-          </button>
-        </td>
+  </thead>
+  <tbody>
+      <tr *ngFor="let review of reviews" class="text-center">
+          <td class="fw-bold">{{ review.id }}</td>
+          <td class="text-left">{{ review.serviceType === 'APPOINTMENT' ? review.baseService.customer.name : review.baseService.emergencyRequest.customer.name }}</td>
+          <td class="text-left">{{ review.description || "Không có ghi chú" }}</td>
+          <td>
+              <div class="d-flex justify-content-center">
+                  <img *ngIf="review.imageUrl" [src]="review.imageUrl" alt="Review Image" class="img-thumbnail img-fluid" style="max-width: 120px; max-height: 120px; object-fit: cover;" />
+                  <span *ngIf="!review.imageUrl">Không có ảnh</span>
+              </div>
+          </td>
+          <td>
+              <p><span class="badge" [ngClass]="{
+                  'bg-primary': review.serviceType === 'APPOINTMENT',
+                  'bg-dark': review.serviceType === 'EMERGENCY_REQUEST',
+                }">{{ review.serviceType }}</span></p>
+          </td>
+
+          <td *ngIf="review.serviceType === 'APPOINTMENT'">
+            <div class="small text-muted p-2 border rounded bg-light shadow-sm">
+              <div><strong>Thời gian:</strong> {{ review.baseService.dateAndTime | date: 'dd/MM/yyyy, HH:mm:ss' }}</div>
+              <div><strong>Loại Xe:</strong> {{ review.baseService.vehicleType }}</div>
+            </div>
+          </td>
+          
+          <td *ngIf="review.serviceType === 'EMERGENCY_REQUEST'">
+            <div class="small text-muted p-2 border rounded bg-light shadow-sm">
+              <div><strong>Địa chỉ:</strong> {{ review.baseService.emergencyRequest.location }}</div>
+              <div><strong>Loại Xe:</strong> {{ review.baseService.emergencyRequest.vehicleType }}</div>
+              <div><strong>Mô tả:</strong> {{ review.baseService.emergencyRequest.description }}</div>
+              <div><strong>Giá đề xuất:</strong> {{ review.baseService.expectedPrice | number }} VNĐ</div>
+            </div>
+          </td>
+        
+          <td>{{ review.rate }}/5</td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="delete(review.id)"
+            >
+              Xóa
+            </button>
+          </td>
       </tr>
-    </tbody>
-  </table>
+
+      <tr *ngIf="reviews.length === 0">
+          <td colspan="12" class="text-center text-muted">Không có yêu cầu nào!</td>
+      </tr>
+  </tbody>
+</table>
+
+<nav>
+  <ul class="pagination justify-content-center mt-4">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" (click)="previousPage()">Trước</button>
+    </li>
+    <li class="page-item disabled">
+      <span class="page-link"
+        >Trang {{ currentPage }} / {{ totalPages }}</span
+      >
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" (click)="nextPage()">Sau</button>
+    </li>
+  </ul>
+</nav>
 </div>

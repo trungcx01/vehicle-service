@@ -20,51 +20,16 @@ export class NotificationService {
   connect(proposalId?: number) {
     const socket = new SockJS('/ws');
     this.stompClient = Stomp.over(socket);
-
+  
     const token = localStorage.getItem("token");
-    if (token){
+    if (token) {
       this.auth.getCurrentUser().subscribe({
         next: (user) => {
           this.stompClient.connect(
-            {
-              Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
+            { Authorization: 'Bearer ' + token },
             (frame: any) => {
               console.log('WebSocket connected', frame);
-              console.log('ROle', user.roles);
-              if (user.roles[0].name === 'SHOP') {
-                this.stompClient.subscribe(
-                  '/topic/emergency-request',
-                  (message: any) => {
-                    console.log('SHOP received:', message.body);
-                    this.notificationSubject.next(message.body);
-                  }
-                );
-              }
-  
-              this.stompClient.subscribe(
-                `/user/${user.username}/queue/proposal`,
-                (message: any) => {
-                  console.log('CUSTOMER received:', message.body);
-                  this.notificationSubject.next(message.body);
-                }
-              );
-  
-              this.stompClient.subscribe(
-                `/user/${user.username}/queue/notifications`,
-                (message: any) => {
-                  this.notificationSubject.next(message.body);
-                }
-              );
-              if (proposalId !== undefined){
-                this.stompClient.subscribe(
-                  `/topic/proposal/${proposalId}`,
-                  (message: any) => {
-                    this.notificationSubject.next(message.body);
-                    console.log('Received Location:', message.body);
-                  }
-                );
-              }
+              this.subscribeToTopics(user, proposalId);
             },
             (error: any) => {
               console.error('WebSocket connection error:', error);
@@ -72,16 +37,45 @@ export class NotificationService {
           );
         },
         error: (error) => {
-          console.error(error);
-        },
+          console.error('Error fetching user data:', error);
+        }
       });
     }
   }
+  
+  private subscribeToTopics(user: any, proposalId?: number) {
+    // các shop sẽ subcribe kênh này và nhận thông báo mỗi khi có ER
+    if (user.roles?.[0]?.name === 'SHOP') {
+      this.stompClient.subscribe('/topic/emergency-request', (message: any) => {
+        console.log('SHOP received:', message.body);
+        this.notificationSubject.next(message.body);
+      });
+    }
+  
+    // kênh của khách hàng (đã yêu cầu cứu trợ) mỗi khi nhận đc các đề xuất từ shop
+    this.stompClient.subscribe(`/user/${user.username}/queue/proposal`, (message: any) => {
+      console.log('CUSTOMER received:', message.body);
+      this.notificationSubject.next(message.body);
+    });
+  
+    // Subscribe cho notifications chung
+    this.stompClient.subscribe(`/user/${user.username}/queue/notifications`, (message: any) => {
+      this.notificationSubject.next(message.body);
+    });
+  
+    // Nếu có proposalId, subscribe theo proposal
+    if (proposalId !== undefined) {
+      this.stompClient.subscribe(`/topic/proposal/${proposalId}`, (message: any) => {
+        this.notificationSubject.next(message.body);
+        console.log('Received Location:', message.body);
+      });
+    }
+  }
+  
 
 
 
   sendLocation(proposalId: string, location: string) {
-    // Gửi vị trí của Shop hoặc KH đến topic chung
     this.stompClient.send(`/app/send-location/${proposalId}`, {}, location);
   }
 

@@ -15,8 +15,16 @@ export class ShopService {
     return this.http.get(this.apiUrl + "/top6-rating");
   }
 
-  createShop(shop: IShopDTO): Observable<any>{
-    return this.http.post(this.apiUrl, shop);
+  createShop(shop: IShopDTO, cover: any): Observable<any>{
+    const formData = new FormData();
+    formData.append('cover', cover);
+    formData.append(
+      'shopDTO',
+      new Blob([JSON.stringify(shop)], {
+        type: 'application/json',
+      })
+    );
+    return this.http.post(this.apiUrl, formData);
   }
 
   getById(id: number): Observable<any>{
@@ -26,23 +34,45 @@ export class ShopService {
   getCurrent(): Observable<any>{
     return this.http.get(this.apiUrl + "/current");
   }
-  update(shop: IShopDTO): Observable<any>{
-    return this.http.put(this.apiUrl, shop)
+  update(shop: IShopDTO, cover: any): Observable<any>{
+    const formData = new FormData();
+    formData.append('cover', cover);
+    formData.append(
+      'shopDTO',
+      new Blob([JSON.stringify(shop)], {
+        type: 'application/json',
+      })
+    );
+    return this.http.put(this.apiUrl, formData)
   }
 
   checkSendProposal(erId: number): Observable<any>{
     return this.http.get(this.apiUrl + "/check-send-proposal/" + erId);
   }
 
-  searchShop(name: string, district: string): Observable<any>{
-    return this.http.get(`${this.apiUrl}/search?name=${name}&district=${district}`);
+  searchShop(name: string, district: string, rating: any): Observable<any>{
+    return this.http.get(`${this.apiUrl}/search?name=${name}&district=${district}&rating=${rating}`);
   }
 
-  getAll(): Observable<any>{
+  getAll(page?: number, size?: number): Observable<any>{
     return this.http.get(this.apiUrl);
   }
 
   delete(id: number): Observable<any>{
     return this.http.delete(this.apiUrl + "/" + id);
+  }
+
+  getTop10Revenue(): Observable<any>{
+    return this.http.get(this.apiUrl + "/top-10-revenue");
+  }
+
+  searchShops(page: number, size: number, searchTerm: string): Observable<any> {
+    const params = {
+      page: page,
+      size: size,
+      searchTerm: searchTerm,
+    };
+  
+    return this.http.get(`${this.apiUrl}/search-all`, { params });
   }
 }

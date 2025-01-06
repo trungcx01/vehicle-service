@@ -57,10 +57,8 @@ export class LoginComponent implements OnInit {
                   this.toastr.success('Đăng nhập thành công!');
                 }
                 else if (role === 'ADMIN') {
-                  this.router.navigate(['/adminn bvcvc ']).then(() => {
-                    window.location.reload();
-                  });
                   this.toastr.success('Đăng nhập thành công!');
+                  this.router.navigate(['/admin'])
                 }
               } else {
                 this.toastr.success('Đăng nhập thành công!');

@@ -69,13 +69,38 @@ export class MapComponent {
     [this.destination_lng, this.destination_lat] = await this.convertToLatLng(
       this.destination
     );
-    [this.origin_lng, this.origin_lat] = await this.convertToLatLng(this.origin);
+    const origin_lat_lng = await this.getShopLastLocation(this.proposalId);
+    console.log(origin_lat_lng + "  oie3098092");
+    if (origin_lat_lng) {
+      const split = origin_lat_lng.split(","); 
+      this.origin_lat = parseFloat(split[0]); 
+      this.origin_lng = parseFloat(split[1]); 
+  } else {
+      [this.origin_lng, this.origin_lat] = await this.convertToLatLng(this.origin);
+  }
+  
+   
 
     this.addMarker(this.destination_lng, this.destination_lat, 'CUSTOMER');
     this.addMarker(this.origin_lng, this.origin_lat, 'SHOP');
     this.setMapCenter();
     [this.fastestTime, this.shortestDistance] = await this.getDistanceAndTime();
     this.getDirectionLines(String(this.i));
+  }
+
+  async getShopLastLocation(proposalId: number): Promise<any>{
+    return new Promise((resolve, reject) =>{
+      this.proposalService.getShopLastLocation(proposalId).subscribe({
+        next: (res) =>{
+          console.log(res);
+          resolve(res.message);
+         
+        }, 
+        error: (err) =>{
+          reject(err);
+        }
+      })
+    })
   }
 
   async init(): Promise<[number, string, string]> {
@@ -86,7 +111,7 @@ export class MapComponent {
         this.proposalService.getById(proposalId).subscribe({
           next: (data) => {
             const origin = data.shop.address;
-            const destination = data.emergencyRequest.customer.address;
+            const destination = data.emergencyRequest.location;
             resolve([proposalId, origin, destination]);
           },
           error: (error) => {
@@ -132,55 +157,11 @@ export class MapComponent {
     this.markers.push(marker);
   }
 
-  // startShopSimulation(): void {
-  //   const intervalId = setInterval(() => {
-  //     this.origin_lat += (this.destination_lat - this.origin_lat) / this.TOTAL_STEP;
-  //     this.origin_lng += (this.destination_lng - this.origin_lng) / this.TOTAL_STEP;
-
-  //     this.updateShopMarker();
-  //     this.sendUpdatedPositionToCustomer(this.origin_lat, this.origin_lng);
-
-  //     if (this.checkIfArrived()) {
-  //       Swal.fire({
-  //         title: 'Đã đến nơi!',
-  //         text: 'Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!',
-  //         icon: 'success',
-  //         confirmButtonText: 'Hoàn tất',
-  //       });
-  //       clearInterval(intervalId);
-  //     }
-  //   }, 5000);
-  // }
-
-  
-
-  // updateShopMarker(): void {
-  //   const shopMarker = this.markers.find(
-  //     (marker) => marker.getElement().className === 'shop-marker'
-  //   );
-  //   if (shopMarker) {
-  //     shopMarker.setLngLat([this.origin_lng, this.origin_lat]);
-  //   } else {
-  //     this.addMarker(this.origin_lng, this.origin_lat, 'shop');
-  //   }
-  //   this.markers.pop()!.remove();
-  //   this.map.removeLayer(String(this.i));
-  //   this.map.removeSource(String(this.i));
-  //   this.getDirectionLines(String(this.i));
-  // }
-
-  // sendUpdatedPositionToCustomer(lat: number, lng: number): void {
-  //   const message = `LIVE_TRACKING_SHOP ${lat},${lng}`;
-  //   this.notificationService.sendLocation(this.proposalId.toString(), message);
-  //   console.log(message);
-  // }
-
   updateShopPosition(data: string): void {
     console.log('dc', this.markers);
     const [lat, lng] = data.split(' ')[1].split(',').map(Number);
   [this.origin_lat, this.origin_lng] = [lat, lng];
 
-  // Tìm marker có `data-role="SHOP"`
   const shopMarker = this.markers.find((marker) =>
     marker.getElement().getAttribute('data-role') === 'SHOP'
   );
@@ -204,7 +185,7 @@ export class MapComponent {
         }
       });
     }
-    // this.markers.pop()!.remove();
+
         this.map.removeLayer(String(this.i));
         this.map.removeSource(String(this.i++));
     this.getDirectionLines(String(this.i));

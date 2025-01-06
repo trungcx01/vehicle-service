@@ -15,9 +15,7 @@
         </div>
 
         <div class="form-group col-6 mb-3">
-          <label class="form-control-label" for="field_phone"
-            >Số điện thoại</label
-          >
+          <label class="form-control-label" for="field_phone">Số điện thoại</label>
           <input
             type="text"
             class="form-control"
@@ -28,7 +26,6 @@
         </div>
       </div>
 
-
       <div class="form-group mb-3 col-12">
         <label class="form-control-label" for="field_address">Địa chỉ</label>
         <ng-select
@@ -38,28 +35,26 @@
           [items]="addressOptions"
           bindLabel="description"
           bindValue="description"
-           (change)="onChange($event)"
+          (change)="onChange($event)"
           (search)="onSearch($event)"
           [searchable]="true"
         ></ng-select>
       </div>
 
-
       <div class="row mb-3">
         <div class="form-group col-6">
           <label class="form-control-label" for="openingTime">Thời gian mở cửa</label>
-            <input  formControlName="openHour" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime1" [format]="24"  readonly>
-            <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+          <input formControlName="openHour" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime1" [format]="24" readonly />
+          <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
         </div>
 
         <div class="form-group col-6">
           <label class="form-control-label" for="closingTime">Thời gian đóng cửa</label>
-          <input  formControlName="closeHour" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime2" [format]="24"  readonly>
+          <input formControlName="closeHour" class="form-control" aria-label="24hr format" [ngxTimepicker]="fullTime2" [format]="24" readonly />
           <ngx-material-timepicker #fullTime2></ngx-material-timepicker>
         </div>
       </div>
 
-      
       <div class="form-group mb-3">
         <label class="form-control-label" for="field_description">Mô tả</label>
         <textarea
@@ -71,22 +66,46 @@
         ></textarea>
       </div>
 
-      <!-- <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
-                <small class="form-text text-danger"
-                       *ngIf="editForm.get('email')?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-                </small>
-            </div> -->
+      <div class="form-group mb-3">
+        <label class="form-control-label" for="field_cover">Ảnh bìa</label>
+
+        <div
+          class="upload-area border border-dashed text-center p-4"
+          style="border-radius: 12px; cursor: pointer; position: relative; background-color: #f8f9fa;"
+          (click)="fileInput.click()"
+        >
+          <div *ngIf="!coverPreview" style="font-size: 1.2rem; color: #007bff; font-weight: 600; margin-bottom: 10px;">
+            Thêm ảnh bìa
+          </div>
+      
+          <div *ngIf="coverPreview" class="mt-2">
+            <img [src]="coverPreview" alt="Cover Preview" class="img-fluid rounded" style="max-height: 150px; object-fit: cover; border-radius: 8px;" />
+          </div>
+      
+          <div *ngIf="!coverPreview" class="text-muted" style="font-size: 0.9rem;">
+            Chọn ảnh bìa từ thiết bị của bạn
+          </div>
+        </div>
+      
+        <input
+          type="file"
+          #fileInput
+          class="d-none"
+          accept="image/*"
+          formControlName="cover"
+          (change)="onCoverChange($event)"
+        />
+      </div>
+      
+
       <div class="form-check mb-3">
         <input id="tick" type="checkbox" class="form-check-input" />
-        <label for="tick" class="form-check-label"
-          >Tôi đồng ý với các điều khoản</label
-        >
+        <label for="tick" class="form-check-label">Tôi đồng ý với các điều khoản</label>
       </div>
 
       <div class="d-flex mt-4 gap-3">
         <button type="submit" (click)="submit()" class="btn btn-success col-6">Lưu</button>
-      <button class="btn btn-danger col-6">Hủy</button>
+        <button class="btn btn-danger col-6">Hủy</button>
       </div>
     </form>
   </div>

@@ -14,6 +14,11 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 
   // Phương thức này định dạng đối tượng NgbDateStruct thành chuỗi ngày tháng
   format(date: NgbDateStruct | null): string {
-    return date ? `${date.day}/${date.month}/${date.year}` : '';
-  }
+    if (date) {
+      const day = date.day < 10 ? '0' + date.day : date.day;
+      const month = date.month < 10 ? '0' + date.month : date.month;
+      return `${day}/${month}/${date.year}`;
+    }
+    return '';
+  }  
 }
