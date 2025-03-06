@@ -11,9 +11,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  isLogin: boolean = false; // Trạng thái đăng nhập
-  name: string = 'Login'; // Tên nút (Login hoặc Logout)
-  url: string = '/login'; // Đường dẫn của nút (Login hoặc Logout)
+  isLogin: boolean = false; 
+  name: string = 'Login'; 
+  url: string = '/login';
   notifications: any[] = [];
   countUnread: any;
   isPopupVisible = true;

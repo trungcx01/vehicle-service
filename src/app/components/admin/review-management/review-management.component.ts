@@ -4,6 +4,9 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { AdminService } from '../../../services/admin.service';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { Util } from '../../../util';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ImageModalComponent } from '../../../image-modal/image-modal.component';
 
 @Component({
   selector: 'app-review-management',
@@ -95,7 +98,9 @@ export class ReviewManagementComponent implements OnInit {
   constructor(
     private reviewService: ReviewService,
     private toastr: ToastrService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    public util: Util,
+    private modalService: NgbModal,
   ) {}
 
 
@@ -133,4 +138,11 @@ export class ReviewManagementComponent implements OnInit {
     });
   }
   
+  openImageModal(imageUrl: any) {
+    const modalRef = this.modalService.open(ImageModalComponent, {
+      size: 'md',
+      centered: true
+    });
+    modalRef.componentInstance.imageUrl = imageUrl;
+  }
 }

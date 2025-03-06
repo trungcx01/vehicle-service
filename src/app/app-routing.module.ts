@@ -5,31 +5,30 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
 import { HeaderComponent } from './layouts/header/header.component';
-import { HomeComponent } from './components/home/home.component';
-import { ShopDetailComponent } from './components/shop-detail/shop-detail.component';
+import { HomeComponent } from './components/customer/home/home.component';
+import { ShopDetailComponent } from './components/customer/shop-detail/shop-detail.component';
 import { ShopHomeComponent } from './components/shop-home/shop-home.component';
 import { ServiceManagerComponent } from './components/shop-home/service-manager/service-manager.component';
-import { MapComponent } from './components/map/map.component';
-import { RegistrationInfoComponent } from './components/registration-info/registration-info.component';
-import { CustomerRegisterComponent } from './components/customer-register/customer-register.component';
-import { ShopRegisterComponent } from './components/shop-register/shop-register.component';
-import { UserInfoComponent } from './components/user-info/user-info.component';
-import { AppointmentComponent } from './components/appointment/appointment.component';
-import { AppointmentHistoryComponent } from './components/appointment-history/appointment-history.component';
-import { PaymentComponent } from './components/payment/payment.component';
-import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
-import { EmergencyRequestComponent } from './components/emergency-request/emergency-request.component';
+import { MapComponent } from './components/customer/map/map.component';
+import { RegistrationInfoComponent } from './components/user/registration-info/registration-info.component';
+import { CustomerRegisterComponent } from './components/user/customer-register/customer-register.component';
+import { ShopRegisterComponent } from './components/user/shop-register/shop-register.component';
+import { UserInfoComponent } from './components/user/user-info/user-info.component';
+import { AppointmentComponent } from './components/customer/appointment/appointment.component';
+import { AppointmentHistoryComponent } from './components/customer/appointment-history/appointment-history.component';
+import { PaymentComponent } from './components/customer/payment/payment.component';
+import { PaymentSuccessComponent } from './components/customer/payment-success/payment-success.component';
+import { EmergencyRequestComponent } from './components/customer/emergency-request/emergency-request.component';
 import { EmergencyRequestListComponent } from './components/shop-home/emergency-request-list/emergency-request-list.component';
-import { ProposalListComponent } from './components/proposal-list/proposal-list.component';
+import { ProposalListComponent } from './components/customer/proposal-list/proposal-list.component';
 import { roleGuard } from './guards/role.guard';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { UnauthorizedComponent } from './components/user/unauthorized/unauthorized.component';
 import { authGuard } from './guards/auth.guard';
-import { ShopListComponent } from './components/shop-list/shop-list.component';
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
-import { ShopMapComponent } from './components/shop-map/shop-map.component';
-import { ShopStatisticComponent } from './components/shop-statistic/shop-statistic.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { EmergencyRequestCustomerComponent } from './components/emergency-request-customer/emergency-request-customer.component';
+import { ShopListComponent } from './components/customer/shop-list/shop-list.component';
+import { ShopMapComponent } from './components/shop-home/shop-map/shop-map.component';
+import { ShopStatisticComponent } from './components/shop-home/shop-statistic/shop-statistic.component';
+import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
+import { EmergencyRequestCustomerComponent } from './components/customer/emergency-request-customer/emergency-request-customer.component';
 import { CustomerManagementComponent } from './components/admin/customer-management/customer-management.component';
 import { ShopManagementComponent } from './components/admin/shop-management/shop-management.component';
 import { VehicleCareManagementComponent } from './components/admin/vehicle-care-management/vehicle-care-management.component';
@@ -39,8 +38,8 @@ import { EmergencyRequestManagementComponent } from './components/admin/emergenc
 import { ReviewManagementComponent } from './components/admin/review-management/review-management.component';
 import { AdminStatisticComponent } from './components/admin/admin-statistic/admin-statistic.component';
 import { AdminComponentComponent } from './components/admin/admin-component/admin-component.component';
-import { ReviewManagerComponent } from './components/review-manager/review-manager.component';
-import { NotificationListComponent } from './components/notification-list/notification-list.component';
+import { ReviewManagerComponent } from './components/shop-home/review-manager/review-manager.component';
+import { NotificationListComponent } from './components/user/notification-list/notification-list.component';
 
 const routes: Routes = [
   // Các đường dẫn cho tất cả người dùng (CUSTOMER, SHOP, ADMIN)
@@ -190,6 +189,12 @@ const routes: Routes = [
         component: ShopStatisticComponent,
         canActivate: [roleGuard],
         data: { roles: ['SHOP'] }
+      },
+      { 
+        path: 'notifications', 
+        component: NotificationListComponent, 
+        canActivate: [roleGuard], 
+        data: { roles: ['SHOP'] } 
       },
     
     ]

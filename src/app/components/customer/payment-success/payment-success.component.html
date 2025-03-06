@@ -1,0 +1,81 @@
+<div *ngIf="payment?.status === 'FINISHED'"  class="container payment-success mt-5">
+    <div class="header text-center">
+      <i class="fas fa-check-circle success-icon"></i>
+      <h2>Thanh toán thành công!</h2>
+      <p class="transaction-message">Giao dịch đã được thực hiện thành công. Cảm ơn bạn đã sử dụng dịch vụ!</p>
+    </div>
+  
+    <div class="payment-details mt-4">
+      <div class="info-row">
+        <span class="label col-6">Số tiền:</span>
+        <span class="value col-6">{{ payment.amount | number }} VNĐ</span>
+      </div>
+      <div class="info-row" *ngIf="payment.transactionReference">
+        <span class="label col-6">Mã giao dịch:</span>
+        <span class="value col-6">{{ payment.transactionReference }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label col-6">Ngày giờ:</span>
+        <span class="value col-6">{{ payment.updateAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+  
+      <div class="info-row">
+        <span class="label col-6">Thanh toán dịch vụ:</span>
+        <span class="value col-6">{{payment.serviceType === 'APPOINTMENT' ? 'Đặt lịch hẹn bảo dưỡng xe' : 'Cứu trợ khẩn cấp'}}</span>
+      </div>
+  
+      <div class="info-row">
+        <span class="label col-6">Cửa hàng:</span>
+        <span *ngIf="payment.serviceType === 'APPOINTMENT'" class="value col-6">{{ payment.baseService.vehicleCares[0].shop.name }}, {{ payment.baseService.vehicleCares[0].shop.address }}</span>
+        <span *ngIf="payment.serviceType !== 'APPOINTMENT'" class="value col-6">{{ payment.baseService.shop.name }}, {{ payment.baseService.shop.address }}</span>  
+    </div>
+  
+      <div class="info-row">
+        <span class="label col-6">Nội dung thanh toán:</span>
+        <span class="value col-6">{{ payment.orderInfo }}</span>
+      </div>
+    </div>
+  
+    <div class="action-buttons mt-4 text-center">
+      <button *ngIf="payment.serviceType !== 'APPOINTMENT'" class="btn btn-primary" (click)="navToMap()">Theo dõi cửa hàng</button>
+      <button class="btn btn-secondary" (click)="goToHome()">Quay lại trang chủ</button>
+    </div>
+  </div>
+  
+
+  <div *ngIf="payment?.status === 'CANCELED'" class="container payment-fail mt-5">
+    <div class="header text-center">
+      <i class="fas fa-times-circle fail-icon"></i>
+      <h2>Thanh toán thất bại!</h2>
+      <p class="transaction-message">Giao dịch không thành công. Vui lòng thử lại hoặc kiểm tra chi tiết thanh toán của bạn.</p>
+    </div>
+  
+    <div class="payment-details mt-4">
+      <div class="info-row">
+        <span class="label">Số tiền:</span>
+        <span class="value">{{ payment.amount | number }} VNĐ</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Mã giao dịch:</span>
+        <span class="value">{{ payment.transactionReference }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Ngày giờ:</span>
+        <span class="value">{{ payment.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Thanh toán dịch vụ:</span>
+        <span class="value">{{ payment.appointment ? 'Đặt lịch hẹn bảo dưỡng xe' : 'Cứu trợ khẩn cấp' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Nội dung thanh toán:</span>
+        <span class="value">{{ payment.orderInfo }}</span>
+      </div>
+    </div>
+  
+    <div class="action-buttons mt-4 text-center">
+      <button class="btn btn-primary" (click)="retryPayment()">Thử lại thanh toán</button>
+      <button class="btn btn-secondary" (click)="goToHome()">Quay lại trang chủ</button>
+    </div>
+  </div>
+  

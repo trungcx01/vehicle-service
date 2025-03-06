@@ -1,5 +1,4 @@
 <div class="container mt-5">
-  <!-- Tiêu đề -->
   <h2 class="text-center mb-4 fw-bold">Quản lý Lịch Hẹn</h2>
 
   <div class="mb-4 d-flex justify-content-end">
@@ -14,28 +13,30 @@
     </div>
   </div>
 
-  <!-- Bảng lịch hẹn -->
+
   <div class="table-responsive">
     <table class="table table-bordered table-hover text-center align-middle">
       <thead class="table-light">
         <tr>
           <th>ID</th>
-          <th>Ghi Chú</th>
-          <th>Thời Gian</th>
+          <th>Khách Hàng</th>
+          <th>Thời Gian Đặt Lịch</th>
+          <th>Thời Gian Hẹn</th>
           <th>Loại Xe</th>
           <th>Dịch Vụ</th>
-          <th>Khách Hàng</th>
+          <th>Ghi Chú</th>
           <th>Trạng Thái</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of appointments">
           <td>{{ item.id }}</td>
-          <td>{{ item.note || "Không có ghi chú" }}</td>
+          <td>{{ item.customer.name }}</td>
+          <td>{{ item.createdAt }}</td>
           <td>
             {{ item.dateAndTime | date : "dd/MM/yyyy HH:mm:ss" }} <br />
           </td>
-          <td>{{ item.vehicleType }}</td>
+          <td>{{ util.translateVehicleType(item.vehicleType) }}</td>
           <td>
             <div
               class="d-grid gap-2"
@@ -51,7 +52,7 @@
               </div>
             </div>
           </td>
-          <td>{{ item.customer.name }}</td>
+          <td>{{ item.note || "Không có ghi chú" }}</td>
           <td>
             <span
               *ngIf="item.status === 'ACCEPTED'"

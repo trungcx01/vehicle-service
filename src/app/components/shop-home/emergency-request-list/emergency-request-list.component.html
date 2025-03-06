@@ -15,7 +15,7 @@
   </div>
 
   <div class="table-responsive">
-    <table class="table table-hover table-bordered">
+    <table class="table table-bordered align-middle">
       <thead class="thead-light text-center">
         <tr>
           <th>ID</th>
@@ -31,7 +31,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let request of emergencyRequests; let i = index" class="text-center">
-          <td class="text-center fw-bold">{{ i + 1 }}</td>
+          <td class="text-center fw-bold">{{request.id}}</td>
           <td>{{ request.customer.name }}</td>
           <td class="text-center">{{ translateVehicleType(request.vehicleType) }}</td>
           <td>{{ request.licensePlate }}</td>
@@ -42,6 +42,7 @@
             <span *ngIf="request.requestStatus === 'FINISHED'" class="badge bg-info">FINISHED</span>
             <span *ngIf="request.requestStatus === 'CANCELED'" class="badge bg-danger">CANCELED</span>
             <span *ngIf="request.requestStatus === 'IN_PROGRESS'" class="badge bg-primary">IN_PROGRESS</span>
+            <span *ngIf="request.requestStatus === 'ARRIVED'" class="badge bg-dark">ARRIVED</span>
           </td>
           <td>
             <div class="d-flex flex-wrap gap-2 justify-content-center">
@@ -54,7 +55,7 @@
           <td class="text-center">
             <div class="btn-group">
               <button
-                *ngIf="!request.check && request.requestStatus !== 'FINISHED'"
+                *ngIf="!request.check && request.requestStatus !== 'FINISHED' && request.requestStatus !== 'CANCELED'"
                 class="btn btn-info btn-sm text-white"
                 (click)="openProposalModal(request)"
               >

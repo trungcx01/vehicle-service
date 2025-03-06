@@ -40,7 +40,9 @@ export class EmergencyRequestListComponent implements OnInit{
   
   
     getEmergencyRequests(): void {
-      this.emergencyRequestService.getAll().subscribe({
+      const page = this.currentPage - 1; 
+      const size = this.itemsPerPage;   
+      this.emergencyRequestService.getAll(page, size).subscribe({
         next: (res) =>{
           console.log('kdie', res);
           this.totalRecords = res.totalElements;
@@ -55,9 +57,9 @@ export class EmergencyRequestListComponent implements OnInit{
           });
          
           forkJoin(checkRequests).subscribe({
-            next: (res) => {
+            next: (res: any) => {
               console.log('lmm',res);
-              this.emergencyRequests = res as any[];
+              this.emergencyRequests = res.reverse();
             
             },
             error: (err) => {

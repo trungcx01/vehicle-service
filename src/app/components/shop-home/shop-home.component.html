@@ -40,6 +40,11 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" [ngClass]="router.url.endsWith('notifications') ? 'active' : ''" routerLink="notifications">
+          <i class="fa fa-chart-line"></i><span *ngIf="!isCollapsed">Thông báo</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link text-danger" style="cursor: pointer;" (click)="logout()">
           <i class="fa fa-sign-out-alt"></i><span *ngIf="!isCollapsed">Đăng Xuất</span>
         </a>

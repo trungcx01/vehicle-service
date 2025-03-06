@@ -17,7 +17,7 @@
     <table class="table table-bordered table-hover text-center align-middle">
       <thead class="table-light">
       <tr>
-        <th>#</th>
+        <th>ID</th>
         <th>Mô Tả</th>
         <th>Vị Trí</th>
         <th>Biển Số Xe</th>
@@ -30,11 +30,11 @@
     </thead>
     <tbody>
       <tr *ngFor="let request of emergencyRequests; let i = index">
-        <td>{{ i + 1 }}</td>
+        <td>{{request.id}}</td>
         <td>{{ request.description }}</td>
         <td>{{ request.location }}</td>
         <td>{{ request.licensePlate }}</td>
-        <td>{{ request.vehicleType }}</td>
+        <td>{{ util.translateVehicleType(request.vehicleType) }}</td>
         <td>
             <strong 
             [ngClass]="{
@@ -43,7 +43,8 @@
               'bg-primary ': request.requestStatus === 'IN_PROGRESS',
               'bg-info text-dark': request.requestStatus === 'FINISHED',
               'bg-danger ': request.requestStatus === 'CANCELED',
-              'bg-secondary ': request.requestStatus === 'DECLINED'
+              'bg-secondary ': request.requestStatus === 'DECLINED',
+              'bg-dark ': request.requestStatus === 'ARRIVED'
             }" 
             style="font-size: 14px;"
             class="px-2 py-1 rounded-pill text-light">
@@ -76,16 +77,17 @@
                 <p class="mb-1" style="font-size: 0.875rem;">
                   <strong>Dự đoán:</strong> {{ item.predict }}
                 </p>
+                <strong>Giá dự kiến:</strong>
                 <p class="mb-1 " style="font-size: 0.875rem;">
-                  <strong>Giá dự kiến:</strong> {{ item.expectedPrice | number }} VNĐ
+                  {{ item.expectedPrice | number }} VNĐ
                 </p>
+                <strong class="me-2">Trạng thái:</strong>
                 <p class="mb-0" style="font-size: 0.875rem;">
-                  <strong class="me-2">Trạng thái:</strong>
                   <strong
                     [ngClass]="{
                       'bg-success': item.status === 'ACCEPTED',
                       'bg-warning': item.status === 'PENDING',
-                      'bg-danger': item.status === 'CANCELED'
+                      'bg-danger': item.status === 'DECLINED'
                     }"
                     class="px-2 py-1 rounded text-light"
                     style="font-size: 0.75rem; font-weight: 500; padding-left: 8px; padding-right: 8px;"

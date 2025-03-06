@@ -38,7 +38,7 @@ export class EmergencyRequestService {
     return this.http.post(this.apiUrl, formData);
   }
 
-  getAll(page?: number, size?: number): Observable<any>{
+  getAll(page?: number, size?: number, sort?: any): Observable<any>{
     return this.http.get(this.apiUrl);
   }
 

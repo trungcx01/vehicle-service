@@ -42,25 +42,27 @@ export class AppointmentShopManagerComponent implements OnInit{
       getAppointments(): void {
         const page = this.currentPage - 1; 
         const size = this.itemsPerPage;    
-
+      
         this.appointmentService.getByCurrentShop(page, size).subscribe({
-          next: (response) => {
-            Promise.all(
-              response.content.map(async (res: any) => { 
+          next: async (response) => {
+            try {
+              const appointmentsWithStatus = [];
+      
+              for (const res of response.content) {
                 const status = await this.getPaymentStatus(res.id);
                 console.log(status);
-                return {
+                appointmentsWithStatus.push({
                   ...res,
                   paymentStatus: status,
-                };
-              })
-            ).then((appointmentsWithStatus) => {
-              this.appointments = appointmentsWithStatus;
+                });
+              }
+      
+              this.appointments = appointmentsWithStatus.reverse();
               this.totalRecords = response.totalElements;
               console.log(this.appointments);
-            }).catch((error) => {
-              console.error("Error while fetching appointments: ", error);
-            });
+            } catch (error) {
+              console.error(error);
+            }
           },
           error: (err) => console.log(err)
         });

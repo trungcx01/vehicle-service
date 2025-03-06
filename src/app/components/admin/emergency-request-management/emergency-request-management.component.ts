@@ -4,6 +4,7 @@ import { EmergencyRequestService } from '../../../services/emergency-request.ser
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { ImageModalComponent } from '../../../image-modal/image-modal.component';
+import { Util } from '../../../util';
 
 @Component({
   selector: 'app-emergency-request-management',
@@ -16,7 +17,8 @@ export class EmergencyRequestManagementComponent implements OnInit {
   constructor(
     private emergencyRequestService: EmergencyRequestService,
     private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    public util: Util,
   ) {}
     currentPage: number = 1;
     itemsPerPage: number = 10; 
@@ -46,7 +48,7 @@ export class EmergencyRequestManagementComponent implements OnInit {
         .getAll(this.currentPage - 1, this.itemsPerPage)
         .subscribe({
           next: (response: any) => {
-            this.emergencyRequests = response.content;
+            this.emergencyRequests = response.content.slice().reverse();
             this.totalRecords = response.totalElements;
           },
           error: (error) => {
@@ -62,7 +64,7 @@ export class EmergencyRequestManagementComponent implements OnInit {
         .searchEmergencyRequests(this.currentPage - 1, this.itemsPerPage, this.searchTerm)
         .subscribe({
           next: (response: any) => {
-            this.emergencyRequests = response.content;
+            this.emergencyRequests = response.content.slice().reverse();
             this.totalRecords = response.totalElements;
           },
           error: (error: any) => {

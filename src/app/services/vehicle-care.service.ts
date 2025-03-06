@@ -11,7 +11,11 @@ export class VehicleCareService {
   constructor(private http: HttpClient) { }
 
   getByShop(id: number): Observable<any>{
-    return this.http.get(this.apiUrl + "/shop-" + id);
+    return this.http.get(this.apiUrl + "/shop/" + id);
+  }
+
+  getByShopAndAvailable(id: number): Observable<any>{
+    return this.http.get(this.apiUrl + "/shop/" + id + "/available");
   }
 
   getByCurrentShop(page?: number, size?: number): Observable<any>{

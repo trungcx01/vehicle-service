@@ -34,7 +34,7 @@
           <td class="text-left">{{ review.serviceType === 'APPOINTMENT' ? review.baseService.customer.name : review.baseService.emergencyRequest.customer.name }}</td>
           <td class="text-left">{{ review.description || "Không có ghi chú" }}</td>
           <td>
-              <div class="d-flex justify-content-center">
+              <div class="d-flex justify-content-center" (click)="openImageModal(review.imageUrl)">
                   <img *ngIf="review.imageUrl" [src]="review.imageUrl" alt="Review Image" class="img-thumbnail img-fluid" style="max-width: 120px; max-height: 120px; object-fit: cover;" />
                   <span *ngIf="!review.imageUrl">Không có ảnh</span>
               </div>
@@ -49,7 +49,7 @@
           <td *ngIf="review.serviceType === 'APPOINTMENT'">
             <div class="small text-muted p-2 border rounded bg-light shadow-sm">
               <div><strong>Thời gian:</strong> {{ review.baseService.dateAndTime | date: 'dd/MM/yyyy, HH:mm:ss' }}</div>
-              <div><strong>Loại Xe:</strong> {{ review.baseService.vehicleType }}</div>
+              <div><strong>Loại Xe:</strong> {{ util.translateVehicleType(review.baseService.vehicleType) }}</div>
             </div>
           </td>
           

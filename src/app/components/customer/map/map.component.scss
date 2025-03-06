@@ -1,0 +1,75 @@
+
+#map {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+  }
+  
+
+  .map-buttons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .map-buttons button {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .map-buttons button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+
+  .map-control {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    width: 260px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+
+  .control-title {
+    font-size: 18px;
+    padding: 15px 0;
+    font-weight: bold;
+  }
+  
+
+  .close-btn {
+    font-size: 18px;
+    cursor: pointer;
+  }
+  
+
+  .info label {
+    font-weight: bold;
+  }
+  
+  .info input {
+    width: 100%;
+    padding: 3px;
+    margin-bottom: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    font-size: 12px;
+  }
+  

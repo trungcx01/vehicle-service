@@ -142,7 +142,6 @@ export class AdminStatisticComponent implements OnInit {
   }
 
   initializeCharts(): void {
-  // Appointment Chart
   this.appointmentChartOptions = {
     animationEnabled: true,
     exportEnabled: true,

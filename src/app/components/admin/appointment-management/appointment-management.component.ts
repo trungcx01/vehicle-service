@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppointmentService } from '../../../services/appointment.service';
 import { ToastrService } from 'ngx-toastr';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { Util } from '../../../util';
 
 @Component({
   selector: 'app-appointment-management',
@@ -39,7 +40,7 @@ export class AppointmentManagementComponent implements OnInit {
         .getAll(this.currentPage - 1, this.itemsPerPage)
         .subscribe({
           next: (response: any) => {
-            this.appointments = response.content;
+            this.appointments = response.content.slice().reverse();
             this.totalRecords = response.totalElements;
           },
           error: (error) => {
@@ -93,7 +94,8 @@ export class AppointmentManagementComponent implements OnInit {
 
   constructor(
     private appointmentSevice: AppointmentService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public util: Util
   ) {}
 
 

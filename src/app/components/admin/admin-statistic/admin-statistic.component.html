@@ -261,7 +261,7 @@
           <tbody>
             <tr *ngFor="let data of top_shop_data" style="border-bottom: 1px solid #e1e1e1;">
               <td>{{ data.shopName}}</td>
-              <td>{{ data.revenue | number}}</td>
+              <td>{{ (data.revenue | number) || 0}}</td>
             </tr>
           </tbody>
         </table>

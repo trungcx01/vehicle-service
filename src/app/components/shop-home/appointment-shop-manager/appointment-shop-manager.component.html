@@ -20,25 +20,26 @@
 </div>
   <!-- Table -->
   <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle">
+    <table class="table table-bordered align-middle">
       <thead class="table-light text-center">
         <tr class="text-center">
-          <th style="width: 1%">ID</th>
+          <th style="width: 5%">ID</th>
           <th style="width: 15%">Khách Hàng</th>
-    
-          <th style="width: 14%">Thời Gian</th>
+          <th style="width: 15%">Thời Gian Đặt Lịch</th>
+          <th style="width: 12%">Thời Gian Hẹn</th>
           <th style="width: 10%">Loại Xe</th>
-          <th style="width: 20%">Ghi Chú</th>
-          <th style="width: 20%">DS Hạng mục</th>
-
+          <th style="width: 18%">Ghi Chú</th>
+          <th style="width: 15%">DS Hạng mục</th>
           <th style="width: 10%">Trạng Thái</th>
-          <th style="width: 20%">Hành Động</th>
+          <th style="width: 10%">Hành Động</th>
         </tr>
+        
       </thead>
       <tbody class="text-center">
         <tr *ngFor="let item of appointments">
           <td class="text-center fw-bold">{{ item.id }}</td>
           <td class="text-center fw-semibold">{{ item.customer.name }}</td>
+          <td class="text-center">{{item.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
           <td class="text-center">
             <span>{{ item.dateAndTime | date : "dd/MM/yyyy HH:mm" }}</span>
           </td>
@@ -59,7 +60,8 @@
                 style="background-color: #f8f9fa; font-size: 14px"
               >
                 <div class="fw-bold text-truncate" title="{{ v.name }}">{{ v.name }}</div>
-                <div class="text-success fw-bold">{{ v.price | number:'1.0-0' }} VNĐ</div>
+                <div *ngIf="v.price" class="text-success fw-bold">{{ v.price | number:'1.0-0' }} VNĐ</div>
+                <div *ngIf="!v.price" class="text-success fw-bold">Không xác định</div>
               </div>
             </div>
           </td>

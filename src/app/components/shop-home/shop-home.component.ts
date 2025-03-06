@@ -11,9 +11,15 @@ export class ShopHomeComponent implements OnInit{
   isCollapsed = false; 
   screenWidth!: number;
 
+  
+
   constructor(public router: Router, private toastr: ToastrService) {}
   ngOnInit(): void {
     this.checkScreenSize();
+    if (this.router.url.includes("/map-emergency")){
+
+      this.isCollapsed = true
+    }
   }
 
   toggleSidebar() {

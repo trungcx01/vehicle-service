@@ -1,0 +1,114 @@
+<div class="review" role="document">
+  <div class="modal-content">
+    <!-- Tiêu đề Modal -->
+    <div class="modal-header bg-primary text-light">
+      <h6 class="modal-title" id="proposalModalLabel">Đánh giá dịch vụ</h6>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        (click)="closeModal()"
+      ></button>
+    </div>
+
+    <div class="modal-body">
+      <form (submit)="submitReview()">
+        <div class="rating-container mb-3">
+          <span class="fw-bold">Đánh giá:</span>
+          <div class="stars d-flex">
+            <i
+              [ngStyle]="{ color: rate >= 1 ? '#ffc107' : '#ccc' }"
+              class="fas fa-star fs-4 mx-1"
+              (click)="setRating(1)"
+              [class.disabled]="appointmentReview || proposalReview"
+              [style.pointerEvents]="appointmentReview || proposalReview ? 'none' : 'auto'"
+            ></i>
+            <i
+              [ngStyle]="{ color: rate >= 2 ? '#ffc107' : '#ccc' }"
+              class="fas fa-star fs-4 mx-1"
+              (click)="setRating(2)"
+              [class.disabled]="appointmentReview || proposalReview"
+              [style.pointerEvents]="appointmentReview || proposalReview ? 'none' : 'auto'"
+            ></i>
+            <i
+              [ngStyle]="{ color: rate >= 3 ? '#ffc107' : '#ccc' }"
+              class="fas fa-star fs-4 mx-1"
+              (click)="setRating(3)"
+              [class.disabled]="appointmentReview || proposalReview"
+              [style.pointerEvents]="appointmentReview || proposalReview ? 'none' : 'auto'"
+            ></i>
+            <i
+              [ngStyle]="{ color: rate >= 4 ? '#ffc107' : '#ccc' }"
+              class="fas fa-star fs-4 mx-1"
+              (click)="setRating(4)"
+              [class.disabled]="appointmentReview || proposalReview"
+              [style.pointerEvents]="appointmentReview || proposalReview ? 'none' : 'auto'"
+            ></i>
+            <i
+              [ngStyle]="{ color: rate === 5 ? '#ffc107' : '#ccc' }"
+              class="fas fa-star fs-4 mx-1"
+              (click)="setRating(5)"
+              [class.disabled]="appointmentReview || proposalReview"
+              [style.pointerEvents]="appointmentReview || proposalReview ? 'none' : 'auto'"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Bình luận -->
+        <textarea
+          class="form-control mb-3"
+          rows="4"
+          placeholder="Nhập nhận xét của bạn..."
+          [(ngModel)]="description"
+          name="content"
+          [disabled]="appointmentReview || proposalReview"
+          minlength="200"
+          required
+        ></textarea>
+
+        <!-- Hình ảnh -->
+        <div class="form-group mb-3">
+          <div class="file-upload d-flex align-items-center">
+            <input
+              type="file"
+              id="fileInput"
+              hidden
+              (change)="onFileSelected($event)"
+              [disabled]="appointmentReview || proposalReview"
+            />
+            <label
+              *ngIf="!(appointmentReview || proposalReview)"
+              for="fileInput"
+              class="btn btn-outline-success py-2 px-4 me-3"
+            >
+              <i class="fa-solid fa-file-arrow-up me-2"></i>Thêm Hình Ảnh
+            </label>
+            <div class="preview-container" (click)="openImageModal(previewImage)">
+              <img
+                *ngIf="previewImage"
+                [src]="previewImage"
+                alt="Preview"
+                class="preview-image border rounded"
+                style="
+                  width: 100px;
+                  height: 100px;
+                  object-fit: cover;
+                  margin-left: 15px;
+                "
+              />
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary py-2 px-4"
+          *ngIf="!(appointmentReview || proposalReview)"
+        >
+          Gửi Bình Luận
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

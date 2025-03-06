@@ -19,7 +19,7 @@ export class OthersService {
 
   getDirections(origin: string, destination: string): Observable<any> {
     return this.http.get(`https://rsapi.goong.io/direction?origin=${origin}
-      &destination=${destination}&vehicle=car&api_key=${environment.apiKey}`);
+      &destination=${destination}&vehicle=bike&api_key=${environment.apiKey}`);
   }
 
   autocomplete(input: string){
